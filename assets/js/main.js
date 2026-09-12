@@ -1,0 +1,442 @@
+/* ==========================================================================
+   CPACC — Interações e animações
+   Sem dependências. Tudo respeita prefers-reduced-motion.
+   ========================================================================== */
+(function () {
+  "use strict";
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $  = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+
+  /* ------------------------------------------------------------------
+     1. Header — encolhe ao scroll e esconde-se ao descer
+     ------------------------------------------------------------------ */
+  function initHeader() {
+    var header = $("[data-header]");
+    if (!header) return;
+    var last = 0;
+    var menu = $("[data-menu]");
+
+    onScroll(function (y) {
+      header.classList.toggle("is-stuck", y > 40);
+
+      var menuOpen = menu && menu.classList.contains("is-open");
+      var goingDown = y > last && y > 300;
+      header.classList.toggle("is-hidden", goingDown && !menuOpen);
+      last = y;
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     2. Menu móvel
+     ------------------------------------------------------------------ */
+  function initMenu() {
+    var burger = $("[data-burger]");
+    var menu = $("[data-menu]");
+    if (!burger || !menu) return;
+
+    function setOpen(open) {
+      burger.setAttribute("aria-expanded", String(open));
+      menu.classList.toggle("is-open", open);
+      menu.setAttribute("aria-hidden", String(!open));
+      document.body.classList.toggle("is-locked", open);
+      if (open) $("[data-header]").classList.remove("is-hidden");
+    }
+
+    burger.addEventListener("click", function () {
+      setOpen(burger.getAttribute("aria-expanded") !== "true");
+    });
+
+    $$("a", menu).forEach(function (a) {
+      a.addEventListener("click", function () { setOpen(false); });
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.classList.contains("is-open")) {
+        setOpen(false);
+        burger.focus();
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     3. Revelação ao scroll — fade + translate, com escalonamento
+     ------------------------------------------------------------------ */
+  function initReveal() {
+    var items = $$("[data-reveal]");
+    if (!items.length) return;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      items.forEach(function (el) { el.classList.add("is-visible"); });
+      return;
+    }
+
+    // Escalonamento automático dentro de contentores marcados
+    $$("[data-stagger]").forEach(function (group) {
+      var step = parseInt(group.getAttribute("data-stagger"), 10) || 90;
+      $$("[data-reveal]", group).forEach(function (el, i) {
+        el.style.setProperty("--reveal-delay", i * step + "ms");
+      });
+    });
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+
+    items.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ------------------------------------------------------------------
+     4. Contadores animados
+     ------------------------------------------------------------------ */
+  function initCounters() {
+    var nums = $$("[data-count]");
+    if (!nums.length) return;
+
+    function run(el) {
+      var target = parseFloat(el.getAttribute("data-count"));
+      var suffix = el.getAttribute("data-suffix") || "";
+      if (reduceMotion) { el.textContent = target + suffix; return; }
+
+      var dur = 1600;
+      var t0 = null;
+      function frame(t) {
+        if (t0 === null) t0 = t;
+        var p = Math.min((t - t0) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+        el.textContent = Math.round(target * eased) + (p === 1 ? suffix : "");
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    if (!("IntersectionObserver" in window)) { nums.forEach(run); return; }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        run(entry.target);
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.6 });
+
+    nums.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ------------------------------------------------------------------
+     5. Parallax do hero + esbatimento do conteúdo
+     ------------------------------------------------------------------ */
+  function initHeroParallax() {
+    var hero = $("[data-hero]");
+    if (!hero || reduceMotion) return;
+
+    var media = $("[data-hero-media]", hero);
+    var content = $("[data-hero-content]", hero);
+
+    onScroll(function (y) {
+      var h = hero.offsetHeight;
+      if (y > h) return;
+      var p = y / h;
+      if (media) media.style.transform = "translate3d(0," + (y * 0.32) + "px,0) scale(" + (1 + p * 0.06) + ")";
+      if (content) {
+        content.style.transform = "translate3d(0," + (y * 0.14) + "px,0)";
+        content.style.opacity = String(Math.max(0, 1 - p * 1.5));
+      }
+      hero.classList.toggle("is-scrolled", y > 60);
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     6. Brilho dourado que segue o rato nos cartões
+     ------------------------------------------------------------------ */
+  function initCardGlow() {
+    if (reduceMotion || window.matchMedia("(hover: none)").matches) return;
+    $$(".card, .slot").forEach(function (card) {
+      card.addEventListener("pointermove", function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     7. Acordeão de FAQ
+     ------------------------------------------------------------------ */
+  function initFaq() {
+    var uid = 0;
+
+    function panelOf(btn) { return btn.nextElementSibling; }
+
+    function setOpen(btn, open) {
+      var panel = panelOf(btn);
+      var inner = panel.firstElementChild;
+      btn.setAttribute("aria-expanded", String(open));
+
+      if (reduceMotion) {
+        panel.classList.toggle("is-open", open);
+        panel.style.height = open ? "auto" : "0px";
+        return;
+      }
+
+      if (open) {
+        panel.classList.add("is-open");
+        panel.style.height = inner.offsetHeight + "px";
+        // depois da transição, "auto" para acompanhar mudanças de largura
+        panel.addEventListener("transitionend", function done(e) {
+          if (e.propertyName !== "height") return;
+          panel.style.height = "auto";
+          panel.removeEventListener("transitionend", done);
+        });
+      } else {
+        // De "auto" para um valor fixo antes de fechar, senão não há o que animar.
+        // O void força o recálculo de layout, para que a transição arranque
+        // a partir da altura real e não do valor anterior.
+        panel.style.height = panel.scrollHeight + "px";
+        void panel.offsetHeight;
+        panel.classList.remove("is-open");
+        panel.style.height = "0px";
+      }
+    }
+
+    $$("[data-faq] .faq__q").forEach(function (btn) {
+      var panel = panelOf(btn);
+      if (!panel) return;
+
+      // Liga botão e painel para leitores de ecrã
+      if (!panel.id) panel.id = "faq-painel-" + (++uid);
+      btn.setAttribute("aria-controls", panel.id);
+      panel.setAttribute("role", "region");
+      panel.setAttribute("aria-labelledby", btn.id || (btn.id = "faq-pergunta-" + uid));
+
+      btn.addEventListener("click", function () {
+        var open = btn.getAttribute("aria-expanded") === "true";
+        var group = btn.closest("[data-faq]");
+
+        // mantém apenas uma resposta aberta de cada vez
+        if (!open && group) {
+          $$(".faq__q[aria-expanded='true']", group).forEach(function (other) {
+            setOpen(other, false);
+          });
+        }
+        setOpen(btn, !open);
+      });
+    });
+
+    // Se a janela mudar de largura, o painel aberto reajusta-se sozinho
+    // porque fica em height:auto — nada a fazer aqui.
+  }
+
+  /* ------------------------------------------------------------------
+     8. Barra de progresso de leitura
+     ------------------------------------------------------------------ */
+  function initProgress() {
+    var bar = $("[data-progress]");
+    if (!bar) return;
+    onScroll(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     9. Vídeo do hero — som e pausa quando fora de vista
+     ------------------------------------------------------------------ */
+  function initHeroVideo() {
+    var video = $("[data-hero-video]");
+    if (!video) return;
+
+    var toggle = $("[data-sound-toggle]");
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        video.muted = !video.muted;
+        toggle.setAttribute("aria-pressed", String(!video.muted));
+        toggle.setAttribute("aria-label", video.muted ? "Ativar som do vídeo" : "Desativar som do vídeo");
+        $$("[data-icon-on], [data-icon-off]", toggle).forEach(function (i) {
+          i.hidden = !i.hidden;
+        });
+      });
+    }
+
+    // Poupa bateria: pausa quando o hero sai do ecrã
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { video.play().catch(function () {}); }
+          else { video.pause(); }
+        });
+      }, { threshold: 0.05 }).observe(video);
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     10. Formulário de pré-inscrição
+     ------------------------------------------------------------------ */
+  function initForm() {
+    var form = $("[data-form]");
+    if (!form) return;
+
+    var success = $("[data-form-success]");
+    var submit = $("[data-form-submit]", form);
+
+    function fieldOf(input) { return input.closest(".field, .consent-field"); }
+
+    function messageFor(input) {
+      if (input.validity.valueMissing) {
+        return input.type === "checkbox" ? "É necessário aceitar para continuar." : "Este campo é obrigatório.";
+      }
+      if (input.validity.typeMismatch && input.type === "email") return "Introduz um email válido.";
+      if (input.validity.patternMismatch && input.name === "telefone") return "Introduz um número de telemóvel válido (9 dígitos).";
+      if (input.validity.rangeUnderflow || input.validity.rangeOverflow) return "Verifica a data introduzida.";
+      return "Verifica este campo.";
+    }
+
+    function validate(input) {
+      var wrap = fieldOf(input);
+      if (!wrap) return input.checkValidity();
+      var ok = input.checkValidity();
+      wrap.classList.toggle("has-error", !ok);
+      var msg = $(".error-msg", wrap);
+      if (msg) msg.textContent = ok ? "" : messageFor(input);
+      input.setAttribute("aria-invalid", String(!ok));
+      return ok;
+    }
+
+    $$("input, select, textarea", form).forEach(function (input) {
+      input.addEventListener("blur", function () {
+        if (input.value !== "" || input.required) validate(input);
+      });
+      input.addEventListener("input", function () {
+        var wrap = fieldOf(input);
+        if (wrap && wrap.classList.contains("has-error")) validate(input);
+      });
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Honeypot: se estiver preenchido, é um bot — fingimos sucesso.
+      var hp = $(".hp input", form);
+      if (hp && hp.value) { showSuccess(); return; }
+
+      var fields = $$("input, select, textarea", form).filter(function (i) {
+        return !i.closest(".hp");
+      });
+      var firstBad = null;
+      fields.forEach(function (input) {
+        if (!validate(input) && !firstBad) firstBad = input;
+      });
+
+      if (firstBad) {
+        firstBad.focus();
+        firstBad.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+        return;
+      }
+
+      send();
+    });
+
+    function send() {
+      submit.setAttribute("aria-busy", "true");
+      var original = submit.innerHTML;
+      submit.innerHTML = "A enviar…";
+
+      var endpoint = form.getAttribute("data-endpoint");
+      var data = new FormData(form);
+
+      // Sem endpoint configurado (modo protótipo): simula o envio.
+      if (!endpoint || endpoint.indexOf("SUBSTITUIR") !== -1) {
+        setTimeout(function () {
+          console.info("[CPACC] Pré-inscrição (modo protótipo):", Object.fromEntries(data.entries()));
+          submit.removeAttribute("aria-busy");
+          submit.innerHTML = original;
+          showSuccess();
+        }, 900);
+        return;
+      }
+
+      fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
+        .then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          showSuccess();
+        })
+        .catch(function (err) {
+          console.error(err);
+          var box = $("[data-form-error]", form);
+          if (box) {
+            box.hidden = false;
+            box.textContent = "Não foi possível enviar. Tenta novamente ou liga-nos para o número em Contactos.";
+          }
+        })
+        .finally(function () {
+          submit.removeAttribute("aria-busy");
+          submit.innerHTML = original;
+        });
+    }
+
+    function showSuccess() {
+      if (!success) return;
+      form.hidden = true;
+      success.classList.add("is-shown");
+      success.setAttribute("tabindex", "-1");
+      success.focus();
+      success.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     11. Ano corrente no rodapé
+     ------------------------------------------------------------------ */
+  function initYear() {
+    $$("[data-year]").forEach(function (el) {
+      el.textContent = String(new Date().getFullYear());
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     Utilitário: um só listener de scroll, sincronizado com o rAF
+     ------------------------------------------------------------------ */
+  var scrollHandlers = [];
+  var ticking = false;
+  function onScroll(fn) {
+    scrollHandlers.push(fn);
+    fn(window.scrollY);
+  }
+  window.addEventListener("scroll", function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var y = window.scrollY;
+      scrollHandlers.forEach(function (fn) { fn(y); });
+      ticking = false;
+    });
+  }, { passive: true });
+
+  /* ------------------------------------------------------------------
+     Arranque
+     ------------------------------------------------------------------ */
+  function init() {
+    initHeader();
+    initMenu();
+    initReveal();
+    initCounters();
+    initHeroParallax();
+    initCardGlow();
+    initFaq();
+    initProgress();
+    initHeroVideo();
+    initForm();
+    initYear();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
