@@ -231,25 +231,25 @@ p { text-wrap: pretty; }
 .btn__arrow { transition: transform 380ms var(--ease-out); }
 .btn:hover .btn__arrow { transform: translateX(4px); }
 
-/* Primário — dourado sólido */
+/* Primário — dourado sólido, com um degradê mais rico e metálico */
 .btn--gold {
-  background: var(--g-gold);
+  background: linear-gradient(135deg, #FCEEC0 0%, #F0D584 16%, #D9AC2E 40%, #B8860B 66%, #6B4F0A 100%);
   color: var(--c-ink-900);
   font-weight: 600;
-  box-shadow: 0 4px 24px -8px var(--c-gold-glow);
+  box-shadow: 0 4px 26px -6px rgba(201,162,39,0.45);
 }
 .btn--gold::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(135deg, #F3E3AE 0%, #E3C567 50%, #C9A227 100%);
+  background: linear-gradient(135deg, #FFF6DC 0%, #F8E4A8 20%, #E3C567 48%, #C9A227 74%, #8F6F15 100%);
   opacity: 0;
   transition: opacity 320ms var(--ease-soft);
 }
 .btn--gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 38px -12px var(--c-gold-glow), 0 0 0 1px rgba(227,197,103,0.35);
+  box-shadow: 0 16px 42px -10px rgba(201,162,39,0.55), 0 0 0 1px rgba(227,197,103,0.35);
 }
 .btn--gold:hover::before { opacity: 1; }
 .btn--gold:active { transform: translateY(0); }
@@ -324,8 +324,11 @@ p { text-wrap: pretty; }
   flex: none;
   display: grid;
   place-items: center;
+  padding: 6px;
+  box-sizing: border-box;
   border: 1px solid var(--c-hairline);
   border-radius: 50%;
+  object-fit: contain;
   font-family: var(--f-display);
   font-size: 0.82rem;
   letter-spacing: 0.02em;
@@ -716,6 +719,31 @@ p { text-wrap: pretty; }
 }
 .coach__name { font-size: 1.25rem; margin-bottom: 0.4rem; }
 .coach__bio { font-size: var(--fs-small); color: var(--c-paper-dim); }
+
+/* Bloco de homenagem — usado na história do clube para destacar uma figura marcante */
+.tribute {
+  position: relative;
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  margin-block: var(--sp-4);
+  background: var(--g-surface);
+  border-left: 3px solid var(--c-gold-500);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+.tribute__role {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-paper-faint);
+  margin-bottom: 0.6rem;
+}
+.tribute__name {
+  font-family: var(--f-display);
+  font-size: 1.4rem;
+  color: var(--c-gold-400);
+  margin-bottom: 1rem;
+}
+.tribute p { color: var(--c-paper-dim); }
+.tribute p + p { margin-top: 0.8rem; }
 
 /* --------------------------------------------------------------------------
    10. HORÁRIOS
