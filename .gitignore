@@ -7,3 +7,6 @@ node_modules/
 
 # trabalho interno que nao deve ir para o repositorio publico
 .local/
+
+# Fotos em alta resolução: ficam só no computador, não são publicadas.
+assets/img/equipa/_originais/
