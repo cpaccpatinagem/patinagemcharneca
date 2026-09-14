@@ -1,7 +1,36 @@
 # CPACC — Site do Clube de Patinagem Artística da Charneca de Caparica
 
-MVP em HTML, CSS e JavaScript puro. Sem build, sem dependências, sem npm.
-Basta abrir `index.html` num browser ou fazer upload da pasta para qualquer alojamento.
+MVP em HTML, CSS e JavaScript puro. Sem build e sem dependências: o que está no
+repositório é exatamente o que vai para o servidor.
+
+---
+
+## Desenvolver localmente
+
+Só precisas do Node (18 ou superior). Não há `npm install` — não existem dependências.
+
+```
+npm run dev
+```
+
+Abre <http://localhost:4173>. O servidor está em `tools/dev-server.mjs` e serve os
+ficheiros tal como estão, com **live reload**:
+
+- editar CSS troca a folha de estilos sem recarregar a página, para não perderes a
+  posição de scroll nem as animações de reveal a meio;
+- editar HTML ou JS recarrega a página.
+
+Para usar outra porta: `npm run dev -- --port 5000`.
+
+Notas:
+
+- URLs sem extensão funcionam (`/horarios` serve `horarios.html`), como na Vercel.
+- Em desenvolvimento não há cache (`Cache-Control: no-store`).
+- Um 404 mostra uma página de aviso em vez de falhar em silêncio, para links
+  partidos entre páginas darem nas vistas.
+
+Abrir os ficheiros com duplo clique (`file://`) também funciona, mas os caminhos
+absolutos e o `fetch` comportam-se de forma diferente — usa `npm run dev`.
 
 ---
 
@@ -18,6 +47,8 @@ patinagem-charneca/
 ├── privacidade.html      Política de privacidade / RGPD
 ├── robots.txt
 ├── sitemap.xml
+├── package.json          Só para o `npm run dev` — sem dependências
+├── tools/dev-server.mjs  Servidor local com live reload
 └── assets/
     ├── css/style.css     Design system completo
     ├── js/main.js        Animações, menu, acordeão, formulário

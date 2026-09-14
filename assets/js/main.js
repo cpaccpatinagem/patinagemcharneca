@@ -349,14 +349,36 @@
       var endpoint = form.getAttribute("data-endpoint");
       var data = new FormData(form);
 
-      // Sem endpoint configurado (modo protótipo): simula o envio.
+      // Sem serviço de receção configurado: entregamos por email em vez de
+      // fingir que enviámos. Abre o cliente de email do visitante já preenchido,
+      // para que a pré-inscrição chegue mesmo ao clube e nada se perca.
       if (!endpoint || endpoint.indexOf("SUBSTITUIR") !== -1) {
-        setTimeout(function () {
-          console.info("[CPACC] Pré-inscrição (modo protótipo):", Object.fromEntries(data.entries()));
-          submit.removeAttribute("aria-busy");
-          submit.innerHTML = original;
-          showSuccess();
-        }, 900);
+        var rotulos = {
+          atleta: "Atleta",
+          nascimento: "Data de nascimento",
+          encarregado: "Encarregado de educação",
+          telefone: "Telemóvel",
+          email: "Email",
+          horario: "Horário preferido",
+          experiencia: "Experiência anterior",
+          mensagem: "Mensagem"
+        };
+        var linhas = [];
+        Object.keys(rotulos).forEach(function (campo) {
+          var valor = data.get(campo);
+          if (valor) linhas.push(rotulos[campo] + ": " + valor);
+        });
+
+        var assunto = "Pré-inscrição — " + (data.get("atleta") || "novo atleta");
+        var corpo = "Pré-inscrição enviada pelo site.\n\n" + linhas.join("\n") + "\n";
+
+        window.location.href = "mailto:cpaccpatinagem@gmail.com"
+          + "?subject=" + encodeURIComponent(assunto)
+          + "&body=" + encodeURIComponent(corpo);
+
+        submit.removeAttribute("aria-busy");
+        submit.innerHTML = original;
+        showSuccess();
         return;
       }
 

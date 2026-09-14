@@ -34,7 +34,7 @@
   --g-veil: linear-gradient(180deg, rgba(6,13,26,0.10) 0%, rgba(6,13,26,0.55) 45%, rgba(6,13,26,0.96) 100%);
 
   /* --- Tipografia --- */
-  --f-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
+  --f-display: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --f-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --fs-eyebrow: clamp(0.68rem, 0.62rem + 0.25vw, 0.78rem);
@@ -107,9 +107,9 @@ button { background: none; border: 0; cursor: pointer; }
    -------------------------------------------------------------------------- */
 h1, h2, h3, h4 {
   font-family: var(--f-display);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
@@ -159,7 +159,10 @@ p { text-wrap: pretty; }
   color: transparent;
 }
 
-.serif-italic { font-style: italic; font-weight: 400; }
+/* Ênfase dos títulos. Mantém o nome da classe (usada em todas as páginas),
+   mas com a Manrope o destaque vem de um peso leve, não de itálico —
+   a itálica sintética de uma sem-serifa fica pesada e mal desenhada. */
+.serif-italic { font-weight: 300; letter-spacing: -0.02em; }
 
 .muted { color: var(--c-paper-dim); }
 .faint { color: var(--c-paper-faint); font-size: var(--fs-small); }
@@ -805,6 +808,71 @@ p { text-wrap: pretty; }
   border-top: 1px solid var(--c-hairline-soft);
 }
 .slot__meta i { font-style: normal; color: var(--c-gold-500); margin-right: 0.4em; }
+
+/* Grelha semanal completa — um cartão por dia, com vários treinos empilhados.
+   Usado quando um pavilhão tem múltiplos escalões a treinar no mesmo dia. */
+.timetable {
+  display: grid;
+  gap: var(--sp-3);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  align-items: start;
+}
+.day-col {
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+  background: var(--g-surface);
+  border: 1px solid var(--c-hairline-soft);
+  border-radius: var(--radius-lg);
+  transition: border-color 400ms, transform 400ms var(--ease-out);
+}
+.day-col:hover { border-color: var(--c-hairline); transform: translateY(-3px); }
+.day-col__head {
+  font-family: var(--f-display);
+  font-size: 1.15rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid var(--c-hairline-soft);
+}
+.day-col__note {
+  display: block;
+  font-family: var(--f-body);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-gold-400);
+  margin-top: 0.3rem;
+}
+.day-col__row { display: grid; gap: 0.15rem; padding-block: 0.55rem; border-top: 1px solid var(--c-hairline-soft); }
+.day-col__row:first-of-type { border-top: 0; padding-top: 0; }
+.day-col__time {
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--c-paper-faint);
+}
+.day-col__activity { font-size: var(--fs-small); font-weight: 500; }
+.day-col__foot {
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--c-hairline-soft);
+  font-size: 0.68rem;
+  color: var(--c-paper-faint);
+}
+
+/* Cores por categoria de treino — consistentes com o código de cores do clube */
+.cat-inicial   { color: #8FD16A; }
+.cat-formacao  { color: var(--c-gold-400); }
+.cat-competicao{ color: #7FB3E8; }
+.cat-livre     { color: var(--c-paper); }
+
+.timetable-legend {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem;
+  margin-bottom: var(--sp-3);
+  font-size: 0.75rem;
+}
+.timetable-legend span::before {
+  content: "●";
+  margin-right: 0.45em;
+  font-size: 0.7em;
+}
 
 /* --------------------------------------------------------------------------
    11. FORMULÁRIO
