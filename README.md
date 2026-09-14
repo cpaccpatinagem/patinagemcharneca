@@ -128,26 +128,51 @@ ffmpeg -i assets/video/treino.mp4 -ss 00:00:02 -vframes 1 -q:v 3 assets/img/hero
 
 ## Formulário de pré-inscrição
 
-Está construído e validado, mas ainda **não envia para lado nenhum**. Em modo protótipo
-mostra o ecrã de sucesso e escreve os dados na consola do browser.
+As pré-inscrições são guardadas numa folha de cálculo do Google e o clube recebe
+um email a cada nova inscrição. O código do recetor está em
+`tools/google-apps-script.gs`.
 
-Para ligar a um serviço real, substitui `SUBSTITUIR_PELO_ENDPOINT` pelo URL do serviço,
-em `index.html` e `pre-inscricao.html`:
+### Instalação (uma vez)
+
+1. Cria uma folha de cálculo nova em [sheets.new](https://sheets.new) e dá-lhe um
+   nome, por exemplo "CPACC — Pré-inscrições".
+2. Nessa folha: **Extensões → Apps Script**.
+3. Apaga o que lá estiver e cola todo o conteúdo de `tools/google-apps-script.gs`.
+4. Guarda (ícone do disquete).
+5. **Implementar → Nova implementação**. No ícone de engrenagem escolhe
+   **Aplicação Web** e define:
+   - *Executar como*: **Eu**
+   - *Quem tem acesso*: **Qualquer pessoa** ← importante, senão o site não consegue enviar
+6. Clica **Implementar** e autoriza o acesso quando pedir (vai avisar que a app não
+   é verificada — é tua, avança em "Avançadas → Aceder a…").
+7. Copia o **URL da aplicação web** que aparece no fim. É algo como
+   `https://script.google.com/macros/s/AKfy.../exec`.
+8. Cola esse URL em `index.html` e `pre-inscricao.html`, no lugar de
+   `SUBSTITUIR_PELO_ENDPOINT`:
 
 ```html
-<form class="form" data-form data-endpoint="https://formspree.io/f/xxxxxxx" novalidate>
+<form class="form" data-form data-endpoint="https://script.google.com/macros/s/AKfy.../exec" novalidate>
 ```
 
-Opções recomendadas (todas com plano gratuito suficiente para um clube):
+9. Incrementa a versão dos assets nas páginas (`?v=3` → `?v=4`), faz commit e push.
 
-- **Formspree** — recebe as respostas por email. O mais simples.
-- **Netlify Forms** — grátis se alojares na Netlify; acrescenta `netlify` ao `<form>`.
-- **Google Apps Script** — envia para uma Google Sheet. Grátis e sem limites, mas exige configuração.
+### Enquanto o endpoint não estiver configurado
 
-O formulário já tem proteção anti-spam (campo-armadilha invisível), validação em português
-e consentimento RGPD obrigatório.
+O formulário não finge que enviou: abre o email do visitante já preenchido para
+`cpaccpatinagem@gmail.com`. Funciona, mas depende de o visitante ter cliente de
+email configurado e carregar em enviar — por isso vale a pena fazer a instalação
+acima.
 
----
+### Testar
+
+Depois de configurado, preenche o formulário no site e confirma que aparece uma
+linha nova na folha de cálculo e um email na caixa do clube. Para testar sem o
+site, no editor do Apps Script escolhe a função `testar` e carrega em Executar.
+
+### Proteção anti-spam
+
+O formulário tem um campo escondido (`website`) que só robôs preenchem. O Apps
+Script ignora essas submissões automaticamente.
 
 ## Publicar
 

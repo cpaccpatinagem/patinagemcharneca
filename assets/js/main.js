@@ -382,7 +382,12 @@
         return;
       }
 
-      fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
+      // Enviado como URL-encoded: é o formato que o Google Apps Script lê
+      // diretamente em e.parameter, e evita o pedido preflight de CORS.
+      var corpo = new URLSearchParams();
+      data.forEach(function (valor, chave) { corpo.append(chave, valor); });
+
+      fetch(endpoint, { method: "POST", body: corpo })
         .then(function (r) {
           if (!r.ok) throw new Error("HTTP " + r.status);
           showSuccess();
@@ -392,7 +397,8 @@
           var box = $("[data-form-error]", form);
           if (box) {
             box.hidden = false;
-            box.textContent = "Não foi possível enviar. Tenta novamente ou liga-nos para o número em Contactos.";
+            box.textContent = "Não foi possível enviar a pré-inscrição. Tenta novamente, "
+              + "ou liga-nos para 926 716 672 — assim não perdes a vaga.";
           }
         })
         .finally(function () {
