@@ -12,8 +12,22 @@
     alguns clientes ignoram (Outlook, Gmail em algumas versões);
   - sem webfonts, sem SVG, sem background-image, sem position;
   - largura fixa de 600px, com max-width para o telemóvel;
-  - cores literais, porque variáveis CSS não existem aqui. Os valores vêm dos
-    tokens do style.css e estão anotados ao lado.
+  - cores literais, porque var(--c-ink-800) não funciona em cliente de email.
+
+  As cores saíram dos tokens do style.css. Se a paleta do site mudar, este
+  ficheiro tem de ser atualizado à mão, procurando e substituindo cada valor:
+
+    #0A1428  --c-ink-800     fundo do cabeçalho, título, botão
+    #060D1A  --c-ink-900     fundo do rodapé
+    #E3C567  --c-gold-400    CPACC, títulos do rodapé, links sobre escuro
+    #C9A227  --c-gold-500    fio dourado por baixo do cabeçalho
+    #F4F2EC  --c-paper       fundo do corpo
+    #E7E3D9  (papel escurecido)  fundo por trás do email, sem token no site
+    #8A6D14  (dourado escurecido) "PRÉ-INSCRIÇÃO RECEBIDA" sobre papel;
+                                  o --c-gold-600 não chegaria a contraste AA
+
+  Os restantes cinzentos (#6B7383, #4A5568, #DCD6C6, #EDE8DC) existem só aqui,
+  para as etiquetas e os fios do cartão de dados.
 
   Campos: {{atleta}} {{nascimento}} {{encarregado}} {{telefone}} {{email}}
           {{inicio}} {{experiencia}} {{mensagem}} {{ano}}
