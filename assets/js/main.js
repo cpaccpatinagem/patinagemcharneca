@@ -100,8 +100,9 @@
 
     function run(el) {
       var target = parseFloat(el.getAttribute("data-count"));
+      var prefix = el.getAttribute("data-prefix") || "";
       var suffix = el.getAttribute("data-suffix") || "";
-      if (reduceMotion) { el.textContent = target + suffix; return; }
+      if (reduceMotion) { el.textContent = prefix + target + suffix; return; }
 
       var dur = 1600;
       var t0 = null;
@@ -109,7 +110,7 @@
         if (t0 === null) t0 = t;
         var p = Math.min((t - t0) / dur, 1);
         var eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
-        el.textContent = Math.round(target * eased) + (p === 1 ? suffix : "");
+        el.textContent = prefix + Math.round(target * eased) + (p === 1 ? suffix : "");
         if (p < 1) requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
@@ -369,7 +370,7 @@
           if (valor) linhas.push(rotulos[campo] + ": " + valor);
         });
 
-        var assunto = "Pré-inscrição — " + (data.get("atleta") || "novo atleta");
+        var assunto = "Pré-inscrição - " + (data.get("atleta") || "novo atleta");
         var corpo = "Pré-inscrição enviada pelo site.\n\n" + linhas.join("\n") + "\n";
 
         window.location.href = "mailto:cpaccpatinagem@gmail.com"
@@ -406,8 +407,8 @@
           var box = $("[data-form-error]", form);
           if (box) {
             box.hidden = false;
-            box.textContent = "Não foi possível enviar a pré-inscrição. Tenta novamente, "
-              + "ou liga-nos para 926 716 672 — assim não perdes a vaga.";
+            box.textContent = "Não foi possível enviar a pré-inscrição. Tente novamente, "
+              + "ou telefone para 926 716 672 - assim não perde a vaga.";
           }
         })
         .finally(function () {
