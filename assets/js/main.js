@@ -359,7 +359,7 @@
           encarregado: "Encarregado de educação",
           telefone: "Telemóvel",
           email: "Email",
-          horario: "Horário preferido",
+          inicio: "Prefere começar",
           experiencia: "Experiência anterior",
           mensagem: "Mensagem"
         };

@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;500;700;800&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=4">
+<link rel="stylesheet" href="assets/css/style.css?v=5">
 
 <!-- Dados estruturados: é isto que faz o Google e os assistentes de IA
      perceberem que somos um clube desportivo em Almada. -->
@@ -419,11 +419,11 @@
 
       <div class="faq__item" data-reveal>
         <button class="faq__q" aria-expanded="false">
-          Há aula experimental?
+          Há treinos experimentais?
           <span class="faq__icon" aria-hidden="true"></span>
         </button>
         <div class="faq__a"><div>
-          <p>Sim. Depois da pré-inscrição, entramos em contacto para agendar uma aula experimental gratuita. É a melhor forma de perceber se a modalidade encaixa.</p>
+          <p>Sim — são 3 treinos experimentais gratuitos, uma semana completa. Depois da pré-inscrição entramos em contacto para combinar o dia de início. É a melhor forma de perceber se a modalidade encaixa.</p>
         </div></div>
       </div>
 
@@ -450,8 +450,8 @@
     <p class="eyebrow eyebrow--center" data-reveal>Pré-inscrição 2026/27</p>
     <h2 data-reveal style="--reveal-delay:80ms">Dois minutos agora,<br><span class="gold serif-italic">uma vida a patinar.</span></h2>
     <p class="lead" data-reveal style="--reveal-delay:160ms">
-      Preenche os dados abaixo. Entramos em contacto para agendar uma aula experimental
-      gratuita e responder a todas as dúvidas. Sem compromisso.
+      Preenche os dados abaixo. Entramos em contacto para agendar os 3 treinos experimentais
+      gratuitos e responder a todas as dúvidas. Sem compromisso.
     </p>
 
     <div class="form-shell" data-reveal="scale" style="--reveal-delay:220ms; text-align:left">
@@ -490,6 +490,22 @@
           <input class="input" type="email" id="email" name="email" required autocomplete="email" placeholder="nome@exemplo.pt">
           <span class="error-msg" aria-live="polite"></span>
         </div>
+
+        <fieldset class="field" style="border:0; padding:0; margin:0">
+          <legend style="font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--c-paper-faint); margin-bottom:0.4rem">
+            Início dos treinos experimentais
+          </legend>
+          <p class="faint" style="margin:0 0 0.7rem; max-width:52ch">
+            O clube oferece <strong style="color:var(--c-gold-400); font-weight:600">3 treinos experimentais gratuitos</strong> &mdash;
+            uma semana completa de Iniciação. Em que dia preferes começar?
+          </p>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="inicio" value="segunda" checked><span>Segunda &middot; 19:00</span></label>
+            <label class="chip"><input type="radio" name="inicio" value="quarta"><span>Quarta &middot; 18:00</span></label>
+            <label class="chip"><input type="radio" name="inicio" value="sexta"><span>Sexta &middot; 19:45</span></label>
+            <label class="chip"><input type="radio" name="inicio" value="indiferente"><span>Indiferente</span></label>
+          </div>
+        </fieldset>
 
         <fieldset class="field" style="border:0; padding:0; margin:0">
           <legend style="font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--c-paper-faint); margin-bottom:0.6rem">
@@ -617,6 +633,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=4" defer></script>
+<script src="assets/js/main.js?v=5" defer></script>
 </body>
 </html>

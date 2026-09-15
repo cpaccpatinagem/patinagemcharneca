@@ -13,7 +13,7 @@ var EMAIL_AVISO = 'cpaccpatinagem@gmail.com';
 
 var COLUNAS = [
   'Data', 'Atleta', 'Nascimento', 'Encarregado', 'Telemóvel',
-  'Email', 'Horário', 'Experiência', 'Mensagem', 'Contactado?'
+  'Email', 'Início experimental', 'Experiência', 'Mensagem', 'Contactado?'
 ];
 
 function doPost(e) {
@@ -34,7 +34,7 @@ function doPost(e) {
       p.encarregado || '',
       p.telefone || '',
       p.email || '',
-      p.horario || '',
+      p.inicio || '',
       p.experiencia || '',
       p.mensagem || '',
       ''
@@ -75,7 +75,7 @@ function avisar(p) {
     'Encarregado de educação: ' + (p.encarregado || '—') + '\n' +
     'Telemóvel: ' + (p.telefone || '—') + '\n' +
     'Email: ' + (p.email || '—') + '\n' +
-    'Horário preferido: ' + (p.horario || '—') + '\n' +
+    'Prefere começar: ' + (p.inicio || '—') + '\n' +
     'Experiência anterior: ' + (p.experiencia || '—') + '\n' +
     'Mensagem: ' + (p.mensagem || '—') + '\n\n' +
     'Todas as inscrições: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl();
@@ -106,7 +106,7 @@ function testar() {
       encarregado: 'Teste Encarregado',
       telefone: '912345678',
       email: 'teste@exemplo.pt',
-      horario: 'sabado',
+      inicio: 'quarta',
       experiencia: 'nunca',
       mensagem: 'Isto é um teste — podes apagar esta linha.'
     }
