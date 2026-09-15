@@ -7,6 +7,7 @@
    1. TOKENS
    -------------------------------------------------------------------------- */
 :root {
+  --sec-bg: var(--c-ink-800);
   /* --- Cores: base azul-noite --- */
   --c-ink-900: #060D1A;   /* fundo mais profundo */
   --c-ink-800: #0A1428;   /* fundo principal */
@@ -176,9 +177,9 @@ p { text-wrap: pretty; }
 }
 .wrap--narrow { width: min(100% - 2.5rem, var(--wrap-narrow)); }
 
-.section { padding-block: clamp(4rem, 9vw, var(--sp-7)); position: relative; }
+.section { padding-block: clamp(4rem, 9vw, var(--sp-7)); position: relative; --sec-bg: var(--c-ink-800); }
 .section--tight { padding-block: clamp(3rem, 6vw, var(--sp-6)); }
-.section--alt { background: var(--c-ink-900); }
+.section--alt { background: var(--c-ink-900); --sec-bg: var(--c-ink-900); }
 
 .section-head { max-width: 62ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
 .section-head--center { margin-inline: auto; text-align: center; }
@@ -1306,14 +1307,20 @@ p { text-wrap: pretty; }
   counter-increment: step;
   content: "0" counter(step);
   position: absolute;
-  top: -0.9rem; left: 0;
-  padding-right: 0.8rem;
-  background: var(--c-ink-800);
+  /* Metade da altura da caixa, para o número ficar centrado na linha e não
+     cortado por ela. Com line-height fixo o cálculo não depende do corpo. */
+  top: -0.55em; left: 0;
+  padding-right: 0.85rem;
+  /* O número abre um buraco na linha: o fundo tem de ser o da secção. */
+  background: var(--sec-bg);
   font-family: var(--f-display);
-  font-size: 0.95rem;
-  color: var(--c-gold-500);
+  font-size: 1.05rem;
+  /* Sem isto herdava o peso 350 do corpo do texto e quase não se via. */
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  color: var(--c-gold-400);
 }
-.section--alt .path__step::before { background: var(--c-ink-900); }
 .path__step h3 { margin-bottom: 0.6rem; }
 .path__step p { color: var(--c-paper-dim); font-size: var(--fs-small); }
 
