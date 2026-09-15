@@ -1,0 +1,155 @@
+<!doctype html>
+<!--
+  CPACC - email de confirmação da pré-inscrição (enviado ao encarregado de educação)
+
+  Este ficheiro é colado no projeto Apps Script como ficheiro HTML com o nome
+  "email-confirmacao". O código em google-apps-script.gs lê-o e substitui os
+  campos {{...}} pelos dados do formulário.
+
+  Regras de HTML para email, a respeitar em qualquer alteração:
+  - layout só com <table>, nunca flexbox nem grid;
+  - todo o estilo inline no atributo style; o <style> abaixo é um extra que
+    alguns clientes ignoram (Outlook, Gmail em algumas versões);
+  - sem webfonts, sem SVG, sem background-image, sem position;
+  - largura fixa de 600px, com max-width para o telemóvel;
+  - cores literais, porque variáveis CSS não existem aqui. Os valores vêm dos
+    tokens do style.css e estão anotados ao lado.
+
+  Campos: {{atleta}} {{nascimento}} {{encarregado}} {{telefone}} {{email}}
+          {{inicio}} {{experiencia}} {{mensagem}} {{ano}}
+  Bloco opcional: <!-- se:mensagem --> ... <!-- /se:mensagem -->
+-->
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>Pré-inscrição recebida</title>
+<style>
+  @media only screen and (max-width: 620px) {
+    .cx { width: 100% !important; }
+    .pd { padding-left: 24px !important; padding-right: 24px !important; }
+    .h1 { font-size: 22px !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; width:100%; background-color:#E7E3D9;">
+
+<!-- Texto de pré-visualização na caixa de entrada, invisível no email aberto. -->
+<div style="display:none; max-height:0; overflow:hidden; opacity:0; font-size:1px; line-height:1px; color:#E7E3D9;">
+  A pré-inscrição de {{atleta}} ficou registada. O clube contacta nos próximos dias úteis para combinar os 3 treinos experimentais.
+  &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; background-color:#E7E3D9;">
+<tr>
+<td align="center" style="padding:28px 12px 36px;">
+
+  <table role="presentation" class="cx" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; border-collapse:collapse; background-color:#F4F2EC;">
+
+    <!-- ============ CABEÇALHO (azul-noite) ============ -->
+    <tr>
+      <td align="center" style="background-color:#0A1428; padding:34px 40px 26px;">
+        <img src="cid:logotipo" width="60" height="60" alt="" style="display:block; margin:0 auto 16px; border:0; outline:none; text-decoration:none;">
+        <div style="font-family:'Manrope',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:15px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:#E3C567;">CPACC</div>
+        <div style="font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; color:#B8B5AC; padding-top:7px;">Clube de Patinagem Artística da Charneca de Caparica</div>
+      </td>
+    </tr>
+    <!-- fio dourado -->
+    <tr><td style="background-color:#C9A227; height:3px; line-height:3px; font-size:0;">&nbsp;</td></tr>
+
+    <!-- ============ CORPO (papel) ============ -->
+    <tr>
+      <td class="pd" style="padding:40px 48px 8px;">
+        <div style="font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:#8A6D14; padding-bottom:12px;">Pré-inscrição recebida</div>
+        <h1 class="h1" style="margin:0 0 18px; font-family:'Manrope',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:26px; line-height:34px; font-weight:800; color:#0A1428;">A pré-inscrição de {{atleta}} ficou registada.</h1>
+        <p style="margin:0 0 14px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:26px; color:#1F2B40;">O clube entra em contacto nos próximos dias úteis, por email ou telefone, para combinar o início dos 3 treinos experimentais gratuitos: uma semana completa no grupo de Iniciação.</p>
+        <p style="margin:0 0 4px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:26px; color:#1F2B40;">Nesses treinos o clube empresta patins e proteções, por isso não é preciso comprar material. Basta roupa confortável.</p>
+      </td>
+    </tr>
+
+    <!-- ============ CARTÃO DE DADOS ============ -->
+    <tr>
+      <td class="pd" style="padding:24px 48px 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; background-color:#FFFFFF; border:1px solid #DCD6C6;">
+          <tr>
+            <td style="padding:20px 24px 6px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:#6B7383;">Dados recebidos</td>
+          </tr>
+
+          <tr><td style="padding:0 24px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+
+            <tr><td style="padding:12px 0 0; border-top:1px solid #EDE8DC; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6B7383;">Atleta</td></tr>
+            <tr><td style="padding:2px 0 12px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:24px; color:#0A1428;">{{atleta}}</td></tr>
+
+            <tr><td style="padding:12px 0 0; border-top:1px solid #EDE8DC; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6B7383;">Data de nascimento</td></tr>
+            <tr><td style="padding:2px 0 12px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:24px; color:#0A1428;">{{nascimento}}</td></tr>
+
+            <tr><td style="padding:12px 0 0; border-top:1px solid #EDE8DC; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6B7383;">Encarregado de educação</td></tr>
+            <tr><td style="padding:2px 0 12px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:24px; color:#0A1428;">{{encarregado}}</td></tr>
+
+            <tr><td style="padding:12px 0 0; border-top:1px solid #EDE8DC; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6B7383;">Contactos</td></tr>
+            <tr><td style="padding:2px 0 12px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:24px; color:#0A1428;">{{telefone}}<br>{{email}}</td></tr>
+
+            <tr><td style="padding:12px 0 0; border-top:1px solid #EDE8DC; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6B7383;">Treino preferido para começar</td></tr>
+            <tr><td style="padding:2px 0 12px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:24px; color:#0A1428;">{{inicio}}</td></tr>
+
+            <tr><td style="padding:12px 0 0; border-top:1px solid #EDE8DC; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6B7383;">Experiência anterior</td></tr>
+            <tr><td style="padding:2px 0 16px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:24px; color:#0A1428;">{{experiencia}}</td></tr>
+
+            <!-- se:mensagem -->
+            <tr><td style="padding:12px 0 0; border-top:1px solid #EDE8DC; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6B7383;">Mensagem</td></tr>
+            <tr><td style="padding:2px 0 16px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:16px; line-height:24px; color:#0A1428;">{{mensagem}}</td></tr>
+            <!-- /se:mensagem -->
+
+          </table></td></tr>
+        </table>
+
+        <p style="margin:14px 0 0; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#4A5568;">Se algum destes dados estiver errado, basta responder a este email.</p>
+      </td>
+    </tr>
+
+    <!-- ============ BOTÃO ============ -->
+    <tr>
+      <td class="pd" align="left" style="padding:28px 48px 44px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
+          <tr>
+            <td align="center" style="background-color:#0A1428; padding:0;">
+              <a href="https://www.patinagemcharneca.pt/horarios.html" style="display:inline-block; padding:15px 30px; font-family:'Manrope',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:15px; font-weight:700; letter-spacing:0.04em; color:#E3C567; text-decoration:none;">Ver os horários de treino</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- ============ RODAPÉ (azul-noite) ============ -->
+    <tr>
+      <td class="pd" style="background-color:#060D1A; padding:32px 48px 34px;">
+        <div style="font-family:'Manrope',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#E3C567; padding-bottom:14px;">Onde estamos</div>
+        <div style="font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:14px; line-height:23px; color:#BFBDB5;">
+          Pavilhão Municipal da Charneca de Caparica<br>
+          Praceta Ruy Coelho, 2820-327 Charneca de Caparica<br>
+          Almada, Portugal
+        </div>
+        <div style="font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:14px; line-height:23px; padding-top:12px;">
+          <a href="tel:+351926716672" style="color:#E3C567; text-decoration:none;">926 716 672</a>
+          <span style="color:#6E7788;">&nbsp;·&nbsp;</span>
+          <a href="mailto:cpaccpatinagem@gmail.com" style="color:#E3C567; text-decoration:none;">cpaccpatinagem@gmail.com</a>
+        </div>
+        <div style="border-top:1px solid #1B2436; margin-top:22px; padding-top:18px; font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; font-size:12px; line-height:20px; color:#8A9099;">
+          Este email foi enviado porque foi feita uma pré-inscrição em
+          <a href="https://www.patinagemcharneca.pt/" style="color:#B6AC8C; text-decoration:underline;">patinagemcharneca.pt</a>.
+          Os dados servem apenas para o contacto do clube.
+          <a href="https://www.patinagemcharneca.pt/privacidade.html" style="color:#B6AC8C; text-decoration:underline;">Política de privacidade</a>.
+        </div>
+      </td>
+    </tr>
+
+  </table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

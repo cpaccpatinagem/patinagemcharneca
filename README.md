@@ -47,8 +47,14 @@ patinagem-charneca/
 ├── privacidade.html      Política de privacidade / RGPD
 ├── robots.txt
 ├── sitemap.xml
-├── package.json          Só para o `npm run dev` — sem dependências
-├── tools/dev-server.mjs  Servidor local com live reload
+├── package.json          Só para o `npm run dev` - sem dependências
+├── tools/
+│   ├── dev-server.mjs         Servidor local com live reload
+│   ├── google-apps-script.gs  Recetor das pré-inscrições
+│   ├── email-confirmacao.html Template do email ao encarregado de educação
+│   ├── email-logo.gs          Símbolo do clube embutido nesse email
+│   ├── preview-email.mjs      Pré-visualiza o email sem republicar
+│   └── preparar-fotos.py      Prepara as fotos da equipa
 └── assets/
     ├── css/style.css     Design system completo
     ├── js/main.js        Animações, menu, acordeão, formulário
@@ -139,23 +145,27 @@ email de confirmação com os dados que enviou. O código do recetor está em
    nome, por exemplo "CPACC — Pré-inscrições".
 2. Nessa folha: **Extensões → Apps Script**.
 3. Apaga o que lá estiver e cola todo o conteúdo de `tools/google-apps-script.gs`.
-4. Guarda (ícone do disquete).
-5. **Implementar → Nova implementação**. No ícone de engrenagem escolhe
+4. Cria mais dois ficheiros no mesmo projeto, com os nomes exatos:
+   - **Ficheiro → Script**, nome `email-logo`, com o conteúdo de `tools/email-logo.gs`;
+   - **Ficheiro → HTML**, nome `email-confirmacao`, com o conteúdo de
+     `tools/email-confirmacao.html`.
+5. Guarda (ícone do disquete).
+6. **Implementar → Nova implementação**. No ícone de engrenagem escolhe
    **Aplicação Web** e define:
    - *Executar como*: **Eu**
    - *Quem tem acesso*: **Qualquer pessoa** ← importante, senão o site não consegue enviar
-6. Clica **Implementar** e autoriza o acesso quando pedir (vai avisar que a app não
+7. Clica **Implementar** e autoriza o acesso quando pedir (vai avisar que a app não
    é verificada — é tua, avança em "Avançadas → Aceder a…").
-7. Copia o **URL da aplicação web** que aparece no fim. É algo como
+8. Copia o **URL da aplicação web** que aparece no fim. É algo como
    `https://script.google.com/macros/s/AKfy.../exec`.
-8. Cola esse URL em `index.html` e `pre-inscricao.html`, no lugar de
+9. Cola esse URL em `index.html` e `pre-inscricao.html`, no lugar de
    `SUBSTITUIR_PELO_ENDPOINT`:
 
 ```html
 <form class="form" data-form data-endpoint="https://script.google.com/macros/s/AKfy.../exec" novalidate>
 ```
 
-9. Incrementa a versão dos assets nas páginas (`?v=3` → `?v=4`), faz commit e push.
+10. Incrementa a versão dos assets nas páginas (`?v=3` → `?v=4`), faz commit e push.
 
 ### Enquanto o endpoint não estiver configurado
 
@@ -167,8 +177,48 @@ acima.
 ### Testar
 
 Depois de configurado, preenche o formulário no site e confirma que aparece uma
-linha nova na folha de cálculo e um email na caixa do clube. Para testar sem o
-site, no editor do Apps Script escolhe a função `testar` e carrega em Executar.
+linha nova na folha de cálculo, um email na caixa do clube e a confirmação na
+caixa do encarregado de educação. Para testar sem o site, no editor do Apps
+Script escolhe a função `testar` e carrega em Executar.
+
+### Email de confirmação ao encarregado de educação
+
+Cada pré-inscrição gera dois emails: o aviso ao clube (texto simples) e uma
+confirmação ao encarregado de educação, em HTML, com o símbolo do clube, os
+dados recebidos e o que acontece a seguir. Quem tenha o HTML desligado recebe a
+mesma informação em texto simples.
+
+Três ficheiros compõem esse email:
+
+| Ficheiro | O que é |
+|---|---|
+| `tools/email-confirmacao.html` | O template. É onde se muda o texto e o aspeto. |
+| `tools/email-logo.gs` | O símbolo em base64, embutido no email. |
+| `tools/google-apps-script.gs` | Preenche o template e envia (`confirmar`). |
+
+**Ver o resultado sem republicar:**
+
+```bash
+node tools/preview-email.mjs
+```
+
+Corre o código real do Apps Script com APIs imitadas e escreve
+`.local/email-preview.html` (e a versão em texto ao lado) para abrir no browser.
+Os dados de exemplo estão no topo de `tools/preview-email.mjs` - vale a pena
+testar nomes longos e o caso sem mensagem, que faz desaparecer esse bloco.
+
+**Regras do template.** Clientes de email não têm flexbox, grid, webfonts nem
+variáveis CSS. Layout só com `<table>`, estilo inline, cores literais, 600px de
+largura. O cabeçalho do ficheiro repete estas regras.
+
+**Regenerar o símbolo**, depois de mudar `assets/img/icon-512.png`:
+
+```bash
+sips -Z 128 assets/img/icon-512.png --out /tmp/logo.png
+python3 -c "import base64,textwrap;print(' +\n'.join(\"  '%s'\" % l for l in textwrap.wrap(base64.b64encode(open('/tmp/logo.png','rb').read()).decode(), 96)))"
+```
+
+Cola o resultado em `tools/email-logo.gs`, a seguir a `var LOGO_PNG_BASE64 =`.
 
 ### Proteção anti-spam
 

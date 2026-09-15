@@ -110,6 +110,10 @@ function avisar(p) {
 
 /**
  * Confirma ao encarregado de educação que a pré-inscrição chegou.
+ *
+ * Envia em HTML (template no ficheiro "email-confirmacao") com o símbolo do
+ * clube inline, e em texto simples para quem tenha o HTML desligado.
+ *
  * Uma falha aqui não pode deitar abaixo a submissão: o registo na folha e o
  * aviso ao clube já foram feitos, por isso o erro fica só no log.
  */
@@ -119,35 +123,85 @@ function confirmar(p) {
     return;
   }
 
-  var corpo =
-    'A pré-inscrição de ' + (p.atleta || 'um novo atleta') + ' no Clube de Patinagem ' +
-    'Artística da Charneca de Caparica ficou registada.\n\n' +
-    'O clube responde por email ou telefone para marcar o treino experimental e ' +
-    'indicar o grupo adequado. A participação no treino experimental não tem custo ' +
-    'nem compromisso.\n\n' +
-    'Dados recebidos\n' +
-    'Atleta: ' + (p.atleta || '-') + '\n' +
-    'Data de nascimento: ' + dataPt(p.nascimento) + '\n' +
-    'Encarregado de educação: ' + (p.encarregado || '-') + '\n' +
-    'Telemóvel: ' + (p.telefone || '-') + '\n' +
-    'Treino preferido para começar: ' + rotulo(ROTULOS_INICIO, p.inicio) + '\n' +
-    'Experiência anterior: ' + rotulo(ROTULOS_EXPERIENCIA, p.experiencia) + '\n' +
-    (p.mensagem ? 'Mensagem: ' + p.mensagem + '\n' : '') +
-    '\nSe algum destes dados estiver errado, basta responder a este email.\n\n' +
-    'Clube de Patinagem Artística da Charneca de Caparica\n' +
-    EMAIL_AVISO;
+  var dados = {
+    atleta: p.atleta || '-',
+    nascimento: dataPt(p.nascimento),
+    encarregado: p.encarregado || '-',
+    telefone: p.telefone || '-',
+    email: destino,
+    inicio: rotulo(ROTULOS_INICIO, p.inicio),
+    experiencia: rotulo(ROTULOS_EXPERIENCIA, p.experiencia),
+    mensagem: p.mensagem || '',
+    ano: String(new Date().getFullYear())
+  };
 
   try {
     MailApp.sendEmail({
       to: destino,
       name: REMETENTE,
-      subject: 'Pré-inscrição recebida - ' + (p.atleta || 'novo atleta'),
-      body: corpo,
-      replyTo: EMAIL_AVISO
+      subject: 'Pré-inscrição recebida - ' + dados.atleta,
+      body: corpoTexto(dados),
+      htmlBody: montarHtml(dados),
+      replyTo: EMAIL_AVISO,
+      inlineImages: { logotipo: logotipoBlob() }
     });
   } catch (erro) {
     console.error('Falhou a confirmação para ' + destino + ': ' + erro);
   }
+}
+
+/** Lê o template, resolve os blocos opcionais e substitui os campos {{...}}. */
+function montarHtml(dados) {
+  var html = HtmlService.createHtmlOutputFromFile('email-confirmacao').getContent();
+
+  // Blocos <!-- se:campo --> ... <!-- /se:campo --> saem quando o campo vem vazio.
+  html = html.replace(/<!--\s*se:(\w+)\s*-->([\s\S]*?)<!--\s*\/se:\1\s*-->/g,
+    function (tudo, campo, dentro) {
+      return dados[campo] ? dentro : '';
+    });
+
+  return html.replace(/\{\{(\w+)\}\}/g, function (tudo, campo) {
+    return escaparHtml(dados[campo] === undefined ? '' : String(dados[campo]));
+  });
+}
+
+/** Versão em texto simples, para quem não recebe HTML. */
+function corpoTexto(d) {
+  return 'A pré-inscrição de ' + d.atleta + ' no Clube de Patinagem Artística da ' +
+    'Charneca de Caparica ficou registada.\n\n' +
+    'O clube entra em contacto nos próximos dias úteis, por email ou telefone, para ' +
+    'combinar o início dos 3 treinos experimentais gratuitos: uma semana completa no ' +
+    'grupo de Iniciação. Nesses treinos o clube empresta patins e proteções, por isso ' +
+    'não é preciso comprar material. Basta roupa confortável.\n\n' +
+    'Dados recebidos\n' +
+    'Atleta: ' + d.atleta + '\n' +
+    'Data de nascimento: ' + d.nascimento + '\n' +
+    'Encarregado de educação: ' + d.encarregado + '\n' +
+    'Telemóvel: ' + d.telefone + '\n' +
+    'Email: ' + d.email + '\n' +
+    'Treino preferido para começar: ' + d.inicio + '\n' +
+    'Experiência anterior: ' + d.experiencia + '\n' +
+    (d.mensagem ? 'Mensagem: ' + d.mensagem + '\n' : '') +
+    '\nSe algum destes dados estiver errado, basta responder a este email.\n\n' +
+    'Horários de treino: https://www.patinagemcharneca.pt/horarios.html\n\n' +
+    'Clube de Patinagem Artística da Charneca de Caparica\n' +
+    'Pavilhão Municipal da Charneca de Caparica, Praceta Ruy Coelho\n' +
+    '2820-327 Charneca de Caparica, Almada\n' +
+    '926 716 672 | ' + EMAIL_AVISO;
+}
+
+/** O símbolo do clube, descodificado do base64 em email-logo.gs. */
+function logotipoBlob() {
+  return Utilities.newBlob(Utilities.base64Decode(LOGO_PNG_BASE64), 'image/png', 'cpacc.png');
+}
+
+function escaparHtml(texto) {
+  return texto
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/\n/g, '<br>');
 }
 
 function emailValido(valor) {
