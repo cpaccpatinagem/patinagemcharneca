@@ -389,7 +389,16 @@
 
       fetch(endpoint, { method: "POST", body: corpo })
         .then(function (r) {
-          if (!r.ok) throw new Error("HTTP " + r.status);
+          // O Google Apps Script executa o doPost e depois redireciona para um
+          // URL googleusercontent.com/macros/echo para devolver a resposta. Esse
+          // redirecionamento devolve 404 a pedidos de outros sítios, mesmo quando
+          // a inscrição foi gravada — confirmámos nos registos de execução.
+          //
+          // Por isso não podemos exigir r.ok: mostraríamos erro em inscrições
+          // bem-sucedidas, e o pai voltaria a submeter. O redirecionamento é o
+          // sinal de que o script correu; um endpoint errado devolve 404 sem
+          // redirecionar, e uma falha de rede rejeita a promessa.
+          if (!r.ok && !r.redirected) throw new Error("HTTP " + r.status);
           showSuccess();
         })
         .catch(function (err) {
