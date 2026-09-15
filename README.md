@@ -128,8 +128,9 @@ ffmpeg -i assets/video/treino.mp4 -ss 00:00:02 -vframes 1 -q:v 3 assets/img/hero
 
 ## Formulário de pré-inscrição
 
-As pré-inscrições são guardadas numa folha de cálculo do Google e o clube recebe
-um email a cada nova inscrição. O código do recetor está em
+As pré-inscrições são guardadas numa folha de cálculo do Google. A cada nova
+inscrição o clube recebe um email de aviso e o encarregado de educação recebe um
+email de confirmação com os dados que enviou. O código do recetor está em
 `tools/google-apps-script.gs`.
 
 ### Instalação (uma vez)
