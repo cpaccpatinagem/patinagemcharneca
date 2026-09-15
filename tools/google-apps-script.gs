@@ -230,6 +230,11 @@ function json(obj) {
 /**
  * Serve para testar sem usar o site: no editor do Apps Script,
  * escolhe esta função e carrega em "Executar".
+ *
+ * Põe um email verdadeiro em SUBSTITUIR_PELO_EMAIL_DE_TESTE antes de executar,
+ * senão a confirmação sai para um endereço que não existe e parece que nada
+ * aconteceu. Repõe o texto depois do teste, para não ficar aqui um email
+ * pessoal.
  */
 function testar() {
   doPost({
@@ -238,7 +243,7 @@ function testar() {
       nascimento: '2019-04-12',
       encarregado: 'Teste Encarregado',
       telefone: '912345678',
-      email: 'teste@exemplo.pt',
+      email: 'SUBSTITUIR_PELO_EMAIL_DE_TESTE',
       inicio: 'quarta',
       experiencia: 'nunca',
       mensagem: 'Isto é um teste, podes apagar esta linha.'
