@@ -748,6 +748,34 @@ p { text-wrap: pretty; }
 .tribute p { color: var(--c-paper-dim); }
 .tribute p + p { margin-top: 0.8rem; }
 
+/* Bloco de retrato + texto, para figuras da direção na página do clube.
+   Em ecrãs estreitos empilha; a partir de 620px fica lado a lado. */
+.figure-aside {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: start;
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  margin-block: var(--sp-4);
+  background: var(--g-surface);
+  border-left: 3px solid var(--c-gold-500);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+@media (min-width: 620px) {
+  .figure-aside { grid-template-columns: minmax(0, 170px) minmax(0, 1fr); }
+}
+.figure-aside__foto {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--c-ink-600), var(--c-ink-900));
+  max-width: 170px;
+}
+.figure-aside__foto img { width: 100%; height: 100%; object-fit: cover; }
+.figure-aside__texto p { color: var(--c-paper-dim); }
+.figure-aside__texto p + p { margin-top: 0.8rem; }
+.figure-aside .tribute__name { margin-bottom: 0.8rem; }
+
 /* --------------------------------------------------------------------------
    10. HORÁRIOS
    -------------------------------------------------------------------------- */
