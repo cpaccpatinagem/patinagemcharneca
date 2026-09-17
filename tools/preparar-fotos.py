@@ -18,9 +18,10 @@ import os
 import unicodedata
 from PIL import Image, ImageOps, ImageEnhance, ImageChops
 
-# Fundo neutro claro, próximo do cinzento de estúdio, para que fotos recortadas
-# e fotos de estúdio pareçam da mesma sessão.
-FUNDO = (238, 236, 232)
+# Branco, que é o fundo das fotos de estúdio que já estão publicadas. Serve para
+# assentar recortes com transparência e para preencher o que falte quando o corte
+# passa fora da foto original.
+FUNDO = (255, 255, 255)
 
 LARGURA, ALTURA = 600, 800          # 3:4
 FOLGA_TOPO = 0.09                   # espaço acima da cabeça, em % da altura
