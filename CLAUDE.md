@@ -17,6 +17,7 @@ documenta como escrever e como decidir.
 |---|---|
 | `—` (travessão) | `-` (hífen) |
 | "clube de bairro", "pequeno clube", "familiar" | "clube de formação" |
+| "bairro" | "a terra", "o concelho" |
 | "educandos" | "atletas" |
 | "o seu filho", "o seu educando" | "os atletas", "quem começa aos 5 anos" |
 | "turmas", "aulas", "professores" | "grupos", "treinos", "treinadores" |
@@ -27,16 +28,37 @@ nem em `alt`, nem em meta descriptions. Substituir por hífen `-`.
 
 Isto não é um ATL nem uma escola. É um clube desportivo federado.
 
+**Exceção em vigor:** o subtítulo da página inicial diz "sem perder as raízes
+familiares e a ligação à terra com que nasceu, em 1999". Fica como está - é uma
+escolha deliberada do Francisco. A regra continua a valer para texto novo: não
+descrever o clube como familiar em mais lado nenhum.
+
 ### Tratamento
 
-Impessoal, focado no atleta. Nunca dirigir o texto a "si" ou a "ti".
+Por defeito impessoal, focado no atleta. O texto descreve o clube, não fala
+para o leitor.
 
 - Sim: "Os atletas do grupo de Formação treinam três vezes por semana."
 - Sim: "A inscrição faz-se em qualquer altura do ano."
-- Não: "O seu filho vai adorar." / "Marca já a tua aula."
 
-Exceção: microcópia de ação (botões, labels de formulário) pode ser imperativa
-neutra, sem pronome - "Pedir pré-inscrição", "Ver horários".
+**Tratar o leitor por "si" é permitido, com moderação.** Onde há uma ação a
+pedir ou uma garantia a dar, o impessoal fica forçado e distante: "Faça a
+pré-inscrição e confirmamos a vaga" é melhor português do que qualquer volta
+para evitar o verbo. Usar onde ganha alguma coisa - chamadas à ação, respostas
+das perguntas frequentes, formulário, privacidade - e não como voz do site.
+
+Se um bloco inteiro estiver em "si", há excesso: passar a descrição a impessoal
+e deixar o tratamento direto só no convite final.
+
+Nunca por "tu": nem em texto, nem em placeholders de formulário, nem em
+mensagens de erro do JavaScript. É o erro que mais escapa, porque esses textos
+não estão no corpo das páginas.
+
+Continua proibido dizer "o seu filho" ou "o seu educando" - isso é sobre a
+criança, não sobre o tratamento. Falar em "os atletas" ou "a criança".
+
+Microcópia de ação (botões, labels) fica imperativa neutra, sem pronome -
+"Pedir pré-inscrição", "Ver horários".
 
 ### Posicionamento
 
@@ -114,12 +136,12 @@ Paleta: azul-noite (`--c-ink-*`) com dourado (`--c-gold-*`) sobre papel
 
 ### Cache busting
 
-Os assets são referenciados com `?v=N` (atualmente `?v=14`). **Sempre que
+Os assets são referenciados com `?v=N` (atualmente `?v=16`). **Sempre que
 alterares `style.css` ou `main.js`, incrementa o `v` em todas as páginas**, senão
 os visitantes ficam com a versão antiga.
 
 ```bash
-sed -i '' 's/?v=14/?v=15/g' *.html
+sed -i '' 's/?v=16/?v=17/g' *.html
 ```
 
 ### Acessibilidade (não negociável)
@@ -143,9 +165,10 @@ renomear páginas, atualizar `sitemap.xml`. O `faq.html` tem dados estruturados
 
 ## 4. Trabalho
 
-- **Commit automático, sem push.** Cada alteração concluída leva commit, com
+- **Commit e push automáticos.** Cada alteração concluída leva commit, com
   mensagem em português, no estilo dos existentes ("Tira a palavra bairro do
-  hero"). O `git push` é decisão do Francisco - nunca fazer sem pedido explícito.
+  hero"), e vai para o `main`. A Vercel publica a partir daí, por isso um push
+  é uma publicação: confirmar no site depois de publicar, não antes.
 - `.local/` e `assets/img/equipa/_originais/` estão em `.gitignore`: trabalho
   interno e fotos em alta resolução não vão para o repositório público.
 - Depois de mexer em HTML, CSS ou JS, verificar no browser (`npm run dev`) antes
@@ -155,7 +178,26 @@ renomear páginas, atualizar `sitemap.xml`. O `faq.html` tem dados estruturados
 
 ## 5. Estado
 
-Próximo passo combinado: **limpeza de linguagem** nas 7 páginas - travessões,
-"o seu filho", "turmas", e alinhar o tom com a secção 1.
+Limpeza de linguagem **feita** em 2026-09-16: 56 travessões passados a hífen nas
+7 páginas e nos textos visíveis do `main.js`, "turmas" e "aulas" substituídas por
+"grupos" e "treinos", e o título "Quem vai estar com o seu filho" passado a "Quem
+acompanha os atletas". A 2026-09-17 saíram os últimos "tu" que tinham escapado:
+um "Tens" na privacidade e o placeholder "O teu nome" no formulário.
 
-Auditoria em 2026-09-15: 49 ocorrências de `—` e 1 de "o seu filho".
+Por fazer:
+
+- **Fotos do pavilhão.** As galerias do `index.html` e do `clube.html` ainda são
+  placeholders. Há fotos reais de um treino por tratar e colocar.
+- **Retratos por identificar.** Duas fotos tratadas, com fundo branco e à escala
+  das outras, à espera de nome e cargo. Estão em `.local/`, fora do repositório.
+- **Cátia Mendonça** - o bloco `.figure-aside` no `clube.html` está construído
+  com o retrato comentado, à espera da foto.
+- **Vídeo do hero** - o `<video>` está comentado no `index.html` e no lugar dele
+  corre o `.hero__placeholder`. Especificações no `README.md`.
+- **Taça de Portugal 2013** e o percurso da Inês Pelica no Clube Futebol
+  Sassoeiros - ambos afirmados no site e por confirmar.
+- **"Piso próprio para patinagem artística"** no `clube.html` - as fotos do
+  pavilhão mostram um pavilhão municipal polivalente, com marcações de
+  basquetebol e andebol. Rever a frase antes de pôr a foto ao lado dela.
+- **Search Console** - falta o registo TXT no dominios.pt para validar o domínio
+  e pedir a indexação da página inicial, para o Google apanhar o ícone.
