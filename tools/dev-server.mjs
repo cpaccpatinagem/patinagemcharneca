@@ -123,12 +123,16 @@ const server = createServer(async (req, res) => {
     }
 
     if (!info) {
-      // 404: devolve a home com um aviso, para links partidos serem óbvios.
-      res.writeHead(404, { "Content-Type": MIME[".html"] });
+      // 404: serve a mesma página que a Vercel serve em produção (404.html),
+      // para links partidos serem óbvios e a página poder ser afinada aqui.
+      const custom = await readFile(join(ROOT, "404.html"), "utf8").catch(() => null);
+      res.writeHead(404, { "Content-Type": MIME[".html"], "Cache-Control": "no-store" });
       res.end(
-        `<body style="font:16px system-ui;background:#0A1428;color:#fff;padding:3rem">
-         <h1>404</h1><p><code>${req.url}</code> não existe.</p>
-         <p><a style="color:#D4AF6A" href="/">Voltar ao início</a></p>${LIVE_RELOAD}</body>`,
+        custom
+          ? custom.replace(/<\/body>/i, `${LIVE_RELOAD}</body>`)
+          : `<body style="font:16px system-ui;background:#0A1428;color:#fff;padding:3rem">
+             <h1>404</h1><p><code>${req.url}</code> não existe.</p>
+             <p><a style="color:#D4AF6A" href="/">Voltar ao início</a></p>${LIVE_RELOAD}</body>`,
       );
       return;
     }
