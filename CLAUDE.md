@@ -86,6 +86,14 @@ Português de Portugal, sem ortografia brasileira. Frases curtas. Verbo cedo.
 Zero superlativos vazios ("incrível", "único", "o melhor"). Se uma afirmação
 precisa de prova, ou tem prova ao lado ou sai.
 
+Isto vale para afirmações por confirmar, não para o que o Francisco sabe da
+modalidade. Um exemplo real: o site diz que o pavilhão tem "piso próprio para
+patinagem artística", eu vi nas fotos um pavilhão municipal com marcações de
+basquetebol e mudei a frase - mas um piso de madeira de pavilhão é mesmo piso
+próprio para patinagem artística, e a frase estava certa. Uma fotografia não
+serve para contestar o que ele afirma sobre a modalidade ou sobre o clube:
+perguntar e esperar pela resposta.
+
 ---
 
 ## 2. Conteúdo que ainda não existe
@@ -196,8 +204,5 @@ Por fazer:
   corre o `.hero__placeholder`. Especificações no `README.md`.
 - **Taça de Portugal 2013** e o percurso da Inês Pelica no Clube Futebol
   Sassoeiros - ambos afirmados no site e por confirmar.
-- **"Piso próprio para patinagem artística"** no `clube.html` - as fotos do
-  pavilhão mostram um pavilhão municipal polivalente, com marcações de
-  basquetebol e andebol. Rever a frase antes de pôr a foto ao lado dela.
 - **Search Console** - falta o registo TXT no dominios.pt para validar o domínio
   e pedir a indexação da página inicial, para o Google apanhar o ícone.
