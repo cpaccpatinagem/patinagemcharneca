@@ -13,3 +13,10 @@ node_modules/
 # para o original nunca ir para um repositório público.
 assets/img/equipa/_originais/
 assets/img/pavilhao/_originais/
+
+# Vídeo em bruto do telemóvel: são crianças em treino, com GPS e data no
+# ficheiro, e centenas de MB. Nunca vai para o repositório público. O vídeo do
+# hero, quando existir, entra já cortado e comprimido em assets/video/.
+Video intro website CPACC homepage/
+*.MOV
+*.mov
