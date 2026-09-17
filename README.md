@@ -227,6 +227,70 @@ Cola o resultado em `tools/email-logo.gs`, a seguir a `var LOGO_PNG_BASE64 =`.
 O formulário tem um campo escondido (`website`) que só robôs preenchem. O Apps
 Script ignora essas submissões automaticamente.
 
+## Medir: funil, ocupação e proveniência
+
+Sem números não se decide nada: nem se vale a pena publicar no Instagram, nem se
+já é altura de pedir mais horas de pista. Três folhas respondem a isso e
+calculam-se sozinhas a partir das pré-inscrições.
+
+Cada uma nasce de uma função do Apps Script que se corre **uma vez**, no editor
+(escolher a função na barra de cima e carregar em Executar):
+
+| Função | Folha que cria | Responde a |
+|---|---|---|
+| `configurarFunil` | **Funil** | De cada 10 pré-inscrições, quantas viram treino experimental e quantas viram inscrição? |
+| `configurarOcupacao` | **Ocupação** | Que grupos têm vagas e quais estão cheios? |
+| `configurarProveniencia` | **Proveniência** | De onde vieram as famílias que se pré-inscreveram? |
+
+### Funil
+
+Na folha das pré-inscrições, marcar `Sim` nas colunas **Experimental feito?** e
+**Inscrito?** à medida que cada criança avança. A folha **Funil** conta por mês e
+mostra as duas percentagens que interessam.
+
+Se a percentagem de quem experimenta for baixa, o problema está no contacto
+depois da pré-inscrição. Se for alta e a de inscrição for baixa, o problema está
+no treino experimental ou no preço.
+
+### Ocupação
+
+A única folha que se escreve à mão. Por grupo, quantos **Lugares** existem e
+quantos **Atletas** estão inscritos hoje; as vagas, a percentagem e a situação
+(`Com vagas`, `Quase cheio`, `Cheio`) saem sozinhas, com cor.
+
+Vale a pena atualizar os atletas uma vez por mês. É esta folha que diz quando
+abrir lista de espera no site e que serve de argumento junto da Câmara para
+pedir mais horas de pavilhão.
+
+Os grupos estão na variável `GRUPOS`, no topo do script. Alterar aí se os nomes
+mudarem e correr `configurarOcupacao` outra vez.
+
+### Proveniência
+
+Automática. O formulário envia duas informações além dos dados da criança: a
+página onde foi preenchido e de onde veio a visita. Não usa cookies, não segue
+ninguém entre visitas e não identifica pessoas - está descrito na política de
+privacidade.
+
+Para medir uma ação concreta, acrescentar `?via=` à ligação que se divulga:
+
+```
+https://www.patinagemcharneca.pt/pre-inscricao?via=cartaz-escola
+https://www.patinagemcharneca.pt/?via=feira-desporto
+```
+
+Essa etiqueta aparece na folha **Proveniência** e fica a saber-se quantas
+pré-inscrições vieram daquele cartaz. Sem etiqueta, fica registado o site de
+onde veio a visita (`google.com`, `l.instagram.com`) ou `direta` para quem
+escreveu o endereço à mão.
+
+### Quantas pessoas visitam
+
+As folhas acima medem quem chega ao fim. Para saber quantos visitantes há e que
+páginas veem, o site usa a medição da Vercel (sem cookies), no painel do projeto
+em **Analytics**. As duas leituras juntas dão a taxa de conversão: visitas na
+página de pré-inscrição a dividir por pré-inscrições recebidas.
+
 ## Publicar
 
 O site está na **Vercel**, ligada ao repositório: cada push para `main` publica em

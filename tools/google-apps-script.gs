@@ -18,8 +18,11 @@ var REMETENTE = 'CPACC';
 var COLUNAS = [
   'Data', 'Atleta', 'Nascimento', 'Encarregado', 'Telemóvel',
   'Email', 'Início experimental', 'Experiência', 'Mensagem', 'Contactado?',
-  'Experimental feito?', 'Inscrito?'
+  'Experimental feito?', 'Inscrito?', 'Página', 'Proveniência'
 ];
+
+// Capacidade e ocupação por grupo. Os nomes têm de ser os que o site usa.
+var GRUPOS = ['Iniciação A', 'Iniciação B', 'Formação A', 'Formação B', 'Competição'];
 
 /**
  * Prepara a folha para medir o funil: pré-inscrições -> treinos experimentais
@@ -122,7 +125,11 @@ function doPost(e) {
       p.inicio || '',
       p.experiencia || '',
       p.mensagem || '',
-      ''
+      '',            // Contactado?
+      '',            // Experimental feito?
+      '',            // Inscrito?
+      p.pagina || '',
+      p.proveniencia || ''
     ]);
 
     avisar(p);
@@ -149,8 +156,105 @@ function obterFolha() {
     folha.setFrozenRows(1);
     folha.setColumnWidth(1, 140);
     folha.setColumnWidth(9, 280);
+    return folha;
+  }
+
+  // Folha criada por uma versão anterior: acrescenta os cabeçalhos que
+  // faltarem, senão as colunas novas ficavam com dados e sem nome.
+  var largura = folha.getLastColumn();
+  if (largura < COLUNAS.length) {
+    var faltam = COLUNAS.slice(largura);
+    folha.getRange(1, largura + 1, 1, faltam.length)
+         .setValues([faltam])
+         .setFontWeight('bold');
   }
   return folha;
+}
+
+/**
+ * Prepara a folha "Ocupação": quantos lugares tem cada grupo, quantos estão
+ * ocupados e quantas vagas sobram. Correr UMA vez, a partir do editor.
+ *
+ * A capacidade e os atletas inscritos escrevem-se à mão - são números que só
+ * o clube sabe. O resto calcula-se sozinho.
+ *
+ * É esta folha que responde às duas perguntas que decidem tudo o resto:
+ * onde há vagas para encher, e onde já não há e é altura de abrir lista de
+ * espera ou pedir mais horas de pista.
+ */
+function configurarOcupacao() {
+  var livro = SpreadsheetApp.getActiveSpreadsheet();
+  var folha = livro.getSheetByName('Ocupação') || livro.insertSheet('Ocupação');
+  folha.clear();
+
+  folha.appendRow(['Grupo', 'Lugares', 'Atletas', 'Vagas', 'Ocupação', 'Situação']);
+  folha.getRange(1, 1, 1, 6).setFontWeight('bold');
+  folha.setFrozenRows(1);
+
+  GRUPOS.forEach(function (grupo, i) {
+    var linha = i + 2;
+    folha.getRange(linha, 1).setValue(grupo);
+    folha.getRange(linha, 2).setValue('PREENCHER');
+    folha.getRange(linha, 3).setValue('PREENCHER');
+    folha.getRange(linha, 4).setFormula(
+      '=IF(OR(NOT(ISNUMBER(B' + linha + ')),NOT(ISNUMBER(C' + linha + '))),"",B' + linha + '-C' + linha + ')');
+    folha.getRange(linha, 5).setFormula(
+      '=IF(OR(NOT(ISNUMBER(B' + linha + ')),B' + linha + '=0),"",C' + linha + '/B' + linha + ')')
+      .setNumberFormat('0%');
+    folha.getRange(linha, 6).setFormula(
+      '=IF(NOT(ISNUMBER(D' + linha + ')),"",IF(D' + linha + '<=0,"Cheio",IF(D' + linha + '<=2,"Quase cheio","Com vagas")))');
+  });
+
+  var ultima = GRUPOS.length + 1;
+  folha.appendRow(['Total',
+    '=SUM(B2:B' + ultima + ')',
+    '=SUM(C2:C' + ultima + ')',
+    '=SUM(D2:D' + ultima + ')',
+    '=IF(B' + (ultima + 1) + '=0,"",C' + (ultima + 1) + '/B' + (ultima + 1) + ')', '']);
+  folha.getRange(ultima + 1, 1, 1, 6).setFontWeight('bold');
+  folha.getRange(ultima + 1, 5).setNumberFormat('0%');
+
+  // Cheio a vermelho, quase cheio a amarelo, com vagas a verde.
+  var alcance = folha.getRange(2, 6, GRUPOS.length, 1);
+  folha.setConditionalFormatRules([
+    SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo('Cheio')
+      .setBackground('#F4C7C3').setRanges([alcance]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo('Quase cheio')
+      .setBackground('#FCE8B2').setRanges([alcance]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo('Com vagas')
+      .setBackground('#B7E1CD').setRanges([alcance]).build()
+  ]);
+
+  folha.getRange(ultima + 3, 1).setValue(
+    'Escreva os "Lugares" de cada grupo (quantos atletas cabem por treino) e os ' +
+    '"Atletas" inscritos hoje. Atualize os "Atletas" uma vez por mês.');
+  folha.autoResizeColumns(1, 6);
+}
+
+/**
+ * Prepara a folha "Proveniência": de onde vieram as pré-inscrições.
+ * Correr UMA vez. Conta-se sozinha a partir da coluna "Proveniência".
+ *
+ * Responde a "vale a pena continuar a publicar no Instagram?" com um número
+ * em vez de uma impressão.
+ */
+function configurarProveniencia() {
+  var livro = SpreadsheetApp.getActiveSpreadsheet();
+  var folha = obterFolha();
+  var destino = livro.getSheetByName('Proveniência') || livro.insertSheet('Proveniência');
+  destino.clear();
+
+  var origem = "'" + folha.getName() + "'";
+  var col = colunaParaLetra(COLUNAS.indexOf('Proveniência') + 1);
+
+  destino.appendRow(['De onde veio', 'Pré-inscrições']);
+  destino.getRange(1, 1, 1, 2).setFontWeight('bold');
+  destino.setFrozenRows(1);
+  destino.getRange(2, 1).setFormula(
+    '=QUERY(' + origem + '!' + col + '2:' + col + ',' +
+    '"select ' + col + ', count(' + col + ') where ' + col + " is not null " +
+    'group by ' + col + ' order by count(' + col + ') desc label count(' + col + ') \'\'",0)');
+  destino.autoResizeColumns(1, 2);
 }
 
 function avisar(p) {

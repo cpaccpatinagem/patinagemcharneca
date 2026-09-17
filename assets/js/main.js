@@ -457,6 +457,26 @@
       send();
     });
 
+    // Resume de onde veio a visita numa palavra. A campanha (utm_source ou
+    // ?via=) manda sobre o referenciador, porque é a que o clube controla:
+    // é assim que se mede um cartaz ou uma publicação em concreto.
+    function proveniencia() {
+      try {
+        var q = new URLSearchParams(location.search);
+        var campanha = q.get("utm_source") || q.get("via");
+        if (campanha) return campanha.slice(0, 40);
+
+        var ref = document.referrer;
+        if (!ref) return "direta";
+
+        var host = new URL(ref).hostname.replace(/^www\./, "");
+        if (host === location.hostname.replace(/^www\./, "")) return "";
+        return host.slice(0, 60);
+      } catch (e) {
+        return "";
+      }
+    }
+
     function send() {
       submit.setAttribute("aria-busy", "true");
       var original = submit.innerHTML;
@@ -464,6 +484,13 @@
 
       var endpoint = form.getAttribute("data-endpoint");
       var data = new FormData(form);
+
+      // Origem da pré-inscrição, para se saber o que traz famílias ao site.
+      // Nada disto identifica ninguém: é a página onde o formulário foi
+      // preenchido e de onde veio a visita (Instagram, Google, cartaz com
+      // ligação própria). Sem cookies e sem seguir ninguém entre visitas.
+      data.append("pagina", location.pathname);
+      data.append("proveniencia", proveniencia());
 
       // Sem serviço de receção configurado: entregamos por email em vez de
       // fingir que enviámos. Abre o cliente de email do visitante já preenchido,
