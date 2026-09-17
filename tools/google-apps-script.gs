@@ -17,8 +17,75 @@ var REMETENTE = 'CPACC';
 
 var COLUNAS = [
   'Data', 'Atleta', 'Nascimento', 'Encarregado', 'Telemóvel',
-  'Email', 'Início experimental', 'Experiência', 'Mensagem', 'Contactado?'
+  'Email', 'Início experimental', 'Experiência', 'Mensagem', 'Contactado?',
+  'Experimental feito?', 'Inscrito?'
 ];
+
+/**
+ * Prepara a folha para medir o funil: pré-inscrições -> treinos experimentais
+ * feitos -> inscrições efetivas. Correr UMA vez, a partir do editor.
+ *
+ * - Acrescenta as colunas "Experimental feito?" e "Inscrito?" à folha das
+ *   pré-inscrições, com uma lista Sim/Não, se ainda não existirem.
+ * - Cria a folha "Funil" com as contagens por mês, calculadas sozinhas.
+ *
+ * Depois é só, em cada linha, marcar Sim quando a criança fez o treino
+ * experimental e Sim quando se inscreveu. O resto conta-se sozinho.
+ */
+function configurarFunil() {
+  var livro = SpreadsheetApp.getActiveSpreadsheet();
+  var folha = obterFolha();
+
+  // Colunas K e L, se faltarem.
+  var cabecalho = folha.getRange(1, 1, 1, Math.max(folha.getLastColumn(), 1)).getValues()[0];
+  ['Experimental feito?', 'Inscrito?'].forEach(function (nome) {
+    if (cabecalho.indexOf(nome) === -1) {
+      var col = folha.getLastColumn() + 1;
+      folha.getRange(1, col).setValue(nome).setFontWeight('bold');
+      cabecalho.push(nome);
+    }
+  });
+  var colExp = cabecalho.indexOf('Experimental feito?') + 1;
+  var colIns = cabecalho.indexOf('Inscrito?') + 1;
+  var regra = SpreadsheetApp.newDataValidation().requireValueInList(['Sim', 'Não'], true).build();
+  folha.getRange(2, colExp, 1000, 1).setDataValidation(regra);
+  folha.getRange(2, colIns, 1000, 1).setDataValidation(regra);
+
+  // Folha "Funil": uma linha por mês, da época 2026/27.
+  var funil = livro.getSheetByName('Funil') || livro.insertSheet('Funil');
+  funil.clear();
+  funil.appendRow(['Mês', 'Pré-inscrições', 'Experimentais feitos', 'Inscritos',
+                   '% que experimentou', '% que se inscreveu']);
+  funil.getRange(1, 1, 1, 6).setFontWeight('bold');
+  funil.setFrozenRows(1);
+
+  var letraExp = colunaParaLetra(colExp);
+  var letraIns = colunaParaLetra(colIns);
+  var origem = "'" + folha.getName() + "'";
+  for (var i = 0; i < 12; i++) {
+    var linha = i + 2;
+    var mes = new Date(2026, 8 + i, 1);           // setembro de 2026 em diante
+    var A = 'A' + linha;
+    var noMes = origem + '!$A:$A,">="&' + A + ',' + origem + '!$A:$A,"<"&EDATE(' + A + ',1)';
+    funil.getRange(linha, 1).setValue(mes).setNumberFormat('mmm yyyy');
+    funil.getRange(linha, 2).setFormula('=COUNTIFS(' + noMes + ')');
+    funil.getRange(linha, 3).setFormula('=COUNTIFS(' + noMes + ',' + origem + '!$' + letraExp + ':$' + letraExp + ',"Sim")');
+    funil.getRange(linha, 4).setFormula('=COUNTIFS(' + noMes + ',' + origem + '!$' + letraIns + ':$' + letraIns + ',"Sim")');
+    funil.getRange(linha, 5).setFormula('=IF(B' + linha + '=0,"",C' + linha + '/B' + linha + ')').setNumberFormat('0%');
+    funil.getRange(linha, 6).setFormula('=IF(B' + linha + '=0,"",D' + linha + '/B' + linha + ')').setNumberFormat('0%');
+  }
+  funil.appendRow(['Época', '=SUM(B2:B13)', '=SUM(C2:C13)', '=SUM(D2:D13)',
+                   '=IF(B14=0,"",C14/B14)', '=IF(B14=0,"",D14/B14)']);
+  funil.getRange(14, 1, 1, 6).setFontWeight('bold');
+  funil.getRange(14, 5, 1, 2).setNumberFormat('0%');
+  funil.autoResizeColumns(1, 6);
+}
+
+function colunaParaLetra(n) {
+  var s = '';
+  while (n > 0) { var r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); }
+  return s;
+}
 
 // Rótulos legíveis para os valores que o formulário envia.
 var ROTULOS_INICIO = {

@@ -24,7 +24,9 @@
   /* --- Neutros --- */
   --c-paper: #F4F2EC;
   --c-paper-dim: rgba(244, 242, 236, 0.70);
-  --c-paper-faint: rgba(244, 242, 236, 0.46);
+  /* 0.52 dá 5.1:1 sobre o azul-noite (WCAG AA para texto normal). A 0.46
+     ficava em 4.26:1 e chumbava nas labels do formulário e no texto .faint. */
+  --c-paper-faint: rgba(244, 242, 236, 0.52);
   --c-hairline: rgba(227, 197, 103, 0.18);
   --c-hairline-soft: rgba(244, 242, 236, 0.10);
 
@@ -237,7 +239,9 @@ p { text-wrap: pretty; }
 
 /* Primário — dourado sólido, com um degradê mais rico e metálico */
 .btn--gold {
-  background: linear-gradient(135deg, #FCEEC0 0%, #F0D584 16%, #D9AC2E 40%, #B8860B 66%, #6B4F0A 100%);
+  /* O canto escuro acaba em #A67A0F e não mais abaixo: é o limite para o
+     texto azul-noite manter 4.5:1 em toda a superfície do botão. */
+  background: linear-gradient(135deg, #FCEEC0 0%, #F0D584 16%, #D9AC2E 40%, #B8860B 66%, #A67A0F 100%);
   color: var(--c-ink-900);
   font-weight: 600;
   box-shadow: 0 4px 26px -6px rgba(201,162,39,0.45);
@@ -247,7 +251,7 @@ p { text-wrap: pretty; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(135deg, #FFF6DC 0%, #F8E4A8 20%, #E3C567 48%, #C9A227 74%, #8F6F15 100%);
+  background: linear-gradient(135deg, #FFF6DC 0%, #F8E4A8 20%, #E3C567 48%, #C9A227 74%, #A67A0F 100%);
   opacity: 0;
   transition: opacity 320ms var(--ease-soft);
 }
@@ -646,22 +650,26 @@ p { text-wrap: pretty; }
 
 /* --------------------------------------------------------------------------
    8. REVELAÇÃO AO SCROLL
+   O estado escondido só se aplica quando o JavaScript correu (a classe "js"
+   no <html> é posta por um script inline no <head>). Sem JS, ou se o main.js
+   falhar, o conteúdo fica simplesmente visível em vez de ficar a página em
+   branco.
    -------------------------------------------------------------------------- */
-[data-reveal] {
+.js [data-reveal] {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 650ms var(--ease-out), transform 650ms var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
 }
-[data-reveal="left"]  { transform: translateX(-32px); }
-[data-reveal="right"] { transform: translateX(32px); }
-[data-reveal="scale"] { transform: scale(0.94); }
+.js [data-reveal="left"]  { transform: translateX(-32px); }
+.js [data-reveal="right"] { transform: translateX(32px); }
+.js [data-reveal="scale"] { transform: scale(0.94); }
 /* Variante "mask": uma cortina da cor da secção recolhe para a direita e
    descobre a imagem. Não se usa clip-path porque um elemento totalmente
    cortado conta como invisível para o IntersectionObserver e para o
    loading="lazy", e nunca chegava a aparecer. */
-[data-reveal="mask"]  { opacity: 1; transform: none; position: relative; }
-[data-reveal="mask"]::after {
+.js [data-reveal="mask"]  { opacity: 1; transform: none; position: relative; }
+.js [data-reveal="mask"]::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -673,11 +681,11 @@ p { text-wrap: pretty; }
   pointer-events: none;
 }
 
-[data-reveal].is-visible {
+.js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
-[data-reveal="mask"].is-visible::after { transform: scaleX(0); }
+.js [data-reveal="mask"].is-visible::after { transform: scaleX(0); }
 
 /* --------------------------------------------------------------------------
    9. CARTÕES
@@ -731,7 +739,10 @@ p { text-wrap: pretty; }
   color: var(--c-ink-900);
   border-color: transparent;
 }
-.card h3 { margin-bottom: 0.6rem; }
+/* .card__title e .form-success__title existem para páginas sem h2 (a de
+   pré-inscrição): o título é um h2 na hierarquia mas veste-se de h3. */
+.card h3, .card__title, .form-success__title { font-size: var(--fs-h3); line-height: 1.2; }
+.card h3, .card__title { margin-bottom: 0.6rem; }
 .card p { color: var(--c-paper-dim); font-size: var(--fs-small); }
 
 /* Cartão de treinador */
@@ -987,7 +998,7 @@ p { text-wrap: pretty; }
   transition: border-color 300ms var(--ease-soft), background-color 300ms, box-shadow 300ms;
   appearance: none;
 }
-.input::placeholder, .textarea::placeholder { color: rgba(244,242,236,0.28); }
+.input::placeholder, .textarea::placeholder { color: rgba(244,242,236,0.42); }
 .input:hover, .select:hover, .textarea:hover { border-color: rgba(244,242,236,0.2); }
 .input:focus, .select:focus, .textarea:focus {
   outline: none;
@@ -1187,6 +1198,7 @@ p { text-wrap: pretty; }
   text-align: center;
   overflow: hidden;
   background: var(--c-ink-900);
+  --sec-bg: var(--c-ink-900);
 }
 .cta-band::before {
   content: "";
@@ -1217,7 +1229,9 @@ p { text-wrap: pretty; }
 .footer__grid > div:first-child { grid-column: 1 / -1; }
 @media (min-width: 900px) { .footer__grid > div:first-child { grid-column: auto; max-width: 30ch; } }
 
-.footer h4 {
+/* Títulos das colunas: são <p>, não headings, para não abrirem um salto
+   h2 → h4 na hierarquia da página. */
+.footer__title {
   font-family: var(--f-body);
   font-size: 0.68rem;
   letter-spacing: 0.2em;

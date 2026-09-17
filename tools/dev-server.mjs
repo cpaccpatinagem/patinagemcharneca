@@ -72,7 +72,13 @@ function broadcast(event) {
 
 /** Resolve um pedido HTTP num caminho dentro de ROOT, ou null se sair da pasta. */
 function resolvePath(urlPath) {
-  const decoded = decodeURIComponent(urlPath.split("?")[0]);
+  let decoded;
+  try {
+    decoded = decodeURIComponent(urlPath.split("?")[0]);
+  } catch {
+    // Um "%" solto no URL faria o decode lançar e derrubava o servidor.
+    return null;
+  }
   const clean = normalize(decoded).replace(/^(\.\.[/\\])+/, "");
   const full = join(ROOT, clean);
   if (!full.startsWith(ROOT.endsWith(sep) ? ROOT : ROOT + sep) && full !== ROOT.slice(0, -1)) {

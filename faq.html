@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Marca o HTML como "com JavaScript": o CSS só esconde os blocos animados
+     quando esta classe existe, para a página nunca ficar em branco sem JS. -->
+<script>document.documentElement.classList.add("js")</script>
 <title>Perguntas frequentes | CPACC Patinagem Artística Charneca de Caparica</title>
 <meta name="description" content="Idade mínima, material necessário, treinos experimentais, competições e mensalidades: as respostas às dúvidas mais comuns sobre a patinagem artística no CPACC.">
 <link rel="canonical" href="https://www.patinagemcharneca.pt/faq.html">
@@ -25,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;500;700;800&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=18">
+<link rel="stylesheet" href="assets/css/style.css?v=19">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -130,6 +133,9 @@
   ]
 }
 </script>
+<!-- Medição de visitas da Vercel: sem cookies, sem identificar ninguém.
+     Só conta visitas por página, país e tipo de dispositivo. -->
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 
 <body class="grain">
@@ -352,7 +358,7 @@
       </div>
 
       <div>
-        <h4>Navegar</h4>
+        <p class="footer__title">Navegar</p>
         <ul>
           <li><a href="index.html">Início</a></li>
           <li><a href="clube.html">O Clube</a></li>
@@ -363,7 +369,7 @@
       </div>
 
       <div>
-        <h4>Inscrições</h4>
+        <p class="footer__title">Inscrições</p>
         <ul>
           <li><a href="pre-inscricao.html">Pré-inscrição online</a></li>
           <li><a href="horarios.html">Grupos de Iniciação</a></li>
@@ -373,7 +379,7 @@
       </div>
 
       <div>
-        <h4>Onde estamos</h4>
+        <p class="footer__title">Onde estamos</p>
         <p class="muted" style="font-size:var(--fs-small)">
           Pavilhão Municipal da Charneca de Caparica<br>
           Praceta Ruy Coelho<br>
@@ -394,6 +400,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=18" defer></script>
+<script src="assets/js/main.js?v=19" defer></script>
 </body>
 </html>

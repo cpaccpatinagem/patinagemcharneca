@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Marca o HTML como "com JavaScript": o CSS só esconde os blocos animados
+     quando esta classe existe, para a página nunca ficar em branco sem JS. -->
+<script>document.documentElement.classList.add("js")</script>
 <title>Política de privacidade | CPACC</title>
 <meta name="description" content="Como o Clube de Patinagem Artística da Charneca de Caparica trata os dados pessoais recolhidos no site.">
 <link rel="canonical" href="https://www.patinagemcharneca.pt/privacidade.html">
@@ -25,7 +28,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;500;700;800&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=18">
+<link rel="stylesheet" href="assets/css/style.css?v=19">
+<!-- Medição de visitas da Vercel: sem cookies, sem identificar ninguém.
+     Só conta visitas por página, país e tipo de dispositivo. -->
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 
 <body class="grain">
@@ -120,7 +126,7 @@
       <p class="muted">As fotografias e vídeos publicados neste site só são usados mediante autorização de imagem assinada pelo encarregado de educação. Essa autorização pode ser revogada a qualquer momento, bastando contactar o clube.</p>
 
       <h2 style="margin-block:2.5rem 1rem">Cookies</h2>
-      <p class="muted">Este site não utiliza cookies de rastreamento nem de publicidade.</p>
+      <p class="muted">Este site não utiliza cookies de rastreamento nem de publicidade. Para saber quantas pessoas o visitam e que páginas veem, usa a medição de visitas da Vercel, que não usa cookies nem identifica visitantes: regista apenas contagens agregadas por página, país e tipo de dispositivo.</p>
 
       <p class="faint" style="margin-top:2rem">Última atualização: setembro de 2026.</p>
     </div>
@@ -156,7 +162,7 @@
       </div>
 
       <div>
-        <h4>Navegar</h4>
+        <p class="footer__title">Navegar</p>
         <ul>
           <li><a href="index.html">Início</a></li>
           <li><a href="clube.html">O Clube</a></li>
@@ -167,7 +173,7 @@
       </div>
 
       <div>
-        <h4>Inscrições</h4>
+        <p class="footer__title">Inscrições</p>
         <ul>
           <li><a href="pre-inscricao.html">Pré-inscrição online</a></li>
           <li><a href="horarios.html">Grupos de Iniciação</a></li>
@@ -177,7 +183,7 @@
       </div>
 
       <div>
-        <h4>Onde estamos</h4>
+        <p class="footer__title">Onde estamos</p>
         <p class="muted" style="font-size:var(--fs-small)">
           Pavilhão Municipal da Charneca de Caparica<br>
           Praceta Ruy Coelho<br>
@@ -198,6 +204,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=18" defer></script>
+<script src="assets/js/main.js?v=19" defer></script>
 </body>
 </html>

@@ -36,26 +36,47 @@
     var menu = $("[data-menu]");
     if (!burger || !menu) return;
 
+    var links = $$("a", menu);
+
     function setOpen(open) {
       burger.setAttribute("aria-expanded", String(open));
+      burger.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
       menu.classList.toggle("is-open", open);
       menu.setAttribute("aria-hidden", String(!open));
       document.body.classList.toggle("is-locked", open);
-      if (open) $("[data-header]").classList.remove("is-hidden");
+      if (open) {
+        $("[data-header]").classList.remove("is-hidden");
+        // O foco entra no menu depois de a cortina abrir; sem isto o Tab
+        // continuava a percorrer a página escondida por baixo.
+        setTimeout(function () { if (links[0]) links[0].focus(); }, reduceMotion ? 0 : 200);
+      }
     }
 
     burger.addEventListener("click", function () {
       setOpen(burger.getAttribute("aria-expanded") !== "true");
     });
 
-    $$("a", menu).forEach(function (a) {
+    links.forEach(function (a) {
       a.addEventListener("click", function () { setOpen(false); });
     });
 
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && menu.classList.contains("is-open")) {
+      if (!menu.classList.contains("is-open")) return;
+
+      if (e.key === "Escape") {
         setOpen(false);
         burger.focus();
+        return;
+      }
+
+      // Enquanto o menu está aberto, o Tab anda em ciclo entre o botão e
+      // os links do menu, e nunca sai para o conteúdo tapado.
+      if (e.key === "Tab") {
+        var ring = [burger].concat(links);
+        var i = ring.indexOf(document.activeElement);
+        if (i === -1) { e.preventDefault(); ring[0].focus(); return; }
+        if (e.shiftKey && i === 0) { e.preventDefault(); ring[ring.length - 1].focus(); }
+        else if (!e.shiftKey && i === ring.length - 1) { e.preventDefault(); ring[0].focus(); }
       }
     });
   }
@@ -97,6 +118,22 @@
   function initCounters() {
     var nums = $$("[data-count]");
     if (!nums.length) return;
+
+    // Contadores "desde uma data" (data-since="1999-10-28") calculam os anos
+    // completos até hoje, para não ser preciso mudar o número a cada época.
+    // O valor escrito no HTML fica como reserva para quem não tem JS.
+    nums.forEach(function (el) {
+      var since = el.getAttribute("data-since");
+      if (!since) return;
+      var start = new Date(since);
+      var now = new Date();
+      var years = now.getFullYear() - start.getFullYear();
+      var beforeAnniversary = now.getMonth() < start.getMonth()
+        || (now.getMonth() === start.getMonth() && now.getDate() < start.getDate());
+      if (beforeAnniversary) years -= 1;
+      el.setAttribute("data-count", String(years));
+      el.textContent = (el.getAttribute("data-prefix") || "") + years + (el.getAttribute("data-suffix") || "");
+    });
 
     // O HTML traz o valor real (para leitores de ecrã, motores de busca e
     // quem não tem JS). Só se vai animar é que se parte do zero.
@@ -352,6 +389,16 @@
 
     var success = $("[data-form-success]");
     var submit = $("[data-form-submit]", form);
+
+    // Limites da data de nascimento relativos ao ano corrente, para não
+    // ficarem presos à época em que o formulário foi escrito. Os atributos
+    // no HTML são a reserva para quem não tem JS.
+    var nascimento = $("[name='nascimento']", form);
+    if (nascimento) {
+      var ano = new Date().getFullYear();
+      nascimento.min = (ano - 21) + "-01-01";
+      nascimento.max = (ano - 3) + "-12-31";
+    }
 
     function fieldOf(input) { return input.closest(".field, .consent-field"); }
 
