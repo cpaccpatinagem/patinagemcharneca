@@ -54,6 +54,7 @@ patinagem-charneca/
 │   ├── email-confirmacao.html Template do email ao encarregado de educação
 │   ├── email-logo.gs          Símbolo do clube embutido nesse email
 │   ├── preview-email.mjs      Pré-visualiza o email sem republicar
+│   ├── resposta-pre-inscricao.md  Modelo da resposta do clube
 │   └── preparar-fotos.py      Prepara as fotos da equipa
 └── assets/
     ├── css/style.css     Design system completo
@@ -206,6 +207,11 @@ Corre o código real do Apps Script com APIs imitadas e escreve
 `.local/email-preview.html` (e a versão em texto ao lado) para abrir no browser.
 Os dados de exemplo estão no topo de `tools/preview-email.mjs` - vale a pena
 testar nomes longos e o caso sem mensagem, que faz desaparecer esse bloco.
+
+**A resposta do clube.** O email automático confirma que a pré-inscrição
+chegou; quem marca os treinos é uma pessoa. O modelo dessa resposta está em
+`tools/resposta-pre-inscricao.md`, com os horários reais, o que trazer e uma
+lista de verificação antes de enviar.
 
 **Regras do template.** Clientes de email não têm flexbox, grid, webfonts nem
 variáveis CSS. Layout só com `<table>`, estilo inline, cores literais, 600px de
