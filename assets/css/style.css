@@ -257,6 +257,17 @@ p { text-wrap: pretty; }
 }
 .btn--gold:hover::before { opacity: 1; }
 .btn--gold:active { transform: translateY(0); }
+/* Brilho que atravessa o botão uma única vez quando entra no ecrã */
+.btn--gold::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255,250,235,0.55) 50%, transparent 65%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+.btn--gold.is-shine::after { animation: shine 1100ms var(--ease-soft) 1 forwards; }
+@keyframes shine { to { transform: translateX(130%); } }
 
 /* Secundário — contorno */
 .btn--ghost {
@@ -300,7 +311,8 @@ p { text-wrap: pretty; }
   height: var(--header-h);
   display: flex;
   align-items: center;
-  transition: height 420ms var(--ease-out), background-color 420ms var(--ease-soft),
+  transition: height 420ms var(--ease-out), transform 420ms var(--ease-out),
+              background-color 420ms var(--ease-soft),
               backdrop-filter 420ms var(--ease-soft), border-color 420ms var(--ease-soft);
   border-bottom: 1px solid transparent;
 }
@@ -476,6 +488,15 @@ p { text-wrap: pretty; }
   object-position: center 40%;
 }
 
+/* Imagem de fallback (poster) com Ken Burns muito lento, para o hero nunca
+   ficar parado quando não há vídeo. O parallax anima o contentor, não a
+   imagem, por isso os dois não se pisam. */
+.hero__media img {
+  transform-origin: center 40%;
+  animation: kenBurns 28s var(--ease-soft) forwards;
+}
+@keyframes kenBurns { from { transform: scale(1); } to { transform: scale(1.08); } }
+
 /* Cena de substituição enquanto o vídeo real não existe */
 .hero__placeholder {
   position: absolute; inset: 0;
@@ -629,22 +650,34 @@ p { text-wrap: pretty; }
 [data-reveal] {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out);
+  transition: opacity 650ms var(--ease-out), transform 650ms var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
 }
 [data-reveal="left"]  { transform: translateX(-32px); }
 [data-reveal="right"] { transform: translateX(32px); }
 [data-reveal="scale"] { transform: scale(0.94); }
-[data-reveal="mask"]  { opacity: 1; clip-path: inset(0 100% 0 0); transform: none; transition: clip-path 1100ms var(--ease-out); }
+/* Variante "mask": uma cortina da cor da secção recolhe para a direita e
+   descobre a imagem. Não se usa clip-path porque um elemento totalmente
+   cortado conta como invisível para o IntersectionObserver e para o
+   loading="lazy", e nunca chegava a aparecer. */
+[data-reveal="mask"]  { opacity: 1; transform: none; position: relative; }
+[data-reveal="mask"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: var(--sec-bg, var(--c-ink-800));
+  transform-origin: right;
+  transition: transform 900ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  pointer-events: none;
+}
 
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
-/* O clip-path é só da variante "mask". Aplicado a todos os elementos com
-   data-reveal, cortava tudo o que fosse desenhado fora da caixa - era isto que
-   cortava ao meio os números 01/02/03, que ficam a cavalo na linha de cima. */
-[data-reveal="mask"].is-visible { clip-path: inset(0 0 0 0); }
+[data-reveal="mask"].is-visible::after { transform: scaleX(0); }
 
 /* --------------------------------------------------------------------------
    9. CARTÕES
@@ -1303,8 +1336,30 @@ p { text-wrap: pretty; }
 .map-frame iframe { width: 100%; height: 100%; min-height: 340px; border: 0; display: block; }
 
 /* Percurso / níveis */
-.path { display: grid; gap: var(--sp-3); counter-reset: step; }
+.path { display: grid; gap: var(--sp-3); counter-reset: step; position: relative; }
 @media (min-width: 900px) { .path { grid-template-columns: repeat(3, 1fr); } }
+/* Linha dourada que se desenha ao longo do percurso com o scroll. Em coluna
+   única desce pela esquerda; em três colunas corre pela linha de cima e faz
+   ponte entre os passos. Os números tapam-na porque têm fundo da secção. */
+.path::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  background: linear-gradient(90deg, var(--c-gold-600), var(--c-gold-400));
+  transform: scaleY(var(--path-p, 0));
+  transform-origin: top;
+  top: 0; bottom: 0; left: 0;
+  width: 1px;
+  transition: transform 160ms linear;
+}
+@media (min-width: 900px) {
+  .path::before {
+    top: 0; left: 0; right: 0; bottom: auto;
+    width: auto; height: 1px;
+    transform: scaleX(var(--path-p, 0));
+    transform-origin: left;
+  }
+}
 .path__step { position: relative; padding-top: var(--sp-4); border-top: 1px solid var(--c-hairline-soft); }
 .path__step::before {
   counter-increment: step;
@@ -1367,6 +1422,17 @@ p { text-wrap: pretty; }
 .skip:focus { top: 1rem; }
 
 /* --------------------------------------------------------------------------
+   17b. TRANSIÇÕES ENTRE PÁGINAS (View Transitions)
+   Cross-fade curto entre documentos. O logótipo do cabeçalho mantém-se no
+   sítio. Browsers sem suporte ignoram tudo isto.
+   -------------------------------------------------------------------------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 250ms; animation-timing-function: var(--ease-soft); }
+.header .brand { view-transition-name: brand; }
+::view-transition-group(brand) { animation-duration: 250ms; }
+
+/* --------------------------------------------------------------------------
    18. ACESSIBILIDADE — MOVIMENTO REDUZIDO
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
@@ -1377,9 +1443,16 @@ p { text-wrap: pretty; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  [data-reveal] { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  [data-reveal="mask"]::after { display: none; }
   .hero__title .line > span { transform: none !important; }
   .hero__fade-in { opacity: 1 !important; transform: none !important; }
   .hero__media { transform: none !important; }
+  .hero__media img { animation: none !important; }
+  .btn--gold::after { display: none; }
+  .path::before { transform: none !important; }
   .menu { transition: none; }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
 }

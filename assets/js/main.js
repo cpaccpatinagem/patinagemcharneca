@@ -98,6 +98,14 @@
     var nums = $$("[data-count]");
     if (!nums.length) return;
 
+    // O HTML traz o valor real (para leitores de ecrã, motores de busca e
+    // quem não tem JS). Só se vai animar é que se parte do zero.
+    if (!reduceMotion && "IntersectionObserver" in window) {
+      nums.forEach(function (el) {
+        el.textContent = (el.getAttribute("data-prefix") || "") + "0";
+      });
+    }
+
     function run(el) {
       var target = parseFloat(el.getAttribute("data-count"));
       var prefix = el.getAttribute("data-prefix") || "";
@@ -138,8 +146,17 @@
 
     var media = $("[data-hero-media]", hero);
     var content = $("[data-hero-content]", hero);
+    var small = window.matchMedia("(max-width: 767px)");
 
     onScroll(function (y) {
+      // Em ecrãs pequenos o scroll do sistema já tem inércia própria; o
+      // parallax ficava a lutar com ela. Limpa-se o que possa ter ficado
+      // de uma largura maior.
+      if (small.matches) {
+        if (media) media.style.transform = "";
+        if (content) { content.style.transform = ""; content.style.opacity = ""; }
+        return;
+      }
       var h = hero.offsetHeight;
       if (y > h) return;
       var p = y / h;
@@ -234,6 +251,44 @@
   }
 
   /* ------------------------------------------------------------------
+     7b. Linha do percurso — desenha-se com o scroll
+     ------------------------------------------------------------------ */
+  function initPathLine() {
+    var path = $("[data-path]");
+    if (!path) return;
+    if (reduceMotion) { path.style.setProperty("--path-p", "1"); return; }
+
+    onScroll(function () {
+      var r = path.getBoundingClientRect();
+      var vh = window.innerHeight;
+      // Começa quando o topo passa os 85% do ecrã; acaba ao fim de uma
+      // distância nunca maior do que 60% do ecrã, para não arrastar.
+      var span = Math.min(r.height, vh * 0.6);
+      var p = (vh * 0.85 - r.top) / span;
+      path.style.setProperty("--path-p", String(Math.min(1, Math.max(0, p))));
+    });
+  }
+
+  /* ------------------------------------------------------------------
+     7c. Brilho único nos botões dourados quando entram no ecrã
+     ------------------------------------------------------------------ */
+  function initShine() {
+    var btns = $$(".btn--gold");
+    if (!btns.length || reduceMotion || !("IntersectionObserver" in window)) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        // Espera que a entrada do botão termine antes de brilhar
+        setTimeout(function () { entry.target.classList.add("is-shine"); }, 700);
+      });
+    }, { threshold: 0.9 });
+
+    btns.forEach(function (b) { io.observe(b); });
+  }
+
+  /* ------------------------------------------------------------------
      8. Barra de progresso de leitura
      ------------------------------------------------------------------ */
   function initProgress() {
@@ -251,6 +306,19 @@
   function initHeroVideo() {
     var video = $("[data-hero-video]");
     if (!video) return;
+
+    // Com poupança de dados ativa não se descarrega vídeo: fica o poster,
+    // que o CSS anima com Ken Burns.
+    var conn = navigator.connection;
+    if (conn && conn.saveData && video.poster) {
+      var still = document.createElement("img");
+      still.src = video.poster;
+      still.alt = "";
+      video.replaceWith(still);
+      var t = $("[data-sound-toggle]");
+      if (t) t.hidden = true;
+      return;
+    }
 
     var toggle = $("[data-sound-toggle]");
     if (toggle) {
@@ -291,10 +359,10 @@
       if (input.validity.valueMissing) {
         return input.type === "checkbox" ? "É necessário aceitar para continuar." : "Este campo é obrigatório.";
       }
-      if (input.validity.typeMismatch && input.type === "email") return "Introduz um email válido.";
-      if (input.validity.patternMismatch && input.name === "telefone") return "Introduz um número de telemóvel válido (9 dígitos).";
-      if (input.validity.rangeUnderflow || input.validity.rangeOverflow) return "Verifica a data introduzida.";
-      return "Verifica este campo.";
+      if (input.validity.typeMismatch && input.type === "email") return "Introduza um email válido.";
+      if (input.validity.patternMismatch && input.name === "telefone") return "Introduza um número de telemóvel válido (9 dígitos).";
+      if (input.validity.rangeUnderflow || input.validity.rangeOverflow) return "Verifique a data introduzida.";
+      return "Verifique este campo.";
     }
 
     function validate(input) {
@@ -466,6 +534,8 @@
     initHeroParallax();
     initCardGlow();
     initFaq();
+    initPathLine();
+    initShine();
     initProgress();
     initHeroVideo();
     initForm();
