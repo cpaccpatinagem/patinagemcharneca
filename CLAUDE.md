@@ -144,12 +144,12 @@ Paleta: azul-noite (`--c-ink-*`) com dourado (`--c-gold-*`) sobre papel
 
 ### Cache busting
 
-Os assets são referenciados com `?v=N` (atualmente `?v=17`). **Sempre que
+Os assets são referenciados com `?v=N` (atualmente `?v=18`). **Sempre que
 alterares `style.css` ou `main.js`, incrementa o `v` em todas as páginas**, senão
 os visitantes ficam com a versão antiga.
 
 ```bash
-sed -i '' 's/?v=17/?v=18/g' *.html
+sed -i '' 's/?v=18/?v=19/g' *.html
 ```
 
 ### Acessibilidade (não negociável)
@@ -177,8 +177,16 @@ renomear páginas, atualizar `sitemap.xml`. O `faq.html` tem dados estruturados
   mensagem em português, no estilo dos existentes ("Tira a palavra bairro do
   hero"), e vai para o `main`. A Vercel publica a partir daí, por isso um push
   é uma publicação: confirmar no site depois de publicar, não antes.
-- `.local/` e `assets/img/equipa/_originais/` estão em `.gitignore`: trabalho
-  interno e fotos em alta resolução não vão para o repositório público.
+- **Nunca `git add -A` nem `git add .`.** Adicionar os ficheiros pelo nome.
+  O Francisco larga fotos e vídeos em bruto dentro do projeto enquanto se
+  trabalha, e o `add -A` já publicou duas vezes o que não devia: retratos em
+  alta resolução dentro de `assets/img/equipa/` e 570 MB de vídeos de crianças
+  em treino, com GPS, da pasta "Video intro website CPACC homepage/". Os
+  originais ficam sempre numa pasta `_originais/` ignorada; o que vai para o
+  site é só o que a ferramenta produz.
+- `.local/`, `assets/img/*/_originais/`, a pasta dos vídeos e qualquer `*.mov`
+  estão em `.gitignore`: trabalho interno, fotos em alta resolução e vídeo em
+  bruto não vão para o repositório público.
 - Depois de mexer em HTML, CSS ou JS, verificar no browser (`npm run dev`) antes
   de dar por feito.
 
