@@ -82,6 +82,9 @@ Procura por `PREENCHER`, `SUBSTITUIR` e pelos blocos com a classe `todo-note`
 | `clube.html` | Ano de fundação, história, conquistas |
 | `contactos.html` | Embed do Google Maps com a morada exata |
 | `index.html` (JSON-LD) | Morada, telefone e redes no bloco de dados estruturados |
+| `apoiar.html` | Valores dos patamares de patrocínio e confirmação das contrapartidas |
+| `apoiar.html` | Contribuinte e dados de transferência, se forem para aparecer |
+| `apoiar.html` | Logótipos de quem já apoia; enquanto não houver, esconder a secção |
 
 ### Logótipo
 
@@ -283,6 +286,32 @@ Essa etiqueta aparece na folha **Proveniência** e fica a saber-se quantas
 pré-inscrições vieram daquele cartaz. Sem etiqueta, fica registado o site de
 onde veio a visita (`google.com`, `l.instagram.com`) ou `direta` para quem
 escreveu o endereço à mão.
+
+## Apoiar o clube
+
+A página `/apoiar` existe para empresas da Charneca e do concelho, não para
+famílias. Por isso está no rodapé e não no menu principal: quem procura
+inscrever uma criança não deve tropeçar num pedido de dinheiro.
+
+Três patamares de patrocínio, com valores e contrapartidas por confirmar, mais
+uma secção para apoios que não são em dinheiro (material, transporte, serviços).
+
+Antes de a divulgar, faltam três decisões que só o clube pode tomar:
+
+1. **Os valores de cada patamar.** Estão marcados com `PREENCHER`.
+2. **As contrapartidas.** As que lá estão são uma proposta de partida. O que
+   for prometido tem de poder cumprir-se em todas as épocas - prometer logótipo
+   no equipamento obriga a mandar fazer equipamento.
+3. **O benefício fiscal.** Se os donativos a clubes sem fins lucrativos derem
+   dedução à empresa, é o argumento mais forte da página e deve ficar escrito.
+   Confirmar com quem trata da contabilidade antes de o afirmar.
+
+A secção "Quem já apoia" fica escondida enquanto não houver logótipos reais,
+com autorização de cada empresa. Uma página de apoios vazia diz o contrário do
+que se pretende.
+
+Para medir o que a página traz, usar uma ligação etiquetada nos emails e nas
+propostas: `/apoiar?via=proposta-farmacia`. Ver "Medir" acima.
 
 ## Lista de espera
 

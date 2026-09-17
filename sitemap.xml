@@ -6,5 +6,6 @@
   <url><loc>https://www.patinagemcharneca.pt/clube</loc><priority>0.7</priority><changefreq>yearly</changefreq></url>
   <url><loc>https://www.patinagemcharneca.pt/faq</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://www.patinagemcharneca.pt/contactos</loc><priority>0.6</priority><changefreq>yearly</changefreq></url>
+  <url><loc>https://www.patinagemcharneca.pt/apoiar</loc><priority>0.5</priority><changefreq>yearly</changefreq></url>
   <url><loc>https://www.patinagemcharneca.pt/privacidade</loc><priority>0.2</priority><changefreq>yearly</changefreq></url>
 </urlset>

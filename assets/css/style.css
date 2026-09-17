@@ -663,6 +663,13 @@ p { text-wrap: pretty; }
 }
 .js [data-reveal="left"]  { transform: translateX(-32px); }
 .js [data-reveal="right"] { transform: translateX(32px); }
+/* Num ecrã estreito os 32px de deslocamento lateral empurravam o elemento
+   para fora da página e davam scroll horizontal até a revelação disparar.
+   O movimento passa a ser o mesmo dos outros: de baixo para cima. */
+@media (max-width: 680px) {
+  .js [data-reveal="left"],
+  .js [data-reveal="right"] { transform: translateY(28px); }
+}
 .js [data-reveal="scale"] { transform: scale(0.94); }
 /* Variante "mask": uma cortina da cor da secção recolhe para a direita e
    descobre a imagem. Não se usa clip-path porque um elemento totalmente
