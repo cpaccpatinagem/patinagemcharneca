@@ -9,4 +9,7 @@ node_modules/
 .local/
 
 # Fotos em alta resolução: ficam só no computador, não são publicadas.
+# As do pavilhão são de crianças e trazem GPS no EXIF - mais uma razão
+# para o original nunca ir para um repositório público.
 assets/img/equipa/_originais/
+assets/img/pavilhao/_originais/
