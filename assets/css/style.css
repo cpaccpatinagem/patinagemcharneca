@@ -640,8 +640,11 @@ p { text-wrap: pretty; }
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
-  clip-path: inset(0 0 0 0);
 }
+/* O clip-path é só da variante "mask". Aplicado a todos os elementos com
+   data-reveal, cortava tudo o que fosse desenhado fora da caixa - era isto que
+   cortava ao meio os números 01/02/03, que ficam a cavalo na linha de cima. */
+[data-reveal="mask"].is-visible { clip-path: inset(0 0 0 0); }
 
 /* --------------------------------------------------------------------------
    9. CARTÕES

@@ -194,12 +194,19 @@ um "Tens" na privacidade e o placeholder "O teu nome" no formulário.
 
 Por fazer:
 
-- **Fotos do pavilhão.** As galerias do `index.html` e do `clube.html` ainda são
-  placeholders. Há fotos reais de um treino por tratar e colocar.
-- **Retratos por identificar.** Duas fotos tratadas, com fundo branco e à escala
-  das outras, à espera de nome e cargo. Estão em `.local/`, fora do repositório.
-- **Cátia Mendonça** - o bloco `.figure-aside` no `clube.html` está construído
-  com o retrato comentado, à espera da foto.
+- **José Quintela.** O bloco `.tribute` no `clube.html` não tem foto. O
+  Francisco quer pôr a foto do pai e um vídeo da homenagem que lhe foi feita em
+  julho de 2024. Lembrá-lo quando ele voltar ao assunto.
+- **Foto da página inicial.** A que está ao lado de "Uma formação que vai além
+  da técnica" é um plano largo do pavilhão; o Francisco acha-a vazia e quer um
+  momento de alegria. Vai mandar uma foto do Halloween de 2025.
+- **Polo do clube nos retratos.** Só a Catarina e a Madalena estão de polo. O
+  Francisco, a Sílvia, a Inês e a Beatriz precisam de foto nova com o polo
+  vestido; a Cátia está com a t-shirt do clube. Não se veste um polo a ninguém
+  por edição - a foto que chegou assim tinha o nome do clube mal escrito no
+  logótipo e não foi publicada. Está em `_originais/`.
+- **Inês Pelica** tem uma biografia de uma linha. Falta percurso.
+- **Foto histórica** - placeholder no topo do `clube.html`.
 - **Vídeo do hero** - o `<video>` está comentado no `index.html` e no lugar dele
   corre o `.hero__placeholder`. Especificações no `README.md`.
 - **Taça de Portugal 2013** e o percurso da Inês Pelica no Clube Futebol
