@@ -17,6 +17,9 @@ repositório - estão no .gitignore, como os retratos da equipa.
 
 import os
 import sys
+import shutil
+import subprocess
+import tempfile
 import unicodedata
 from PIL import Image, ImageOps
 
@@ -29,8 +32,24 @@ LARGURA_MAX = 1600
 QUALIDADE = 78
 
 
+def abrir(caminho):
+    """
+    Abre a foto. O HEIC do iPhone a Pillow não lê, por isso passa primeiro
+    pelo sips, que vem com o macOS.
+    """
+    if caminho.lower().endswith((".heic", ".heif")):
+        tmp = os.path.join(tempfile.mkdtemp(), "convertida.png")
+        subprocess.run(["sips", "-s", "format", "png", caminho, "--out", tmp],
+                       check=True, capture_output=True)
+        im = Image.open(tmp)
+        im.load()
+        shutil.rmtree(os.path.dirname(tmp), ignore_errors=True)
+        return im
+    return Image.open(caminho)
+
+
 def preparar(origem, nome):
-    im = ImageOps.exif_transpose(Image.open(origem))   # respeita a rotação
+    im = ImageOps.exif_transpose(abrir(origem))        # respeita a rotação
     im = im.convert("RGB")
 
     if im.width > LARGURA_MAX:
