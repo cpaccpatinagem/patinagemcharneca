@@ -284,6 +284,51 @@ pré-inscrições vieram daquele cartaz. Sem etiqueta, fica registado o site de
 onde veio a visita (`google.com`, `l.instagram.com`) ou `direta` para quem
 escreveu o endereço à mão.
 
+## Lista de espera
+
+Quando a folha **Ocupação** disser `Cheio` num horário, o site deve dizer o
+mesmo. Um clube que assume ter lista de espera vale mais do que um clube que
+parece ter sempre lugar: é sinal de procura para as famílias e é argumento junto
+da Câmara na hora de pedir mais horas de pavilhão.
+
+Não se apaga o horário nem se esconde. Continua lá, com a etiqueta do estado, e
+a pré-inscrição continua aberta - quem quer entrar naquele horário inscreve-se
+na mesma e fica à espera.
+
+### Marcar um horário
+
+Em `horarios.html`, dentro do `<article class="slot">`, a seguir ao dia:
+
+```html
+<div class="slot__day">Segunda-feira
+  <span class="slot__vagas" data-vagas="cheio">Lista de espera</span>
+</div>
+```
+
+Os estados são três e o texto é livre:
+
+| `data-vagas` | Texto habitual | Como aparece |
+|---|---|---|
+| (sem etiqueta) | - | normal, é o estado com vagas |
+| `poucas` | Últimas vagas | etiqueta dourada |
+| `cheio` | Lista de espera | etiqueta discreta, cartão esbatido |
+
+O texto está no HTML de propósito: é lido por leitores de ecrã e aparece mesmo
+sem JavaScript. O atributo só decide a cor.
+
+### Os outros dois sítios
+
+Marcar o horário na grelha não chega, porque o formulário pergunta qual o
+horário preferido. Em `pre-inscricao.html` e em `index.html`, no grupo de
+opções `name="inicio"`, acrescentar ao rótulo:
+
+```html
+<span>Segunda &middot; 19:00 (lista de espera)</span>
+```
+
+Quando o horário voltar a ter vaga, retirar a etiqueta e o texto. São três
+edições de texto, sem tocar em CSS nem em JavaScript.
+
 ### Quantas pessoas visitam
 
 As folhas acima medem quem chega ao fim. Para saber quantos visitantes há e que

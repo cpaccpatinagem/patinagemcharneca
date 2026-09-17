@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;500;700;800&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=20">
+<link rel="stylesheet" href="assets/css/style.css?v=21">
 <!-- Medição de visitas da Vercel: sem cookies, sem identificar ninguém.
      Só conta visitas por página, país e tipo de dispositivo. -->
 <script defer src="/_vercel/insights/script.js"></script>
@@ -108,6 +108,10 @@
     </div>
     <div class="schedule" data-stagger="90">
       <article class="slot" data-reveal>
+        <!-- Para marcar o estado das vagas, acrescentar a seguir ao dia:
+             <span class="slot__vagas" data-vagas="poucas">Últimas vagas</span>
+             <span class="slot__vagas" data-vagas="cheio">Lista de espera</span>
+             Um horário sem etiqueta tem vagas. Ver README, "Lista de espera". -->
         <div class="slot__day">Segunda-feira</div>
         <div class="slot__time">19:00 <span>-</span> 19:45</div>
         <div class="slot__meta">
@@ -285,6 +289,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=20" defer></script>
+<script src="assets/js/main.js?v=21" defer></script>
 </body>
 </html>

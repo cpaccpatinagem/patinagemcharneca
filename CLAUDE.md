@@ -144,12 +144,12 @@ Paleta: azul-noite (`--c-ink-*`) com dourado (`--c-gold-*`) sobre papel
 
 ### Cache busting
 
-Os assets são referenciados com `?v=N` (atualmente `?v=20`). **Sempre que
+Os assets são referenciados com `?v=N` (atualmente `?v=21`). **Sempre que
 alterares `style.css` ou `main.js`, incrementa o `v` em todas as páginas**, senão
 os visitantes ficam com a versão antiga.
 
 ```bash
-sed -i '' 's/?v=20/?v=21/g' *.html
+sed -i '' 's/?v=21/?v=22/g' *.html
 ```
 
 ### Acessibilidade (não negociável)
