@@ -24,7 +24,10 @@ Para usar outra porta: `npm run dev -- --port 5000`.
 
 Notas:
 
-- URLs sem extensão funcionam (`/horarios` serve `horarios.html`), como na Vercel.
+- URLs sem extensão funcionam (`/horarios` serve `horarios.html`), como na Vercel
+  (`cleanUrls` no `vercel.json`). Os links internos usam sempre a forma sem
+  extensão e com barra inicial (`href="/horarios"`).
+- Um endereço inexistente serve a `404.html`, a mesma página que a Vercel usa.
 - Em desenvolvimento não há cache (`Cache-Control: no-store`).
 - Um 404 mostra uma página de aviso em vez de falhar em silêncio, para links
   partidos entre páginas darem nas vistas.
@@ -82,18 +85,10 @@ Procura por `PREENCHER`, `SUBSTITUIR` e pelos blocos com a classe `todo-note`
 
 ### Logótipo
 
-Coloca o ficheiro em `assets/img/logo.svg` e substitui, no cabeçalho e no rodapé de
-cada página, o bloco:
-
-```html
-<span class="brand__mark" aria-hidden="true">CP</span>
-```
-
-por:
-
-```html
-<img src="assets/img/logo.svg" alt="" width="38" height="38">
-```
+O símbolo está em `assets/img/mark-gold.svg` (cabeçalho e rodapé de todas as
+páginas); as versões completas em `logo-gold.svg` e `logo-navy.svg`; os ícones
+em `favicon.svg`, `favicon-96.png`, `apple-touch-icon.png` e `icon-512.png`, que é
+também o `logo` dos dados estruturados.
 
 Se as cores oficiais do clube forem diferentes das que usei, altera apenas as variáveis
 no topo de `assets/css/style.css` (`--c-ink-800`, `--c-gold-500`, etc.) — todo o site
@@ -166,7 +161,8 @@ email de confirmação com os dados que enviou. O código do recetor está em
 <form class="form" data-form data-endpoint="https://script.google.com/macros/s/AKfy.../exec" novalidate>
 ```
 
-10. Incrementa a versão dos assets nas páginas (`?v=3` → `?v=4`), faz commit e push.
+10. Faz commit e push. (O `data-endpoint` vive no HTML, por isso não é preciso
+    mexer no `?v=` dos assets.)
 
 ### Enquanto o endpoint não estiver configurado
 
@@ -233,13 +229,29 @@ Script ignora essas submissões automaticamente.
 
 ## Publicar
 
-Qualquer um destes serve, e todos são gratuitos para este volume:
+O site está na **Vercel**, ligada ao repositório: cada push para `main` publica em
+<https://www.patinagemcharneca.pt> ao fim de cerca de um minuto. Um push é uma
+publicação - confirmar no site depois, não antes.
 
-1. **Netlify** — arrasta a pasta para app.netlify.com/drop. Pronto em segundos.
-2. **Cloudflare Pages** — liga um repositório Git, deploy automático.
-3. **Vercel** — igual.
+O `vercel.json` na raiz define:
 
-Depois liga o domínio `patinagemcharneca.pt` nas definições de DNS do serviço escolhido.
+- `cleanUrls`: `/horarios` é o endereço oficial e `/horarios.html` redireciona
+  (308) para lá;
+- os cabeçalhos de segurança em todas as respostas, incluindo a
+  `Content-Security-Policy`. Se um dia entrar um script ou um serviço externo
+  novo (mapa, vídeo alojado fora, formulário de terceiros), é preciso
+  acrescentá-lo à CSP, senão o browser bloqueia-o em silêncio. O script inline
+  do `<head>` que põe a classe `js` no `<html>` está autorizado pelo seu hash:
+  se o conteúdo desse script mudar, o hash tem de ser recalculado:
+
+```bash
+printf '%s' 'document.documentElement.classList.add("js")' | openssl dgst -sha256 -binary | openssl base64
+```
+
+- cache de um ano para `assets/css` e `assets/js` (são versionados com `?v=`) e
+  de um dia para imagens.
+
+A `404.html` na raiz é a página de erro, servida com o estado 404.
 
 ### A fazer depois de publicar
 
