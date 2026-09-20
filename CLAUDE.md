@@ -208,11 +208,12 @@ Por fazer:
 - **Foto da página inicial.** A que está ao lado de "Uma formação que vai além
   da técnica" é um plano largo do pavilhão; o Francisco acha-a vazia e quer um
   momento de alegria. Vai mandar uma foto do Halloween de 2025.
-- **Polo do clube nos retratos.** Só a Catarina e a Madalena estão de polo. O
-  Francisco, a Sílvia, a Inês e a Beatriz precisam de foto nova com o polo
-  vestido; a Cátia está com a t-shirt do clube. Não se veste um polo a ninguém
-  por edição - a foto que chegou assim tinha o nome do clube mal escrito no
-  logótipo e não foi publicada. Está em `_originais/`.
+- **Logótipo do polo nos retratos gerados.** A Sílvia, a Inês e a Beatriz têm
+  retratos com o polo vestido por edição de imagem. O logótipo saiu mal escrito
+  em todos ("CLUB PATTINAGE ARTISTIQUE / CHARENCE DE CAPARNCA" e variantes) e o
+  Francisco decidiu publicá-los assim a 2026-09-20, sabendo disso. A 15 px de
+  altura na grelha não se lê, mas na página do Clube lê-se de perto: trocar por
+  fotografia verdadeira quando houver. A Cátia está com a t-shirt do clube.
 - **Inês Pelica** tem uma biografia de uma linha. Falta percurso.
 - **Foto histórica** - placeholder no topo do `clube.html`.
 - **Vídeo do hero** - o `<video>` está comentado no `index.html` e no lugar dele

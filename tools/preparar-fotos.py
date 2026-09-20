@@ -36,9 +36,9 @@ FOLGA_TOPO = 0.09                   # espaço acima da cabeça, em % da altura
 # O recorte é calculado a partir daí para a cabeça ocupar sempre ALTURA_CABECA
 # da altura final — é isso que faz os retratos parecerem da mesma sessão.
 ROSTOS = {
-    "beatriz-maia":      (95,   690,  590),
-    "ines-pelica":       (103,  429,  425),
-    "silvia-almeida":    (51,   430,  532),
+    "beatriz-maia":      (104,  380,  288),
+    "ines-pelica":       (88,   390,  300),
+    "silvia-almeida":    (45,   240,  222),
     "francisco-quintela": (615, 1680, 3150),
     "catarina-branco":   (31,   500,  969),
     "madalena-bonito":   (62,   445,  280),
