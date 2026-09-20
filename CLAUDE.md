@@ -219,5 +219,20 @@ Por fazer:
   corre o `.hero__placeholder`. Especificações no `README.md`.
 - **Taça de Portugal 2013** e o percurso da Inês Pelica no Clube Futebol
   Sassoeiros - ambos afirmados no site e por confirmar.
-- **Search Console** - falta o registo TXT no dominios.pt para validar o domínio
-  e pedir a indexação da página inicial, para o Google apanhar o ícone.
+- **Analytics da Vercel** - o script está nas 7 páginas e a política de
+  privacidade já o descreve, mas `/_vercel/insights/script.js` dá 404 porque a
+  funcionalidade não está ligada no painel. Enquanto assim for, não se conta
+  visita nenhuma. Painel da Vercel -> projeto -> Analytics -> Enable. Escolher
+  "Other" no seletor de framework: as instruções de Next.js mandam instalar um
+  pacote npm, e isso não entra aqui.
+- **Perfil de Empresa no Google** - por criar. Para um clube local vale mais
+  do que qualquer página nova; é o que aparece no mapa em "patinagem Almada".
+- **Funil na folha das pré-inscrições** - correr `configurarFunil()` uma vez a
+  partir do editor do Apps Script. Cria as colunas "Experimental feito?" e
+  "Inscrito?" e a folha "Funil" com as contagens por mês.
+
+Feito a 2026-09-20: **Search Console validada** por registo TXT no dominios.pt
+(o painel exige o valor entre aspas e o nome por extenso, não aceita `@`),
+sitemap submetido com o URL completo (numa propriedade de Domínio o caminho
+relativo não serve) e indexação da página inicial pedida. O registo TXT não
+pode ser apagado: o Google revalida-o periodicamente.
