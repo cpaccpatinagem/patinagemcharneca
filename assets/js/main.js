@@ -233,6 +233,15 @@
       var inner = panel.firstElementChild;
       btn.setAttribute("aria-expanded", String(open));
 
+      // Um painel pode ser fechado a meio de se estar a abrir - basta clicar
+      // noutra pergunta. Se o ouvinte da abertura ficar pendurado, dispara no
+      // fim da animação de FECHO e repõe height:auto num painel já fechado:
+      // fica um vazio do tamanho da resposta, invisível mas a ocupar espaço.
+      if (panel._aoAbrir) {
+        panel.removeEventListener("transitionend", panel._aoAbrir);
+        panel._aoAbrir = null;
+      }
+
       if (reduceMotion) {
         panel.classList.toggle("is-open", open);
         panel.style.height = open ? "auto" : "0px";
@@ -243,11 +252,14 @@
         panel.classList.add("is-open");
         panel.style.height = inner.offsetHeight + "px";
         // depois da transição, "auto" para acompanhar mudanças de largura
-        panel.addEventListener("transitionend", function done(e) {
+        panel._aoAbrir = function (e) {
           if (e.propertyName !== "height") return;
+          if (!panel.classList.contains("is-open")) return;
           panel.style.height = "auto";
-          panel.removeEventListener("transitionend", done);
-        });
+          panel.removeEventListener("transitionend", panel._aoAbrir);
+          panel._aoAbrir = null;
+        };
+        panel.addEventListener("transitionend", panel._aoAbrir);
       } else {
         // De "auto" para um valor fixo antes de fechar, senão não há o que animar.
         // O void força o recálculo de layout, para que a transição arranque

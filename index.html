@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;500;700;800&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=22">
+<link rel="stylesheet" href="assets/css/style.css?v=23">
 
 <!-- Dados estruturados: é isto que faz o Google e os assistentes de IA
      perceberem que somos um clube desportivo em Almada. -->
@@ -136,8 +136,11 @@
     </video>
     -->
 
-    <!-- Cena de substituição enquanto o vídeo não existe -->
-    <div class="hero__placeholder" aria-hidden="true"></div>
+    <!-- Foto do pavilhão enquanto o vídeo não existe. O CSS dá-lhe uma
+         aproximação muito lenta, para o hero não ficar parado. Fica por baixo
+         do véu escuro, por isso lê-se como ambiente e não como fotografia. -->
+    <img src="assets/img/pavilhao/hero.jpg" alt="" width="2400" height="1350"
+         fetchpriority="high" decoding="async">
   </div>
 
   <div class="hero__veil" aria-hidden="true"></div>
@@ -683,6 +686,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=22" defer></script>
+<script src="assets/js/main.js?v=23" defer></script>
 </body>
 </html>
