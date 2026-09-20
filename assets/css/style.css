@@ -607,6 +607,115 @@ p { text-wrap: pretty; }
   color: var(--c-paper-faint);
 }
 
+/* Cada número do hero traz uma figura que o torna legível de relance: a linha
+   do tempo, os seis da equipa técnica, as barras dos atletas e o globo das
+   internacionalizações. São decorativas (aria-hidden) e animam na mesma
+   passagem em que o contador ao lado arranca. Quem não tem JS, ou desligou a
+   animação, vê-as logo no estado final: a classe .is-armed só é posta pelo
+   JS quando há mesmo animação para correr. */
+.stat__vis {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 30px;
+  margin-bottom: 0.55rem;
+}
+.vis { height: 100%; width: auto; overflow: visible; }
+
+.vis__fig { fill: var(--c-gold-400); }
+.vis__bar { fill: var(--c-gold-500); opacity: var(--o, 1); }
+.vis__line { stroke: rgba(244, 242, 236, 0.22); stroke-width: 1; stroke-linecap: round; fill: none; }
+.vis__goldline { stroke: var(--c-gold-400); stroke-width: 1.6; stroke-linecap: round; fill: none; }
+.vis__gold { fill: var(--c-gold-400); }
+
+/* --- Estado de partida, só com JS e só se houver animação --- */
+.stat.is-armed .vis__tick,
+.stat.is-armed .vis__merid { opacity: 0; }
+.stat.is-armed .vis__fig {
+  opacity: 0;
+  transform: translateY(5px);
+  fill: rgba(244, 242, 236, 0.26);
+}
+.stat.is-armed .vis__bar { opacity: 0; transform: scaleY(0.04); }
+.stat.is-armed .vis__pop { opacity: 0; transform: scale(0); }
+.stat.is-armed .vis__draw,
+.stat.is-armed .vis__rota { stroke-dasharray: 78; stroke-dashoffset: 78; }
+.stat.is-armed .vis__draw-circ { stroke-dasharray: 82; stroke-dashoffset: 82; }
+
+.vis__fig, .vis__bar, .vis__pop {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+.vis__pop { transform-origin: center; }
+
+/* --- A animação, quando o contador ao lado arranca --- */
+.stat.is-armed.is-on .vis__tick {
+  opacity: 1;
+  transition: opacity 400ms var(--ease-soft) calc(var(--i) * 110ms);
+}
+.stat.is-armed.is-on .vis__fig {
+  opacity: 1;
+  transform: none;
+  fill: var(--c-gold-400);
+  transition:
+    opacity 380ms var(--ease-out) calc(var(--i) * 160ms),
+    transform 480ms var(--ease-out) calc(var(--i) * 160ms),
+    fill 480ms var(--ease-soft) calc(var(--i) * 160ms + 120ms);
+}
+.stat.is-armed.is-on .vis__bar {
+  opacity: var(--o, 1);
+  transform: none;
+  transition:
+    opacity 320ms var(--ease-soft) calc(var(--i) * 72ms),
+    transform 560ms var(--ease-out) calc(var(--i) * 72ms);
+}
+.stat.is-armed.is-on .vis__draw {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1500ms var(--ease-out);
+}
+.stat.is-armed.is-on .vis__draw-circ {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 900ms var(--ease-out);
+}
+.stat.is-armed.is-on .vis__merid {
+  opacity: 1;
+  transition: opacity 420ms var(--ease-soft) calc(400ms + var(--i) * 110ms);
+}
+.stat.is-armed.is-on .vis__rota {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 800ms var(--ease-out) 700ms;
+}
+.stat.is-armed.is-on .vis__pop {
+  opacity: 1;
+  transform: none;
+  transition: opacity 300ms var(--ease-out) 1420ms, transform 520ms var(--ease-out) 1420ms;
+}
+
+/* --- Rato por cima: a figura acende, sem mexer no que se lê --- */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .stat { transition: background-color 400ms var(--ease-soft); }
+  .stat:hover { background: rgba(227, 197, 103, 0.045); }
+  .stat:hover .vis__fig { fill: var(--c-gold-400); }
+  .stat:hover .vis__bar { opacity: 1; }
+  .stat:hover .vis__line { stroke: rgba(244, 242, 236, 0.4); }
+  .stat:hover .vis__pop { filter: drop-shadow(0 0 5px var(--c-gold-glow)); }
+  .stat .vis__fig, .stat .vis__bar, .stat .vis__line, .stat .vis__pop {
+    transition: fill 320ms var(--ease-soft), opacity 320ms var(--ease-soft),
+                stroke 320ms var(--ease-soft), filter 320ms var(--ease-soft);
+  }
+}
+
+/* Com a animação desligada no sistema não se arma nada, mas a regra fica
+   como rede: o estado final é sempre o que vale. */
+@media (prefers-reduced-motion: reduce) {
+  .stat .vis__tick, .stat .vis__merid, .stat .vis__fig, .stat .vis__pop { opacity: 1; }
+  .stat .vis__bar { opacity: var(--o, 1); }
+  .stat .vis__fig { fill: var(--c-gold-400); }
+  .stat .vis__fig, .stat .vis__bar, .stat .vis__pop { transform: none; }
+  .stat .vis__draw, .stat .vis__rota, .stat .vis__draw-circ { stroke-dashoffset: 0; }
+  .stat * { transition: none !important; }
+}
+
 /* Indicador de scroll */
 .scroll-hint {
   position: absolute;

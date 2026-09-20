@@ -140,10 +140,20 @@
     if (!reduceMotion && "IntersectionObserver" in window) {
       nums.forEach(function (el) {
         el.textContent = (el.getAttribute("data-prefix") || "") + "0";
+        // As figuras ao lado do número partem do estado final no HTML. Só
+        // se armam aqui, quando se sabe que há animação para correr.
+        var stat = statDe(el);
+        if (stat) stat.classList.add("is-armed");
       });
     }
 
+    function statDe(el) {
+      return el.closest ? el.closest(".stat") : null;
+    }
+
     function run(el) {
+      var stat = statDe(el);
+      if (stat) stat.classList.add("is-on");
       var target = parseFloat(el.getAttribute("data-count"));
       var prefix = el.getAttribute("data-prefix") || "";
       var suffix = el.getAttribute("data-suffix") || "";
