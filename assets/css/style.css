@@ -628,8 +628,54 @@ p { text-wrap: pretty; }
 .vis__goldline { stroke: var(--c-gold-400); stroke-width: 1.6; stroke-linecap: round; fill: none; }
 .vis__gold { fill: var(--c-gold-400); }
 
+/* Os anos nas pontas da linha do tempo, e a linha de meta das barras: ambos
+   são marcas de leitura, não informação nova. O que conta continua a ser o
+   número e a legenda por baixo. */
+.vis__ano {
+  fill: var(--c-paper-faint);
+  font-family: var(--f-body);
+  font-size: 7.5px;
+  letter-spacing: 0.06em;
+}
+.vis__ano--b { text-anchor: end; }
+.vis__meta {
+  stroke: rgba(227, 197, 103, 0.34);
+  stroke-width: 0.9;
+  stroke-dasharray: 2 3;
+  stroke-linecap: round;
+}
+
+/* O globo roda: cada meridiano é uma circunferência achatada em scaleX, e as
+   tres correm a mesma volta desfasadas 60 graus. Dá a ilusão do arame a
+   girar sem precisar de 3D. Fica parado por defeito: só anda quando o bloco
+   aparece (uma passagem curta, abaixo dos cinco segundos que a WCAG 2.2.2
+   trata) e enquanto o rato estiver por cima, que é movimento pedido. */
+@keyframes visGiro {
+  0%    { transform: scaleX(1); }
+  12.5% { transform: scaleX(0.707); }
+  25%   { transform: scaleX(0.02); }
+  37.5% { transform: scaleX(0.707); }
+  50%   { transform: scaleX(1); }
+  62.5% { transform: scaleX(0.707); }
+  75%   { transform: scaleX(0.02); }
+  87.5% { transform: scaleX(0.707); }
+  100%  { transform: scaleX(1); }
+}
+.vis__lon {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: visGiro 9s linear var(--ad, 0s) infinite;
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vis__lon { animation: none; transform: scaleX(0.5); }
+  .vis__lon:first-of-type { transform: scaleX(1); }
+}
+
 /* --- Estado de partida, só com JS e só se houver animação --- */
 .stat.is-armed .vis__tick,
+.stat.is-armed .vis__ano,
+.stat.is-armed .vis__meta,
 .stat.is-armed .vis__merid { opacity: 0; }
 .stat.is-armed .vis__fig {
   opacity: 0;
@@ -652,6 +698,14 @@ p { text-wrap: pretty; }
 .stat.is-armed.is-on .vis__tick {
   opacity: 1;
   transition: opacity 400ms var(--ease-soft) calc(var(--i) * 110ms);
+}
+.stat.is-armed.is-on .vis__ano {
+  opacity: 1;
+  transition: opacity 500ms var(--ease-soft) 1100ms;
+}
+.stat.is-armed.is-on .vis__meta {
+  opacity: 1;
+  transition: opacity 500ms var(--ease-soft) 120ms;
 }
 .stat.is-armed.is-on .vis__fig {
   opacity: 1;
@@ -681,6 +735,7 @@ p { text-wrap: pretty; }
   opacity: 1;
   transition: opacity 420ms var(--ease-soft) calc(400ms + var(--i) * 110ms);
 }
+.stat.is-girar .vis__lon { animation-play-state: running; }
 .stat.is-armed.is-on .vis__rota {
   stroke-dashoffset: 0;
   transition: stroke-dashoffset 800ms var(--ease-out) 700ms;
@@ -699,6 +754,8 @@ p { text-wrap: pretty; }
   .stat:hover .vis__bar { opacity: 1; }
   .stat:hover .vis__line { stroke: rgba(244, 242, 236, 0.4); }
   .stat:hover .vis__pop { filter: drop-shadow(0 0 5px var(--c-gold-glow)); }
+  .stat:hover .vis__lon { animation-play-state: running; }
+  .stat:hover .vis__meta { stroke: rgba(227, 197, 103, 0.6); }
   .stat .vis__fig, .stat .vis__bar, .stat .vis__line, .stat .vis__pop {
     transition: fill 320ms var(--ease-soft), opacity 320ms var(--ease-soft),
                 stroke 320ms var(--ease-soft), filter 320ms var(--ease-soft);
@@ -708,7 +765,8 @@ p { text-wrap: pretty; }
 /* Com a animação desligada no sistema não se arma nada, mas a regra fica
    como rede: o estado final é sempre o que vale. */
 @media (prefers-reduced-motion: reduce) {
-  .stat .vis__tick, .stat .vis__merid, .stat .vis__fig, .stat .vis__pop { opacity: 1; }
+  .stat .vis__tick, .stat .vis__merid, .stat .vis__fig, .stat .vis__pop,
+  .stat .vis__ano, .stat .vis__meta { opacity: 1; }
   .stat .vis__bar { opacity: var(--o, 1); }
   .stat .vis__fig { fill: var(--c-gold-400); }
   .stat .vis__fig, .stat .vis__bar, .stat .vis__pop { transform: none; }

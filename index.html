@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;500;700;800&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=25">
+<link rel="stylesheet" href="assets/css/style.css?v=26">
 
 <!-- Dados estruturados: é isto que faz o Google e os assistentes de IA
      perceberem que somos um clube desportivo em Almada. -->
@@ -179,18 +179,20 @@
     <div class="stat">
       <div class="stat__vis">
         <svg class="vis" viewBox="0 0 72 28" fill="none" aria-hidden="true" focusable="false">
-          <line class="vis__line vis__tick" style="--i:0" x1="1" y1="21" x2="1" y2="13"/>
-          <line class="vis__line vis__tick" style="--i:1" x1="9.75" y1="21" x2="9.75" y2="16.5"/>
-          <line class="vis__line vis__tick" style="--i:2" x1="18.5" y1="21" x2="18.5" y2="16.5"/>
-          <line class="vis__line vis__tick" style="--i:3" x1="27.25" y1="21" x2="27.25" y2="16.5"/>
-          <line class="vis__line vis__tick" style="--i:4" x1="36" y1="21" x2="36" y2="13"/>
-          <line class="vis__line vis__tick" style="--i:5" x1="44.75" y1="21" x2="44.75" y2="16.5"/>
-          <line class="vis__line vis__tick" style="--i:6" x1="53.5" y1="21" x2="53.5" y2="16.5"/>
-          <line class="vis__line vis__tick" style="--i:7" x1="62.25" y1="21" x2="62.25" y2="16.5"/>
-          <line class="vis__line vis__tick" style="--i:8" x1="71" y1="21" x2="71" y2="13"/>
-          <line class="vis__line" x1="2" y1="21" x2="69" y2="21"/>
-          <line class="vis__goldline vis__draw" x1="2" y1="21" x2="69" y2="21"/>
-          <circle class="vis__gold vis__pop" cx="69" cy="21" r="2.8"/>
+          <text class="vis__ano vis__ano--a" x="2" y="10">1999</text>
+          <text class="vis__ano vis__ano--b" x="69" y="10">hoje</text>
+          <line class="vis__line vis__tick" style="--i:0" x1="1" y1="22" x2="1" y2="18"/>
+          <line class="vis__line vis__tick" style="--i:1" x1="9.75" y1="22" x2="9.75" y2="19.5"/>
+          <line class="vis__line vis__tick" style="--i:2" x1="18.5" y1="22" x2="18.5" y2="19.5"/>
+          <line class="vis__line vis__tick" style="--i:3" x1="27.25" y1="22" x2="27.25" y2="19.5"/>
+          <line class="vis__line vis__tick" style="--i:4" x1="36" y1="22" x2="36" y2="19.5"/>
+          <line class="vis__line vis__tick" style="--i:5" x1="44.75" y1="22" x2="44.75" y2="19.5"/>
+          <line class="vis__line vis__tick" style="--i:6" x1="53.5" y1="22" x2="53.5" y2="19.5"/>
+          <line class="vis__line vis__tick" style="--i:7" x1="62.25" y1="22" x2="62.25" y2="19.5"/>
+          <line class="vis__line vis__tick" style="--i:8" x1="71" y1="22" x2="71" y2="18"/>
+          <line class="vis__line" x1="2" y1="22" x2="69" y2="22"/>
+          <line class="vis__goldline vis__draw" x1="2" y1="22" x2="69" y2="22"/>
+          <circle class="vis__gold vis__pop" cx="69" cy="22" r="2.8"/>
         </svg>
       </div>
       <div class="stat__num"><span data-count="26" data-since="1999-10-28" data-suffix="">26</span></div>
@@ -231,6 +233,7 @@
     <div class="stat">
       <div class="stat__vis">
         <svg class="vis" viewBox="0 0 72 28" aria-hidden="true" focusable="false">
+          <line class="vis__meta" x1="0" y1="7.5" x2="72" y2="7.5"/>
           <rect class="vis__bar" style="--i:0;--o:0.42" x="1" y="18" width="3" height="7" rx="1.2"/>
           <rect class="vis__bar" style="--i:1;--o:0.46" x="6" y="14" width="3" height="11" rx="1.2"/>
           <rect class="vis__bar" style="--i:2;--o:0.51" x="11" y="16" width="3" height="9" rx="1.2"/>
@@ -254,11 +257,12 @@
       <div class="stat__vis">
         <svg class="vis" viewBox="0 0 30 28" fill="none" aria-hidden="true" focusable="false">
           <circle class="vis__line vis__draw-circ" cx="15" cy="14" r="13"/>
-          <ellipse class="vis__line vis__merid" style="--i:0" cx="15" cy="14" rx="4.5" ry="13"/>
-          <ellipse class="vis__line vis__merid" style="--i:1" cx="15" cy="14" rx="9" ry="13"/>
           <line class="vis__line vis__merid" style="--i:2" x1="2" y1="14" x2="28" y2="14"/>
           <line class="vis__line vis__merid" style="--i:3" x1="3.8" y1="7.5" x2="26.2" y2="7.5"/>
           <line class="vis__line vis__merid" style="--i:4" x1="3.8" y1="20.5" x2="26.2" y2="20.5"/>
+          <ellipse class="vis__line vis__merid vis__lon" style="--i:0;--ad:0s" vector-effect="non-scaling-stroke" cx="15" cy="14" rx="13" ry="13"/>
+          <ellipse class="vis__line vis__merid vis__lon" style="--i:1;--ad:-3s" vector-effect="non-scaling-stroke" cx="15" cy="14" rx="13" ry="13"/>
+          <ellipse class="vis__line vis__merid vis__lon" style="--i:1;--ad:-6s" vector-effect="non-scaling-stroke" cx="15" cy="14" rx="13" ry="13"/>
           <path class="vis__goldline vis__rota" d="M6.5 20.8C9 9 19 4.2 25 8"/>
           <circle class="vis__gold vis__pop" cx="25" cy="8" r="2.6"/>
         </svg>
@@ -760,6 +764,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=25" defer></script>
+<script src="assets/js/main.js?v=26" defer></script>
 </body>
 </html>

@@ -153,7 +153,17 @@
 
     function run(el) {
       var stat = statDe(el);
-      if (stat) stat.classList.add("is-on");
+      if (stat) {
+        stat.classList.add("is-on");
+        // O globo dá uma volta curta ao aparecer e depois assenta. Fica
+        // abaixo dos cinco segundos da WCAG 2.2.2, que é o limite a partir
+        // do qual movimento automático precisaria de um botão para parar.
+        // Com o rato por cima volta a andar, e aí é movimento pedido.
+        if (!reduceMotion && stat.querySelector(".vis__lon")) {
+          stat.classList.add("is-girar");
+          setTimeout(function () { stat.classList.remove("is-girar"); }, 4200);
+        }
+      }
       var target = parseFloat(el.getAttribute("data-count"));
       var prefix = el.getAttribute("data-prefix") || "";
       var suffix = el.getAttribute("data-suffix") || "";
