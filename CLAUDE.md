@@ -22,6 +22,7 @@ documenta como escrever e como decidir.
 | "o seu filho", "o seu educando" | "os atletas", "quem começa aos 5 anos" |
 | "turmas", "aulas", "professores" | "grupos", "treinos", "treinadores" |
 | "equipe", "time", "esporte" (pt-BR) | "equipa", "desporto" |
+| "piruetas" | "piões" (é o termo da modalidade) |
 
 O travessão `—` não entra em lado nenhum: nem em texto visível, nem em títulos,
 nem em `alt`, nem em meta descriptions. Substituir por hífen `-`.
