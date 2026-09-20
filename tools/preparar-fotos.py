@@ -34,10 +34,14 @@ FOLGA_TOPO = 0.09                   # espaço acima da cabeça, em % da altura
 #
 # Cada entrada é (topo_da_cabeca_y, queixo_y, centro_do_rosto_x) no original.
 # O recorte é calculado a partir daí para a cabeça ocupar sempre ALTURA_CABECA
-# da altura final — é isso que faz os retratos parecerem da mesma sessão.
+# da altura final - é isso que faz os retratos parecerem da mesma sessão.
+#
+# Um quarto valor opcional substitui ALTURA_CABECA só nesse retrato. Serve para
+# quando o original não dá altura suficiente: mais vale a cabeça ficar um pouco
+# maior do que inventar tronco que não está na fotografia.
 ROSTOS = {
     "beatriz-maia":      (104,  380,  288),
-    "ines-pelica":       (88,   390,  300),
+    "ines-pelica":       (88,   390,  300, 0.442),
     "silvia-almeida":    (45,   240,  222),
     "francisco-quintela": (615, 1680, 3150),
     "catarina-branco":   (31,   500,  969),
@@ -127,9 +131,11 @@ def preparar(origem, nome):
     centro_x = (esq + dir_) // 2
 
     if nome in ROSTOS:
-        cabeca_topo, queixo, centro_x = ROSTOS[nome]
+        medida = ROSTOS[nome]
+        cabeca_topo, queixo, centro_x = medida[:3]
+        proporcao = medida[3] if len(medida) > 3 else ALTURA_CABECA
         topo = cabeca_topo
-        altura_corte = int((queixo - cabeca_topo) / ALTURA_CABECA)
+        altura_corte = int((queixo - cabeca_topo) / proporcao)
     else:
         # Sem medição à mão, aproximamos pelos limites detetados.
         altura_corte = int((base - topo) * 1.15)
