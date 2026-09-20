@@ -46,6 +46,7 @@ ROSTOS = {
     "francisco-quintela": (615, 1680, 3150),
     "catarina-branco":   (31,   500,  969),
     "madalena-bonito":   (62,   445,  280),
+    "catia-mendonca":    (98,   378,  288),
 }
 
 ALTURA_CABECA = 0.40                # a cabeça ocupa 40% da altura do retrato

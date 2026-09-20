@@ -214,7 +214,7 @@ Por fazer:
   em todos ("CLUB PATTINAGE ARTISTIQUE / CHARENCE DE CAPARNCA" e variantes) e o
   Francisco decidiu publicá-los assim a 2026-09-20, sabendo disso. A 15 px de
   altura na grelha não se lê, mas na página do Clube lê-se de perto: trocar por
-  fotografia verdadeira quando houver. A Cátia está com a t-shirt do clube.
+  fotografia verdadeira quando houver. A Cátia também tem retrato gerado, mas o logótipo dela saiu correto.
 - **Inês Pelica** tem uma biografia de uma linha. Falta percurso.
 - **Foto histórica** - placeholder no topo do `clube.html`.
 - **Vídeo do hero** - o `<video>` está comentado no `index.html` e no lugar dele
