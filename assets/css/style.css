@@ -34,7 +34,10 @@
   --g-gold: linear-gradient(135deg, #E3C567 0%, #C9A227 45%, #8F6F15 100%);
   --g-gold-text: linear-gradient(100deg, #F0DC9A 0%, #E3C567 35%, #C9A227 75%);
   --g-surface: linear-gradient(160deg, rgba(19,43,77,0.55) 0%, rgba(10,20,40,0.85) 100%);
-  --g-veil: linear-gradient(180deg, rgba(6,13,26,0.10) 0%, rgba(6,13,26,0.55) 45%, rgba(6,13,26,0.96) 100%);
+  /* Véu sobre a foto do hero. Os valores do meio são os que contam: é aí que
+     ficam o sobretítulo e o título, e a parede clara do pavilhão deixava-os
+     a custo. Subir o meio dá-lhes fundo sem apagar a fotografia. */
+  --g-veil: linear-gradient(180deg, rgba(6,13,26,0.30) 0%, rgba(6,13,26,0.74) 45%, rgba(6,13,26,0.97) 100%);
 
   /* --- Tipografia --- */
   --f-display: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
