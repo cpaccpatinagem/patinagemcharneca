@@ -1408,6 +1408,75 @@ p { text-wrap: pretty; }
 .cta-band h2 { max-width: 20ch; margin-inline: auto; }
 .cta-band .lead { max-width: 52ch; margin: var(--sp-3) auto var(--sp-4); }
 
+/* Atalho permanente para a pré-inscrição.
+   Abaixo dos 1080px o cabeçalho não tem botão nenhum - o atalho entra assim
+   que se passa o herói e fica. A partir dos 1080px o cabeçalho já tem o botão,
+   por isso o atalho só entra quando o cabeçalho se esconde (ao descer), para
+   não haver dois botões dourados iguais no ecrã ao mesmo tempo. Quem decide é
+   o JavaScript; aqui só está o aspeto. */
+.cta-rapido {
+  position: fixed;
+  z-index: 90;                 /* abaixo do cabeçalho (100) e do menu móvel */
+  inset: auto 0 0 0;
+  padding: 0.75rem 1.25rem;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  background: rgba(6, 13, 26, 0.92);
+  backdrop-filter: blur(16px) saturate(140%);
+  border-top: 1px solid var(--c-hairline-soft);
+  transform: translateY(110%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 420ms var(--ease-out),
+              opacity 260ms var(--ease-soft),
+              visibility 0s linear 420ms;
+}
+.cta-rapido.is-visible {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s, 0s, 0s;
+}
+
+.cta-rapido__inner {
+  width: min(100%, 1360px);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.cta-rapido__texto {
+  font-size: var(--fs-small);
+  color: var(--c-paper-dim);
+  line-height: 1.4;
+}
+.cta-rapido .btn { flex: none; padding: 0.85em 1.7em; }
+
+/* Ecrãs estreitos: o texto rouba o espaço ao botão, e o botão é o que conta. */
+@media (max-width: 420px) {
+  .cta-rapido__texto { display: none; }
+  .cta-rapido .btn { width: 100%; }
+}
+
+/* Ecrãs largos: deixa de ser barra e fica só o botão, solto no canto. Uma
+   barra a toda a largura aqui pesava de mais, e a frase já foi lida no herói. */
+@media (min-width: 1080px) {
+  .cta-rapido {
+    inset: auto 2rem 2rem auto;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+    border: 0;
+    transform: translateY(180%);
+  }
+  .cta-rapido__texto { display: none; }
+  .cta-rapido .btn--gold {
+    box-shadow: 0 20px 44px -14px rgba(0, 0, 0, 0.8),
+                0 4px 26px -6px rgba(201, 162, 39, 0.45);
+  }
+  .cta-rapido.is-visible { transform: none; }
+}
+
 /* --------------------------------------------------------------------------
    15. RODAPÉ
    -------------------------------------------------------------------------- */

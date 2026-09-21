@@ -29,6 +29,61 @@
   }
 
   /* ------------------------------------------------------------------
+     1b. Atalho para a pré-inscrição
+     ------------------------------------------------------------------ */
+  function initCtaRapido() {
+    var cta = $("[data-cta-rapido]");
+    if (!cta) return;
+
+    var header = $("[data-header]");
+    var menu = $("[data-menu]");
+    var ecraLargo = window.matchMedia("(min-width: 1080px)");
+
+    // Duas zonas onde o atalho estorva: a faixa de pré-inscrição, onde seria
+    // redundante e taparia o formulário, e o fim do rodapé, onde tapava a
+    // linha do copyright e o link da privacidade. Guardamos o estado de cada
+    // uma em vez de um contador, para não haver desvios se o observador
+    // repetir uma entrada.
+    var zonas = [$(".cta-band"), $(".footer__bottom")].filter(Boolean);
+    var aVista = zonas.map(function () { return false; });
+    function estorva() { return aVista.indexOf(true) !== -1; }
+
+    if (zonas.length && "IntersectionObserver" in window) {
+      var observador = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (e) {
+          aVista[zonas.indexOf(e.target)] = e.isIntersecting;
+        });
+        atualizar(window.scrollY);
+      });
+      zonas.forEach(function (z) { observador.observe(z); });
+    }
+
+    function atualizar(y) {
+      var passouOHeroi = y > window.innerHeight * 0.6;
+      // Nos ecrãs largos o cabeçalho já leva o botão: o atalho só faz falta
+      // quando o cabeçalho se esconde, ao descer.
+      var faltaBotao = ecraLargo.matches
+        ? header && header.classList.contains("is-hidden")
+        : true;
+      var menuAberto = menu && menu.classList.contains("is-open");
+
+      cta.classList.toggle(
+        "is-visible",
+        passouOHeroi && faltaBotao && !estorva() && !menuAberto
+      );
+    }
+
+    onScroll(atualizar);
+    if (ecraLargo.addEventListener) {
+      ecraLargo.addEventListener("change", function () { atualizar(window.scrollY); });
+    }
+    // O menu móvel abre e fecha sem scroll nenhum pelo meio.
+    if (menu) {
+      menu.addEventListener("transitionend", function () { atualizar(window.scrollY); });
+    }
+  }
+
+  /* ------------------------------------------------------------------
      2. Menu móvel
      ------------------------------------------------------------------ */
   function initMenu() {
@@ -634,6 +689,7 @@
      ------------------------------------------------------------------ */
   function init() {
     initHeader();
+    initCtaRapido();
     initMenu();
     initReveal();
     initCounters();
