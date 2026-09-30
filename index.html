@@ -575,6 +575,42 @@
   </div>
 </section>
 
+<!-- ====================== ATUALIZAÇÕES ======================
+     Como acrescentar uma entrada:
+       1. copiar um <article class="card"> inteiro e pôr no topo da grelha;
+       2. datetime="AAAA-MM-DD" é o que o Google lê; a data visível é para as
+          pessoas e escreve-se por extenso;
+       3. apagar a entrada mais antiga, para ficarem sempre três;
+       4. incrementar o ?v= dos assets só se mexeres no CSS ou no JS.
+     Os resultados saem de `node tools/provas-cpacc.mjs`. O que não estiver
+     confirmado na Federação não entra. Sem nomes de menores.
+     Explicação completa em tools/publicar.md.
+============================================================== -->
+<section class="section section--alt" id="atualizacoes">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow" data-reveal>O clube esta época</p>
+      <h2 data-reveal style="--reveal-delay:80ms">O que tem acontecido<br><span class="gold serif-italic">na pista.</span></h2>
+      <p class="lead" data-reveal style="--reveal-delay:160ms">
+        Provas, apresentações e as datas que marcam a época. As classificações
+        completas ficam sempre na Federação de Patinagem de Portugal.
+      </p>
+    </div>
+
+    <div class="grid grid--3" data-stagger="120">
+      <article class="card" data-reveal>
+        <time class="card__num" datetime="2026-09-27">27 de setembro de 2026</time>
+        <h3>Silver Cup e Torneio Distrital de Benjamins</h3>
+        <p>Dois dias de Solo Dance disputados na Charneca de Caparica. O clube
+        levou atletas a quatro escalões e trouxe dois segundos lugares, em
+        Iniciados e Cadetes femininos, e um terceiro em Infantis femininos, o
+        escalão mais concorrido, com doze atletas em prova.</p>
+        <p style="margin-bottom:0"><a class="btn btn--link" href="https://pa.fpp.pt/Rollart/3778" rel="noopener">Classificações na Federação <span class="btn__arrow" aria-hidden="true">→</span></a></p>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ====================== CTA + FORMULÁRIO ====================== -->
 <section class="section cta-band" id="pre-inscricao">
   <div class="wrap wrap--narrow">
