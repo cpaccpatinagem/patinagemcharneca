@@ -5,7 +5,9 @@
   "description": "Site do Clube de Patinagem Artística da Charneca de Caparica. HTML/CSS/JS estático, sem passo de build.",
   "type": "module",
   "scripts": {
-    "dev": "node tools/dev-server.mjs"
+    "dev": "node tools/dev-server.mjs",
+    "provas": "node tools/provas-cpacc.mjs",
+    "agenda": "node tools/provas-cpacc.mjs --agenda --verificar"
   },
   "engines": {
     "node": ">=18"
