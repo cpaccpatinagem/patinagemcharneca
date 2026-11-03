@@ -1,0 +1,105 @@
+<!doctype html>
+<!--
+  CPACC - assinatura de email do Presidente da Direção.
+
+  Esta página serve para copiar a assinatura para o Gmail: abrir o ficheiro no
+  browser, selecionar o bloco dentro da moldura tracejada, copiar, e colar na
+  caixa de assinatura das definições do Gmail. O Gmail guarda a formatação e
+  passa a imagem pelo seu próprio servidor.
+
+  Regras de HTML para email, as mesmas do email-confirmacao.html:
+  - layout só com <table>, nunca flexbox nem grid;
+  - todo o estilo inline no atributo style;
+  - sem webfonts, sem SVG, sem background-image, sem position;
+  - cores literais, porque var(--c-ink-800) não funciona em cliente de email.
+
+  O símbolo NÃO vai em base64 como no email-confirmacao.html: o Gmail apaga
+  imagens em data: na assinatura. Tem de ser um endereço https público, por
+  isso aponta para o ficheiro que o próprio site já serve. Se o site sair do
+  ar ou o caminho mudar, a assinatura fica sem símbolo.
+
+    https://www.patinagemcharneca.pt/assets/img/icon-512.png
+
+  Cores, dos tokens do style.css:
+
+    #0A1428  --c-ink-800   nome
+    #C9A227  --c-gold-500  fio vertical e fio curto
+    #8A6D14  (dourado escurecido)  cargo e links; o --c-gold-600 não chega a
+                                   contraste AA sobre branco
+    #4A5568  cinzento do nome do clube
+    #6B7383  cinzento dos separadores
+
+  Os dados são os que estão públicos em contactos.html e clube.html: site,
+  Instagram, telefone e email do clube. Se algum mudar, muda aqui também.
+-->
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Assinatura de email - CPACC</title>
+</head>
+<body style="margin:0; padding:32px; background-color:#E7E3D9; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+
+<div style="max-width:720px; margin:0 auto;">
+
+  <p style="font-size:13px; line-height:1.6; color:#4A5568; margin:0 0 4px;">
+    Selecionar tudo o que está dentro da moldura, copiar, e colar na caixa de
+    assinatura do Gmail. Não copiar a moldura.
+  </p>
+
+  <div style="border:1px dashed #C9A227; padding:24px; background-color:#FFFFFF; border-radius:6px;">
+
+  <!-- ====== ASSINATURA: copiar daqui ====== -->
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <tr>
+      <td valign="top" style="padding:0 16px 0 0;">
+        <img src="https://www.patinagemcharneca.pt/assets/img/icon-512.png"
+             alt="CPACC" width="64" height="64"
+             style="display:block; width:64px; height:64px; border:0; outline:none; text-decoration:none;">
+      </td>
+      <td valign="top" width="1" style="width:1px; font-size:0; line-height:0;">
+        <div style="width:1px; height:64px; background-color:#C9A227; font-size:0; line-height:0;">&nbsp;</div>
+      </td>
+      <td valign="top" style="padding:0 0 0 16px;">
+
+        <div style="font-size:16px; line-height:20px; font-weight:bold; color:#0A1428; padding-bottom:2px;">
+          Francisco Quintela
+        </div>
+
+        <div style="font-size:11px; line-height:16px; font-weight:bold; color:#8A6D14; letter-spacing:1px; text-transform:uppercase; padding-bottom:6px;">
+          Presidente da Direção
+        </div>
+
+        <div style="font-size:12px; line-height:17px; color:#4A5568; padding-bottom:8px;">
+          Clube de Patinagem Artística da Charneca de Caparica
+        </div>
+
+        <div style="font-size:12px; line-height:18px; color:#6B7383; padding-bottom:1px;">
+          <a href="https://www.patinagemcharneca.pt" style="color:#8A6D14; font-weight:bold; text-decoration:none;">patinagemcharneca.pt</a>
+          <span style="color:#C9A227;">&nbsp;&middot;&nbsp;</span>
+          <a href="https://www.instagram.com/patinagemcharneca" style="color:#8A6D14; font-weight:bold; text-decoration:none;">@patinagemcharneca</a>
+        </div>
+
+        <div style="font-size:12px; line-height:18px; color:#6B7383;">
+          <a href="tel:+351926716672" style="color:#4A5568; text-decoration:none;">+351 926 716 672</a>
+          <span style="color:#C9A227;">&nbsp;&middot;&nbsp;</span>
+          <a href="mailto:cpaccpatinagem@gmail.com" style="color:#4A5568; text-decoration:none;">cpaccpatinagem@gmail.com</a>
+        </div>
+
+      </td>
+    </tr>
+  </table>
+  <!-- ====== ASSINATURA: até aqui ====== -->
+
+  </div>
+
+  <p style="font-size:12px; line-height:1.6; color:#6B7383; margin:16px 0 0;">
+    O símbolo é carregado de patinagemcharneca.pt. Se o site sair do ar, a
+    assinatura fica sem imagem, mas o texto mantém-se.
+  </p>
+
+</div>
+
+</body>
+</html>
