@@ -13,6 +13,7 @@ O que sobra para uma pessoa fazer: ler o rascunho, escolher uma foto, publicar.
 | | |
 |---|---|
 | Bloco no site | secção `#atualizacoes` no `index.html`, três entradas |
+| Link de cada entrada | só a publicação do clube no Instagram, nunca a Federação |
 | Instagram do clube | <https://www.instagram.com/patinagemcharneca> |
 | Resultados das provas | `node tools/provas-cpacc.mjs` |
 | Rascunhos | `.local/rascunhos/AAAA-MM-DD-*.md`, fora do repositório |
@@ -87,7 +88,16 @@ com ela.
 
 ---
 
-## O Instagram é destino, não fonte
+## A Federação não se liga, só se lê
+
+As páginas de classificações listam o nome completo e a pontuação de cada
+atleta, quase todas menores. São a fonte dos factos e é de lá que o script os
+tira, mas **não se põem links para elas no site**: o clube não quer dar essa
+exposição. O único link de uma entrada é para a publicação do próprio clube.
+
+---
+
+## O Instagram é destino, e fonte de confirmação
 
 O site já aponta para a conta do clube em todas as páginas: o ícone do rodapé,
 a página de contactos, e o campo `sameAs` dos dados estruturados, que é o que
