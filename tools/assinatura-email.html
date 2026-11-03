@@ -15,10 +15,16 @@
 
   O símbolo NÃO vai em base64 como no email-confirmacao.html: o Gmail apaga
   imagens em data: na assinatura. Tem de ser um endereço https público, por
-  isso aponta para o ficheiro que o próprio site já serve. Se o site sair do
+  isso aponta para um ficheiro que o próprio site serve. Se o site sair do
   ar ou o caminho mudar, a assinatura fica sem símbolo.
 
-    https://www.patinagemcharneca.pt/assets/img/icon-512.png
+    https://www.patinagemcharneca.pt/assets/img/icon-128.png
+
+  É o icon-128.png e não o icon-512.png de propósito. A app Mail do macOS
+  ignora o width/height do HTML quando se arrasta a assinatura para lá, e
+  mostra a imagem ao tamanho real: com o ficheiro de 512px aparecia um
+  símbolo gigante. A 128px fica correto no Mail e nítido em ecrã retina,
+  onde se vê a 64px.
 
   Cores, dos tokens do style.css:
 
@@ -54,7 +60,7 @@
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
     <tr>
       <td valign="top" style="padding:0 16px 0 0;">
-        <img src="https://www.patinagemcharneca.pt/assets/img/icon-512.png"
+        <img src="https://www.patinagemcharneca.pt/assets/img/icon-128.png"
              alt="CPACC" width="64" height="64"
              style="display:block; width:64px; height:64px; border:0; outline:none; text-decoration:none;">
       </td>
