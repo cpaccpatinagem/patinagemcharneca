@@ -88,9 +88,15 @@
   .evitar-corte { break-inside: avoid; page-break-inside: avoid; }
 
   @media print {
-    body { background: #fff; padding: 0; font-size: 9.8pt; }
+    body { background: #fff; padding: 0; font-size: 9.3pt; line-height: 1.38; }
     .folha { max-width: none; margin: 0; padding: 0; box-shadow: none; }
-    .nota { background: transparent; }
+    .nota { background: transparent; padding: 6px 9px; margin: 8px 0; }
+    /* Apertado para caber em duas folhas: a assinatura não pode cair sozinha
+       numa terceira página. */
+    h2 { margin: 12px 0 5px; }
+    p { margin-bottom: 5px; }
+    .campo { margin-bottom: 7px; }
+    .assinaturas { margin-top: 16px; }
   }
 </style>
 </head>
@@ -185,6 +191,15 @@
   </ul>
 
   <div class="nota evitar-corte">
+    <strong>Onde as imagens vão parar.</strong> Publicar nas redes sociais significa entregar as
+    imagens ao Instagram e ao Facebook, serviços da Meta. A partir daí ficam sujeitas às
+    condições dessas plataformas, podem ser tratadas fora da União Europeia e o clube não
+    controla o que delas se faça nem consegue garantir o apagamento de cópias feitas por
+    terceiros. Quem quiser evitar isso pode autorizar o site e recusar as redes sociais, no
+    ponto 3.
+  </div>
+
+  <div class="nota evitar-corte">
     <strong>O que esta autorização não cobre.</strong> A Federação de Patinagem de Portugal e as
     associações distritais publicam as classificações das provas com o nome dos atletas, ao
     abrigo dos seus próprios regulamentos. Isso não depende do clube nem deste documento. O
@@ -205,8 +220,11 @@
   com os contactos indicados no topo deste documento. O fundamento do tratamento é o
   consentimento, nos termos do Regulamento Geral sobre a Proteção de Dados.</p>
   <p>A qualquer momento pode pedir ao clube o acesso às imagens, a sua retificação, o
-  apagamento ou a limitação da sua utilização, e pode retirar o consentimento. Tem ainda o
-  direito de apresentar reclamação à Comissão Nacional de Proteção de Dados.</p>
+  apagamento, a limitação da sua utilização ou a portabilidade, pode opor-se ao tratamento e
+  pode retirar o consentimento, com a mesma facilidade com que o deu. Tem ainda o direito de
+  apresentar reclamação à Comissão Nacional de Proteção de Dados.</p>
+  <p>Este documento é assinado em duplicado: um exemplar fica com o clube, como prova do
+  consentimento, e outro com o encarregado de educação.</p>
 
   <h2>7. Declaração</h2>
   <p>Declaro que exerço as responsabilidades parentais sobre o atleta identificado no ponto 1,
@@ -240,7 +258,7 @@
 
   <footer>
     <span>Clube de Patinagem Artística da Charneca de Caparica &nbsp;·&nbsp; Autorização de utilização de imagem</span>
-    <span>Versão 1 &nbsp;·&nbsp; Exemplar para o clube</span>
+    <span>Versão 1 &nbsp;·&nbsp; Exemplar para o clube / para o encarregado de educação</span>
   </footer>
 
 </div>
