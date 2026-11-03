@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;500;700;800&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=27">
+<link rel="stylesheet" href="assets/css/style.css?v=28">
 
 <!-- Dados estruturados: é isto que faz o Google e os assistentes de IA
      perceberem que somos um clube desportivo em Almada. -->
@@ -582,6 +582,10 @@
           pessoas e escreve-se por extenso;
        3. apagar a entrada mais antiga, para ficarem sempre três;
        4. incrementar o ?v= dos assets só se mexeres no CSS ou no JS.
+     Cada entrada pode ter dois links no fim, e os dois são opcionais: a
+     classificação na Federação e a publicação no Instagram. O do Instagram
+     só se põe depois de a publicação existir - colar o endereço do post,
+     nunca o do perfil. Se não houver, apaga-se a linha inteira.
      Os resultados saem de `node tools/provas-cpacc.mjs`. O que não estiver
      confirmado na Federação não entra. Sem nomes de menores.
      Explicação completa em tools/publicar.md.
@@ -605,7 +609,13 @@
         levou atletas a quatro escalões e trouxe dois segundos lugares, em
         Iniciados e Cadetes femininos, e um terceiro em Infantis femininos, o
         escalão mais concorrido, com doze atletas em prova.</p>
-        <p style="margin-bottom:0"><a class="btn btn--link" href="https://pa.fpp.pt/Rollart/3778" rel="noopener">Classificações na Federação <span class="btn__arrow" aria-hidden="true">→</span></a></p>
+        <div class="update__links">
+          <a class="btn btn--link" href="https://pa.fpp.pt/Rollart/3778" target="_blank" rel="noopener">Classificações na Federação <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <!-- Quando houver publicação no Instagram sobre esta prova, colar aqui
+               o endereço do post (não o do perfil) e descomentar:
+          <a class="btn btn--link" href="PREENCHER" target="_blank" rel="noopener">Ver no Instagram <span class="btn__arrow" aria-hidden="true">→</span></a>
+          -->
+        </div>
       </article>
     </div>
   </div>
@@ -810,6 +820,6 @@
   </div>
 </div>
 
-<script src="assets/js/main.js?v=27" defer></script>
+<script src="assets/js/main.js?v=28" defer></script>
 </body>
 </html>
