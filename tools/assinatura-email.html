@@ -18,13 +18,15 @@
   isso aponta para um ficheiro que o próprio site serve. Se o site sair do
   ar ou o caminho mudar, a assinatura fica sem símbolo.
 
-    https://www.patinagemcharneca.pt/assets/img/icon-128.png
+    https://www.patinagemcharneca.pt/assets/img/icon-64.png
 
-  É o icon-128.png e não o icon-512.png de propósito. A app Mail do macOS
-  ignora o width/height do HTML quando se arrasta a assinatura para lá, e
-  mostra a imagem ao tamanho real: com o ficheiro de 512px aparecia um
-  símbolo gigante. A 128px fica correto no Mail e nítido em ecrã retina,
-  onde se vê a 64px.
+  O ficheiro tem exatamente os 64px a que é mostrado, e isso é de propósito.
+  A app Mail do macOS ignora o width/height do HTML quando se arrasta a
+  assinatura para lá e desenha a imagem ao tamanho real do ficheiro: com o
+  icon-512.png saía um símbolo gigante, e com uma versão de 128px continuava
+  grande de mais. Ao ter o ficheiro no tamanho final, o Mail e o Gmail
+  mostram ambos o mesmo. Em ecrã retina perde-se alguma definição, que é o
+  preço de o Mail não respeitar o tamanho pedido.
 
   Cores, dos tokens do style.css:
 
@@ -60,7 +62,7 @@
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
     <tr>
       <td valign="top" style="padding:0 16px 0 0;">
-        <img src="https://www.patinagemcharneca.pt/assets/img/icon-128.png"
+        <img src="https://www.patinagemcharneca.pt/assets/img/icon-64.png"
              alt="CPACC" width="64" height="64"
              style="display:block; width:64px; height:64px; border:0; outline:none; text-decoration:none;">
       </td>
