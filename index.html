@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;500;700;800&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=28">
+<link rel="stylesheet" href="assets/css/style.css?v=29">
 
 <!-- Dados estruturados: é isto que faz o Google e os assistentes de IA
      perceberem que somos um clube desportivo em Almada. -->
@@ -575,51 +575,6 @@
   </div>
 </section>
 
-<!-- ====================== ATUALIZAÇÕES ======================
-     Como acrescentar uma entrada:
-       1. copiar um <article class="card"> inteiro e pôr no topo da grelha;
-       2. datetime="AAAA-MM-DD" é o que o Google lê; a data visível é para as
-          pessoas e escreve-se por extenso;
-       3. apagar a entrada mais antiga, para ficarem sempre três;
-       4. incrementar o ?v= dos assets só se mexeres no CSS ou no JS.
-     Cada entrada pode ter dois links no fim, e os dois são opcionais: a
-     classificação na Federação e a publicação no Instagram. O do Instagram
-     só se põe depois de a publicação existir - colar o endereço do post,
-     nunca o do perfil. Se não houver, apaga-se a linha inteira.
-     Os resultados saem de `node tools/provas-cpacc.mjs`. O que não estiver
-     confirmado na Federação não entra. Sem nomes de menores.
-     Explicação completa em tools/publicar.md.
-============================================================== -->
-<section class="section section--alt" id="atualizacoes">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow" data-reveal>O clube esta época</p>
-      <h2 data-reveal style="--reveal-delay:80ms">O que tem acontecido<br><span class="gold serif-italic">na pista.</span></h2>
-      <p class="lead" data-reveal style="--reveal-delay:160ms">
-        Provas, apresentações e as datas que marcam a época. As classificações
-        completas ficam sempre na Federação de Patinagem de Portugal.
-      </p>
-    </div>
-
-    <div class="grid grid--3" data-stagger="120">
-      <article class="card" data-reveal>
-        <time class="card__num" datetime="2026-09-27">27 de setembro de 2026</time>
-        <h3>Silver Cup e Torneio Distrital de Benjamins</h3>
-        <p>Dois dias de Solo Dance disputados na Charneca de Caparica. O clube
-        levou atletas a quatro escalões e trouxe dois segundos lugares, em
-        Iniciados e Cadetes femininos, e um terceiro em Infantis femininos, o
-        escalão mais concorrido, com doze atletas em prova.</p>
-        <div class="update__links">
-          <a class="btn btn--link" href="https://pa.fpp.pt/Rollart/3778" target="_blank" rel="noopener">Classificações na Federação <span class="btn__arrow" aria-hidden="true">→</span></a>
-          <!-- Quando houver publicação no Instagram sobre esta prova, colar aqui
-               o endereço do post (não o do perfil) e descomentar:
-          <a class="btn btn--link" href="PREENCHER" target="_blank" rel="noopener">Ver no Instagram <span class="btn__arrow" aria-hidden="true">→</span></a>
-          -->
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
 
 <!-- ====================== CTA + FORMULÁRIO ====================== -->
 <section class="section cta-band" id="pre-inscricao">
@@ -738,6 +693,79 @@
   </div>
 </section>
 
+<!-- ====================== ATUALIZAÇÕES ======================
+     Como acrescentar uma entrada:
+       1. copiar um <article class="card"> inteiro e pôr no topo da grelha;
+       2. datetime="AAAA-MM-DD" é o que o Google lê; a data visível é para as
+          pessoas e escreve-se por extenso;
+       3. apagar a entrada mais antiga, para ficarem sempre três;
+       4. incrementar o ?v= dos assets só se mexeres no CSS ou no JS.
+     Cada entrada pode ter dois links no fim, e os dois são opcionais: a
+     classificação na Federação e a publicação no Instagram. O do Instagram
+     só se põe depois de a publicação existir - colar o endereço do post,
+     nunca o do perfil. Se não houver, apaga-se a linha inteira.
+     Os resultados saem de `node tools/provas-cpacc.mjs`. O que não estiver
+     confirmado na Federação não entra. Sem nomes de menores.
+     Explicação completa em tools/publicar.md.
+============================================================== -->
+<section class="section section--alt" id="atualizacoes">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow" data-reveal>O clube esta época</p>
+      <h2 data-reveal style="--reveal-delay:80ms">O que tem acontecido<br><span class="gold serif-italic">na pista.</span></h2>
+      <p class="lead" data-reveal style="--reveal-delay:160ms">
+        Provas, apresentações e as datas que marcam a época. As classificações
+        completas ficam sempre na Federação de Patinagem de Portugal.
+      </p>
+    </div>
+
+    <div class="grid grid--3" data-stagger="120">
+      <article class="card" data-reveal>
+        <time class="card__num" datetime="2026-11-01">1 de novembro de 2026</time>
+        <h3>Terceiro lugar nacional em Solo Dance</h3>
+        <p>Campeonato Nacional de 2ª Divisão e Torneio Nacional de Benjamins,
+        em Albufeira. Em Solo Dance, terceiro lugar em Iniciados femininos
+        entre vinte e cinco atletas de todo o país, e quatro atletas do clube
+        na final de Infantis.</p>
+        <div class="update__links">
+          <a class="btn btn--link" href="https://pa.fpp.pt/Rollart/3915" target="_blank" rel="noopener">Classificações na Federação <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <!-- Candidatas no Instagram, por data: /p/DfRx_R7ukiz/ (3 nov),
+               /p/DfPeJ9LO86J/ (2 nov), /p/DfNW0x4jofu/ (1 nov). Escolher a
+               certa, pôr no href e descomentar.
+          <a class="btn btn--link" href="PREENCHER" target="_blank" rel="noopener">Ver no Instagram <span class="btn__arrow" aria-hidden="true">→</span></a>
+          -->
+        </div>
+      </article>
+
+      <article class="card" data-reveal>
+        <time class="card__num" datetime="2026-10-11">11 de outubro de 2026</time>
+        <h3>Silver Cup de Patinagem Livre, em Alcácer do Sal</h3>
+        <p>Uma vitória em Benjamins femininos, entre sete atletas em prova, e
+        um segundo lugar em Iniciados, num escalão de dezassete. Em Infantis, o
+        mais disputado do fim de semana, o clube pôs seis atletas na pista.</p>
+        <div class="update__links">
+          <a class="btn btn--link" href="https://pa.fpp.pt/Rollart/3776" target="_blank" rel="noopener">Classificações na Federação <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <!-- Candidatas no Instagram, todas de 11 de outubro:
+               /p/DeXlf7ijtEH/, /p/DeXkaQeDvxQ/, /p/DeXi7FbuPk5/
+          <a class="btn btn--link" href="PREENCHER" target="_blank" rel="noopener">Ver no Instagram <span class="btn__arrow" aria-hidden="true">→</span></a>
+          -->
+        </div>
+      </article>
+
+      <article class="card" data-reveal>
+        <time class="card__num" datetime="2026-09-27">27 de setembro de 2026</time>
+        <h3>Silver Cup de Solo Dance, em casa</h3>
+        <p>Dois dias de Solo Dance disputados na Charneca de Caparica. Dois
+        segundos lugares, em Iniciados e Cadetes femininos, e um terceiro em
+        Infantis, com doze atletas em prova.</p>
+        <div class="update__links">
+          <a class="btn btn--link" href="https://pa.fpp.pt/Rollart/3778" target="_blank" rel="noopener">Classificações na Federação <span class="btn__arrow" aria-hidden="true">→</span></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <!-- ====================== RODAPÉ ====================== -->
@@ -820,6 +848,6 @@
   </div>
 </div>
 
-<script src="assets/js/main.js?v=28" defer></script>
+<script src="assets/js/main.js?v=29" defer></script>
 </body>
 </html>

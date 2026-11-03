@@ -926,6 +926,16 @@ p { text-wrap: pretty; }
   gap: 0.6rem var(--sp-3);
   margin-top: var(--sp-3);
 }
+/* O .btn é inline-flex, centra o conteúdo e tem white-space:nowrap. Como item
+   de um flex encolhe abaixo do seu conteúdo, e aí o texto centrado transborda
+   pelos dois lados e o overflow:hidden do cartão come-lhe o início. Daí
+   alinhar à esquerda e deixar partir a linha em vez de encolher o texto. */
+.update__links > .btn {
+  flex: 0 1 auto;
+  justify-content: flex-start;
+  text-align: left;
+  white-space: normal;
+}
 /* .card__title e .form-success__title existem para páginas sem h2 (a de
    pré-inscrição): o título é um h2 na hierarquia mas veste-se de h3. */
 .card h3, .card__title, .form-success__title { font-size: var(--fs-h3); line-height: 1.2; }
