@@ -19,8 +19,30 @@
  */
 
 const BASE = 'https://pa.fpp.pt';
-const ASSOCIACAO_SETUBAL = 14;
 const SIGLA = 'CPACC';
+
+// A plataforma separa as provas por associação. O clube aparece em duas:
+// na AP Setúbal, que é a sua, e na Federação, onde vivem os nacionais, as
+// taças e os opens. Olhar só para a primeira deixa passar os nacionais.
+const ASSOCIACOES = [
+  { id: 14, nome: 'AP Setúbal' },
+  { id: 1, nome: 'Federação' },
+];
+
+// As restantes existem e o clube pode aparecer nelas quando vai a um open
+// fora do distrito. Ficam atrás de --todas, porque varrê-las todas é lento.
+const OUTRAS_ASSOCIACOES = [
+  { id: 4, nome: 'AP Alentejo/Algarve' },
+  { id: 5, nome: 'AP Aveiro' },
+  { id: 6, nome: 'AP Coimbra' },
+  { id: 7, nome: 'AP Leiria' },
+  { id: 8, nome: 'AP Lisboa' },
+  { id: 9, nome: 'AP Madeira' },
+  { id: 10, nome: 'AP Minho' },
+  { id: 11, nome: 'AP Porto' },
+  { id: 12, nome: 'AP São Miguel' },
+  { id: 13, nome: 'AP Ribatejo' },
+];
 
 /* ------------------------------------------------------------------ rede */
 
@@ -115,14 +137,24 @@ function lerClassificacao(html) {
   for (const m of html.matchAll(re)) {
     const bloco = m[1];
     const nome = semTags((bloco.match(/<span class="nome">([\s\S]*?)<\/span>/) || [])[1] || '');
-    const clube = semTags((bloco.match(/<span class="equipa">([\s\S]*?)<\/span>/) || [])[1] || '');
-    const numeros = [...bloco.matchAll(/<span>\s*([\d.,]+)\s*<\/span>/g)].map((n) => n[1]);
     if (!nome) continue;
+    const clube = semTags((bloco.match(/<span class="equipa">([\s\S]*?)<\/span>/) || [])[1] || '');
+
+    // A linha tem, por esta ordem: <span> do lugar, <span class="nome">,
+    // <span class="equipa"> e <span> da pontuação. O do lugar vem vazio
+    // enquanto a prova não está homologada e preenchido depois. Ler os dois
+    // pela posição relativa à equipa, nunca "o primeiro número da linha":
+    // era isso que fazia passar o lugar por pontuação nas provas já fechadas.
+    const lugar = semTags((bloco.match(/^\s*<span>([\s\S]*?)<\/span>/) || [])[1] || '');
+    const depoisDoClube = bloco.slice(bloco.indexOf('class="equipa"'));
+    const pontos = (depoisDoClube.match(/<span>\s*([\d]+[.,][\d]+|[\d]+)\s*<\/span>/) || [])[1] || '';
+
     linhas.push({
-      posicao: linhas.length + 1,
+      posicao: /^\d+$/.test(lugar) ? Number(lugar) : linhas.length + 1,
+      oficial: /^\d+$/.test(lugar),
       atleta: nome,
       clube,
-      total: numeros[0] || '',
+      total: pontos,
     });
   }
   return { titulo, linhas };
@@ -130,24 +162,27 @@ function lerClassificacao(html) {
 
 /* ----------------------------------------------------------------- lógica */
 
-async function provasDaJanela(dias) {
+async function provasDaJanela(dias, associacoes) {
   const limite = new Date(Date.now() - dias * 864e5).toISOString().slice(0, 10);
   const hoje = new Date().toISOString().slice(0, 10);
   const encontradas = [];
-  // A lista está ordenada da mais recente para a mais antiga; duas páginas
-  // cobrem largamente qualquer janela razoável.
-  for (const pagina of [1, 2]) {
-    const html = await buscar(
-      `/Views/_getRollartAssociacao.php?associacaoID=${ASSOCIACAO_SETUBAL}&pagina=${pagina}`,
-    );
-    const provas = lerProvas(html);
-    if (!provas.length) break;
-    for (const p of provas) {
-      if (p.fim >= limite && p.inicio <= hoje) encontradas.push(p);
+  for (const associacao of associacoes) {
+    // A lista está ordenada da mais recente para a mais antiga; duas páginas
+    // cobrem largamente qualquer janela razoável.
+    for (const pagina of [1, 2]) {
+      const html = await buscar(
+        `/Views/_getRollartAssociacao.php?associacaoID=${associacao.id}&pagina=${pagina}`,
+      );
+      const provas = lerProvas(html);
+      if (!provas.length) break;
+      for (const p of provas) {
+        if (p.fim >= limite && p.inicio <= hoje) encontradas.push({ ...p, associacao });
+      }
+      if (provas.some((p) => p.fim < limite)) break;
     }
-    if (provas.some((p) => p.fim < limite)) break;
   }
-  return encontradas;
+  // Mais recente primeiro, independentemente da associação de onde veio.
+  return encontradas.sort((a, b) => b.fim.localeCompare(a.fim));
 }
 
 async function resultadosDoClube(prova) {
@@ -186,7 +221,7 @@ function imprimir(provas) {
   for (const p of provas) {
     const datas = p.inicio === p.fim ? p.inicio : `${p.inicio} a ${p.fim}`;
     console.log(`\n## ${p.nome}`);
-    console.log(`${p.local || 'local não indicado'} · ${datas}`);
+    console.log(`${p.associacao.nome} · ${p.local || 'local não indicado'} · ${datas}`);
     console.log(p.url);
     if (!p.escaloes.length) {
       console.log('\nSem atletas do CPACC nas classificações publicadas.');
@@ -195,15 +230,22 @@ function imprimir(provas) {
     for (const e of p.escaloes) {
       console.log(`\n### ${e.titulo}  (${e.participantes} atletas em prova)`);
       for (const l of e.nossos) {
-        console.log(`  ${l.posicao}º de ${e.participantes} · ${l.atleta} · ${l.total}`);
+        const marca = l.oficial ? '' : '  (lugar deduzido da ordem)';
+        console.log(`  ${l.posicao}º de ${e.participantes} · ${l.atleta} · ${l.total}${marca}`);
       }
     }
   }
-  console.log(
-    '\n---\nA posição é a ordem da classificação publicada. Enquanto a prova não\n' +
-      'estiver homologada a coluna do lugar vem vazia na Federação: confirmar o\n' +
-      'pódio antes de o afirmar no site.',
-  );
+  const deduzidos = provas.some((p) => p.escaloes.some((e) => e.nossos.some((l) => !l.oficial)));
+  console.log('\n---');
+  if (deduzidos) {
+    console.log(
+      'Onde diz "lugar deduzido da ordem", a Federação ainda não publicou o\n' +
+        'número do lugar e ele foi calculado pela pontuação. Confirmar antes de\n' +
+        'afirmar um pódio no site. Os restantes são o lugar oficial.',
+    );
+  } else {
+    console.log('Todos os lugares acima são os oficiais publicados pela Federação.');
+  }
 }
 
 /* ------------------------------------------------------------------- main */
@@ -235,8 +277,11 @@ try {
     }
   } else {
     const dias = Number(opcao('dias', 14));
+    const associacoes = args.includes('--todas')
+      ? [...ASSOCIACOES, ...OUTRAS_ASSOCIACOES]
+      : ASSOCIACOES;
     const provas = [];
-    for (const p of await provasDaJanela(dias)) {
+    for (const p of await provasDaJanela(dias, associacoes)) {
       provas.push(await resultadosDoClube(p));
     }
     if (args.includes('--json')) console.log(JSON.stringify(provas, null, 2));

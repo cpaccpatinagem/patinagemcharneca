@@ -30,8 +30,14 @@ cada atleta em sigla. A nossa é **CPACC**.
 
 O que importa saber:
 
-- A **AP Setúbal é a associação 14**. As provas dela têm `APSet` no título, e é
-  esse o sinal de que o clube quase certamente participou.
+- O clube aparece em **duas** associações, e olhar só para uma deixa passar
+  metade: a **AP Setúbal é a 14** (distritais, torneios, taças do distrito) e a
+  **Federação é a 1** (campeonatos nacionais, torneios nacionais, opens). O
+  script varre as duas por defeito. Com `--todas` varre também as outras dez,
+  para o caso de um open fora do distrito.
+- As provas da AP Setúbal têm `APSet` no título, e é esse o sinal de que o
+  clube quase certamente participou. Nas da Federação não há atalho: é preciso
+  abrir e procurar a sigla.
 - A lista de provas de uma associação carrega por AJAX. O endereço útil é
   `https://pa.fpp.pt/Views/_getRollartAssociacao.php?associacaoID=14&pagina=1`,
   e não a página que o browser mostra.
@@ -57,11 +63,18 @@ node tools/provas-cpacc.mjs --json           # para outro programa ler
 
 ### Um cuidado com as posições
 
-A coluna do lugar vem **vazia** na Federação enquanto a prova não está
-homologada. O script calcula a posição pela ordem da classificação, que é a
-ordem da pontuação. Serve para escrever, mas **antes de afirmar um pódio no
-site, confirmar**. É exactamente o tipo de afirmação que o `CLAUDE.md` manda
-não publicar sem prova.
+A coluna do lugar vem **vazia** enquanto a prova não está homologada e
+**preenchida** depois. O script usa o lugar oficial quando existe e, quando não
+existe, calcula-o pela ordem da pontuação e marca a linha com "lugar deduzido
+da ordem".
+
+Só as linhas marcadas precisam de confirmação antes de afirmar um pódio no
+site. As outras são o lugar oficial da Federação e podem ir como estão.
+
+Na mesma linha há dois números seguidos, o lugar e a pontuação, e ambos num
+`<span>` sem classe. Ler "o primeiro número da linha" dá o lugar a fazer-se
+passar por pontuação em todas as provas já homologadas. O script lê a
+pontuação a partir da posição relativa ao `<span class="equipa">`.
 
 ### Nomes de menores
 
@@ -80,10 +93,21 @@ O site já aponta para a conta do clube em todas as páginas: o ícone do rodap�
 a página de contactos, e o campo `sameAs` dos dados estruturados, que é o que
 diz ao Google que o site e a conta são a mesma entidade.
 
-O que **não** funciona é ler o Instagram por programa. O perfil responde, mas a
-página não traz publicação nenhuma a quem não tem sessão iniciada: só a etiqueta
-com o número de seguidores e de publicações. Os factos continuam a vir da
-Federação. Ninguém inicia sessão na conta para contornar isto.
+O que **não** funciona é ler o Instagram a partir do script. Um pedido simples
+traz só a etiqueta com o número de seguidores; e disfarçar o pedido de browser
+para contornar a detecção de robôs não se faz, nem se inicia sessão na conta
+para ver mais. Os factos continuam a vir da Federação.
+
+O que **funciona**, e só num browser a sério, é abrir o perfil e ler:
+
+- os endereços das **12 publicações mais recentes** (`/patinagemcharneca/p/...`);
+- a **data** de cada uma, no texto alternativo da imagem ("Photo by CPACC on
+  November 03, 2026");
+- uma descrição grosseira da imagem, que raramente serve para alguma coisa.
+
+As **legendas não são legíveis**. Chega, mesmo assim, para as duas coisas que
+interessam: saber se o site está atrasado em relação ao Instagram, e encontrar
+a publicação que corresponde a uma prova, pela data, para preencher o link.
 
 A ligação faz-se ao contrário, à mão e numa linha. Cada entrada do site tem no
 fim um `<div class="update__links">` com o link para a Federação e um segundo
