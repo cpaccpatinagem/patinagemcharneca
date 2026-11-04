@@ -9,6 +9,9 @@
   Documento para imprimir e assinar. Não está ligado a partir do site e não é
   indexado. Para gerar o PDF: abrir no browser e imprimir para ficheiro, em A4.
 
+  Duas páginas. O CSS de impressão está afinado para que as assinaturas não
+  caiam sozinhas numa terceira folha: ao acrescentar texto, confirmar o PDF.
+
   REVISÃO JURÍDICA PENDENTE. Isto é uma minuta cuidada, não um parecer. Envolve
   dados de menores e deve ser lida por quem responda juridicamente pelo clube
   antes de ir para as famílias.
@@ -57,15 +60,18 @@
     color: var(--gold);
   }
 
+  h3 {
+    font-size: 9.6pt; font-weight: 700; margin: 10px 0 3px;
+  }
+
   p { margin: 0 0 7px; }
-  ul { margin: 0 0 7px; padding-left: 17px; }
-  li { margin-bottom: 3px; }
 
   .campo { display: flex; gap: 8px; align-items: baseline; margin-bottom: 9px; }
   .campo > span { flex: 0 0 auto; color: var(--muted); font-size: 9pt; }
   .linha { flex: 1 1 auto; border-bottom: 1px solid var(--ink); min-height: 15px; }
   .dupla { display: flex; gap: 16px; }
   .dupla > .campo { flex: 1 1 0; }
+  .pista { font-size: 8.4pt; color: var(--muted); margin: -5px 0 9px; }
 
   table.opcoes { width: 100%; border-collapse: collapse; margin: 4px 0 8px; }
   table.opcoes th { font-size: 8.2pt; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; padding: 0 0 5px; }
@@ -76,27 +82,21 @@
   .opcao-nome { font-weight: 600; }
   .opcao-desc { color: var(--muted); font-size: 8.8pt; display: block; margin-top: 1px; }
 
-  .nota { background: #f7f5ee; border-left: 3px solid var(--gold); padding: 8px 11px; margin: 10px 0; font-size: 9.2pt; }
+  .clausula { margin-bottom: 8px; }
+  .clausula > strong { color: var(--ink); }
 
-  .assinaturas { display: flex; gap: 22px; margin-top: 20px; }
+  .assinaturas { display: flex; gap: 20px; margin-top: 22px; }
   .assinaturas > div { flex: 1 1 0; }
   .assinatura-linha { border-bottom: 1px solid var(--ink); height: 34px; }
-  .assinatura-rotulo { font-size: 8.4pt; color: var(--muted); margin-top: 4px; }
+  .assinatura-rotulo { font-size: 8.4pt; color: var(--muted); margin-top: 4px; line-height: 1.3; }
 
   footer { margin-top: 18px; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 8pt; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; }
 
   .evitar-corte { break-inside: avoid; page-break-inside: avoid; }
 
   @media print {
-    body { background: #fff; padding: 0; font-size: 9.3pt; line-height: 1.38; }
+    body { background: #fff; padding: 0; font-size: 9.6pt; line-height: 1.42; }
     .folha { max-width: none; margin: 0; padding: 0; box-shadow: none; }
-    .nota { background: transparent; padding: 6px 9px; margin: 8px 0; }
-    /* Apertado para caber em duas folhas: a assinatura não pode cair sozinha
-       numa terceira página. */
-    h2 { margin: 12px 0 5px; }
-    p { margin-bottom: 5px; }
-    .campo { margin-bottom: 7px; }
-    .assinaturas { margin-top: 16px; }
   }
 </style>
 </head>
@@ -115,50 +115,46 @@
   </header>
 
   <h1>Autorização para utilização de imagem</h1>
-  <p class="sub">Assina-se uma vez, à entrada no clube, e mantém-se válida enquanto o atleta treinar no CPACC. Não há renovação anual.</p>
+  <p class="sub">Documento de outorga única, válido enquanto o atleta se mantiver inscrito no clube, sem renovação periódica.</p>
 
-  <p>O presente documento tem por objeto a autorização de utilização da imagem do
-  atleta em materiais fotográficos e videográficos captados pelo CPACC no decurso da
-  sua atividade desportiva. A divulgação dessas imagens nos canais de informação
-  oficiais do clube carece de autorização de quem exerce as responsabilidades
-  parentais, prestada nos termos que se seguem.</p>
+  <p>O presente documento tem por objeto a autorização de utilização da imagem do atleta em
+  materiais fotográficos e videográficos captados pelo CPACC no decurso da sua atividade
+  desportiva. A divulgação dessas imagens nos canais de informação oficiais do clube carece
+  de autorização de quem exerce as responsabilidades parentais, prestada nos termos que se
+  seguem.</p>
 
-  <p>Esta autorização é livre e <strong>não é condição para treinar no clube</strong>. Um atleta sem
-  autorização de imagem participa em tudo exatamente nas mesmas condições: o clube
-  limita-se a não o publicar.</p>
+  <p>A presente autorização é livremente prestada e <strong>não constitui condição de admissão
+  ou de permanência no clube</strong>. O atleta cuja imagem não seja autorizada participa em
+  todas as atividades em condições idênticas às dos restantes, limitando-se o clube a não
+  divulgar a sua imagem.</p>
 
-  <h2>1. Atleta</h2>
-  <div class="campo"><span>Nome completo</span><div class="linha"></div></div>
+  <h2>1. Identificação</h2>
+  <div class="campo"><span>Atleta, nome completo</span><div class="linha"></div></div>
   <div class="dupla">
     <div class="campo"><span>Data de nascimento</span><div class="linha"></div></div>
-    <div class="campo"><span>Grupo</span><div class="linha"></div></div>
+    <div class="campo"><span>Encarregado de educação, nome completo</span><div class="linha"></div></div>
   </div>
-
-  <h2>2. Encarregado de educação</h2>
-  <div class="campo"><span>Nome completo</span><div class="linha"></div></div>
   <div class="dupla">
     <div class="campo" style="flex:2 1 0"><span>Cartão de Cidadão n.º</span><div class="linha"></div></div>
     <div class="campo" style="flex:1 1 0"><span>Qualidade</span><div class="linha"></div></div>
   </div>
-  <div style="font-size:8.4pt;color:var(--muted);margin:-4px 0 8px">
-    Basta o número. O clube não guarda nem fotocopia o documento de identificação.
-  </div>
+  <p class="pista">É suficiente a indicação do número. O clube não conserva nem reproduz o documento de identificação.</p>
   <div class="dupla">
     <div class="campo"><span>Telemóvel</span><div class="linha"></div></div>
     <div class="campo"><span>Email</span><div class="linha"></div></div>
   </div>
 
-  <h2>3. O que autoriza</h2>
-  <p>Assinale <strong>Sim</strong> ou <strong>Não</strong> em cada linha. Pode autorizar umas e recusar outras.
-  O que ficar em branco entende-se como não autorizado.</p>
+  <h2>2. Canais de divulgação autorizados</h2>
+  <p>Assinalar <strong>Sim</strong> ou <strong>Não</strong> em cada linha. A autorização pode ser
+  concedida para uns canais e recusada para outros. A ausência de indicação equivale a recusa.</p>
 
   <table class="opcoes evitar-corte">
     <thead>
-      <tr><th>Utilização</th><th class="sn">Sim</th><th class="sn">Não</th></tr>
+      <tr><th>Canal</th><th class="sn">Sim</th><th class="sn">Não</th></tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="opcao-nome">Site oficial do clube</span>
+        <td><span class="opcao-nome">Sítio oficial do clube</span>
           <span class="opcao-desc">patinagemcharneca.pt</span></td>
         <td class="sn"><span class="quadro"></span></td>
         <td class="sn"><span class="quadro"></span></td>
@@ -170,102 +166,93 @@
         <td class="sn"><span class="quadro"></span></td>
       </tr>
       <tr>
-        <td><span class="opcao-nome">Materiais de divulgação do clube</span>
-          <span class="opcao-desc">Cartazes, folhetos, apresentações e material para patrocinadores</span></td>
+        <td><span class="opcao-nome">Materiais de divulgação institucional</span>
+          <span class="opcao-desc">Cartazes, folhetos, apresentações e material destinado a patrocinadores</span></td>
         <td class="sn"><span class="quadro"></span></td>
         <td class="sn"><span class="quadro"></span></td>
       </tr>
       <tr>
-        <td><span class="opcao-nome">Comunicação social</span>
-          <span class="opcao-desc">Jornais, rádios e sítios de notícias locais, a pedido destes</span></td>
+        <td><span class="opcao-nome">Órgãos de comunicação social</span>
+          <span class="opcao-desc">Imprensa, rádio e publicações noticiosas, mediante solicitação destes</span></td>
         <td class="sn"><span class="quadro"></span></td>
         <td class="sn"><span class="quadro"></span></td>
       </tr>
     </tbody>
   </table>
 
-  <h2>4. Em que situações e com que limites</h2>
-  <p>A autorização abrange fotografias e vídeos recolhidos em treinos, provas, galas,
-  estágios e eventos do clube, em contexto desportivo.</p>
-  <p>O clube compromete-se a:</p>
-  <ul>
-    <li>usar as imagens apenas para dar a conhecer a atividade do clube, sem fim comercial e sem as ceder a terceiros para fins próprios destes;</li>
-    <li>não publicar imagens em situação de vulnerabilidade, como balneários, momentos de aflição ou lesão;</li>
-    <li>não associar à imagem a morada, a escola, o contacto ou qualquer outro dado pessoal do atleta;</li>
-    <li>retirar do site e das redes sociais do clube, logo que possível, qualquer imagem a pedido do encarregado de educação, mesmo sem revogação da autorização.</li>
-  </ul>
+  <h2>3. Condições gerais</h2>
 
-  <div class="nota evitar-corte">
-    <strong>Onde as imagens vão parar.</strong> Publicar nas redes sociais significa entregar as
-    imagens ao Instagram e ao Facebook, serviços da Meta. A partir daí ficam sujeitas às
-    condições dessas plataformas, podem ser tratadas fora da União Europeia e o clube não
-    controla o que delas se faça nem consegue garantir o apagamento de cópias feitas por
-    terceiros. Quem quiser evitar isso pode autorizar o site e recusar as redes sociais, no
-    ponto 3.
-  </div>
+  <p class="clausula"><strong>3.1. Âmbito material.</strong> A autorização abrange as fotografias e
+  os registos videográficos recolhidos em treinos, provas, galas, estágios e demais eventos
+  promovidos pelo clube, em contexto desportivo.</p>
 
-  <div class="nota evitar-corte">
-    <strong>O que esta autorização não cobre.</strong> A Federação de Patinagem de Portugal e as
-    associações distritais publicam as classificações das provas com o nome dos atletas, ao
-    abrigo dos seus próprios regulamentos. Isso não depende do clube nem deste documento. O
-    clube também não controla o que terceiros, incluindo outras famílias, fotografem ou
-    publiquem por sua conta.
-  </div>
+  <p class="clausula"><strong>3.2. Obrigações do clube.</strong> O CPACC obriga-se a utilizar as
+  imagens exclusivamente para divulgação da sua atividade, sem finalidade comercial e sem as
+  ceder a terceiros para finalidades próprias destes; a não divulgar imagens captadas em
+  situação de vulnerabilidade, designadamente em balneários ou em momentos de aflição ou
+  lesão; a não associar à imagem a morada, o estabelecimento de ensino, os contactos ou
+  quaisquer outros dados pessoais do atleta; e a retirar dos seus canais, com a maior
+  brevidade possível, qualquer imagem cuja remoção seja solicitada pelo encarregado de
+  educação, independentemente de revogação da presente autorização.</p>
 
-  <h2>5. Durante quanto tempo</h2>
-  <p>Esta autorização é válida enquanto o atleta estiver inscrito no clube e pode ser revogada
-  a qualquer momento, sem necessidade de justificação, bastando um email para
-  cpaccpatinagem@gmail.com ou um pedido escrito entregue ao clube.</p>
-  <p>A revogação produz efeitos para o futuro: o clube retira o material das suas páginas, mas
-  não afeta a licitude do que foi publicado antes. Material já impresso ou já partilhado por
-  terceiros pode não ser recuperável.</p>
+  <p class="clausula"><strong>3.3. Divulgação em plataformas de terceiros.</strong> A divulgação
+  nas redes sociais implica a disponibilização das imagens ao Instagram e ao Facebook,
+  serviços operados pela Meta Platforms Ireland Limited, ficando as mesmas sujeitas às
+  condições dessas plataformas e podendo ser objeto de tratamento fora do Espaço Económico
+  Europeu. O clube não exerce controlo sobre esse tratamento, nem pode assegurar a eliminação
+  de reproduções efetuadas por terceiros. A autorização pode ser concedida apenas quanto ao
+  sítio oficial e recusada quanto às redes sociais, nos termos do ponto 2.</p>
 
-  <h2>6. Os seus direitos</h2>
-  <p>O responsável pelo tratamento é o Clube de Patinagem Artística da Charneca de Caparica,
-  com os contactos indicados no topo deste documento. O fundamento do tratamento é o
-  consentimento, nos termos do Regulamento Geral sobre a Proteção de Dados.</p>
-  <p>A qualquer momento pode pedir ao clube o acesso às imagens, a sua retificação, o
-  apagamento, a limitação da sua utilização ou a portabilidade, pode opor-se ao tratamento e
-  pode retirar o consentimento, com a mesma facilidade com que o deu. Tem ainda o direito de
-  apresentar reclamação à Comissão Nacional de Proteção de Dados.</p>
-  <p>Este documento é assinado em duplicado: um exemplar fica com o clube, como prova do
-  consentimento, e outro com o encarregado de educação.</p>
+  <p class="clausula"><strong>3.4. Tratamentos não abrangidos.</strong> A Federação de Patinagem de
+  Portugal e as associações distritais divulgam as classificações das provas com identificação
+  nominal dos atletas, ao abrigo dos respetivos regulamentos, em termos que não dependem do
+  clube nem do presente documento. O clube não responde igualmente pelas captações ou
+  divulgações efetuadas por terceiros, incluindo outros agregados familiares presentes nos
+  eventos.</p>
 
-  <h2>7. Declaração</h2>
-  <p>Ao assinar o presente documento, declaro que exerço as responsabilidades parentais sobre
-  o atleta identificado no ponto 1, que li e compreendi integralmente o seu conteúdo, e que
-  autorizo o CPACC a utilizar material fotográfico e videográfico do atleta para divulgação
-  das suas atividades nos canais de informação oficiais do clube, nos exatos termos que
-  assinalei no ponto 3.</p>
+  <p class="clausula"><strong>3.5. Duração e revogação.</strong> A autorização mantém-se válida
+  enquanto o atleta se mantiver inscrito no clube e pode ser revogada a todo o tempo, sem
+  necessidade de fundamentação, mediante comunicação para cpaccpatinagem@gmail.com ou pedido
+  escrito entregue ao clube. A revogação produz efeitos para o futuro, não afetando a
+  licitude do tratamento efetuado com base no consentimento previamente prestado. O material
+  já impresso ou já difundido por terceiros pode não ser recuperável.</p>
+
+  <p class="clausula"><strong>3.6. Proteção de dados.</strong> O responsável pelo tratamento é o
+  Clube de Patinagem Artística da Charneca de Caparica, com os contactos indicados no
+  cabeçalho, sendo o consentimento o fundamento de licitude, nos termos do Regulamento Geral
+  sobre a Proteção de Dados. É assegurado o exercício dos direitos de acesso, retificação,
+  apagamento, limitação do tratamento, portabilidade e oposição, bem como o direito de
+  retirar o consentimento com a mesma facilidade com que foi prestado e o de apresentar
+  reclamação à Comissão Nacional de Proteção de Dados.</p>
+
+  <p class="clausula"><strong>3.7. Duplicado.</strong> O presente documento é outorgado em
+  duplicado, ficando um exemplar na posse do clube, como prova do consentimento, e outro na
+  posse do encarregado de educação.</p>
+
+  <h2>4. Declaração</h2>
+  <p>Ao assinar o presente documento, declaro que exerço as responsabilidades parentais sobre o
+  atleta identificado no ponto 1, que li e compreendi integralmente o seu conteúdo, e que
+  autorizo o CPACC a utilizar material fotográfico e videográfico do atleta para divulgação da
+  sua atividade nos canais de informação oficiais do clube, nos exatos termos assinalados no
+  ponto 2.</p>
 
   <div class="assinaturas evitar-corte">
     <div>
       <div class="assinatura-linha"></div>
       <div class="assinatura-rotulo">Assinatura do encarregado de educação, conforme documento de identificação</div>
     </div>
-    <div style="flex:0 0 32%">
+    <div>
+      <div class="assinatura-linha"></div>
+      <div class="assinatura-rotulo">Assinatura do atleta, exigível a partir dos 16 anos de idade</div>
+    </div>
+    <div style="flex:0 0 20%">
       <div class="assinatura-linha"></div>
       <div class="assinatura-rotulo">Data</div>
     </div>
   </div>
 
-  <div class="nota evitar-corte" style="margin-top:14px">
-    <strong>A partir dos 16 anos</strong>, o atleta assina também, em conjunto com o encarregado de educação.
-    <div class="assinaturas" style="margin-top:8px">
-      <div>
-        <div class="assinatura-linha"></div>
-        <div class="assinatura-rotulo">Assinatura do atleta, se tiver 16 anos ou mais</div>
-      </div>
-      <div style="flex:0 0 32%">
-        <div class="assinatura-linha"></div>
-        <div class="assinatura-rotulo">Data</div>
-      </div>
-    </div>
-  </div>
-
   <footer>
     <span>Clube de Patinagem Artística da Charneca de Caparica &nbsp;·&nbsp; Autorização de utilização de imagem</span>
-    <span>Versão 1 &nbsp;·&nbsp; Exemplar para o clube / para o encarregado de educação</span>
   </footer>
 
 </div>
