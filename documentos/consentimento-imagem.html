@@ -64,7 +64,10 @@
     font-size: 9.6pt; font-weight: 700; margin: 10px 0 3px;
   }
 
-  p { margin: 0 0 7px; }
+  /* Texto justificado, com hifenização: sem ela o justificado abre buracos
+     brancos entre palavras longas como "responsabilidades parentais". */
+  p { margin: 0 0 7px; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+  .sub, .pista, .assinatura-rotulo, footer, .opcao-desc { text-align: left; hyphens: manual; -webkit-hyphens: manual; }
 
   /* Coluna com a linha encostada ao fundo: se um rótulo quebrar em duas
      linhas, as linhas de escrita da mesma fila continuam alinhadas. */
@@ -137,10 +140,10 @@
   </div>
   <div class="campo"><span>Encarregado de educação, nome completo</span><div class="linha"></div></div>
   <div class="dupla">
-    <div class="campo" style="flex:2 1 0"><span>Cartão de Cidadão n.º</span><div class="linha"></div></div>
+    <div class="campo" style="flex:2 1 0"><span>N.º de Cartão de Cidadão do encarregado de educação</span><div class="linha"></div></div>
     <div class="campo" style="flex:1 1 0"><span>Qualidade</span><div class="linha"></div></div>
   </div>
-  <p class="pista">É suficiente a indicação do número. O clube não conserva nem reproduz o documento de identificação.</p>
+  <p class="pista">É suficiente a indicação do número de identificação de quem subscreve. O clube não conserva nem reproduz o documento.</p>
   <div class="dupla">
     <div class="campo"><span>Telemóvel</span><div class="linha"></div></div>
     <div class="campo"><span>Email</span><div class="linha"></div></div>
