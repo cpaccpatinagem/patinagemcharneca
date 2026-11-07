@@ -935,6 +935,8 @@ p { text-wrap: pretty; }
   aspect-ratio: 4 / 3;
   object-fit: cover;
 }
+.card__media--duas { grid-template-columns: 1fr 1fr; }
+.card__media--duas img { aspect-ratio: 3 / 4; }
 .card__media--tres { grid-template-columns: 1fr 1fr; }
 .card__media--tres > :first-child { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
 .card__media--tres > :first-child + img,
