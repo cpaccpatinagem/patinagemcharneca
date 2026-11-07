@@ -203,9 +203,9 @@ um "Tens" na privacidade e o placeholder "O teu nome" no formulário.
 
 Por fazer:
 
-- **José Quintela.** O bloco `.tribute` no `clube.html` não tem foto. O
-  Francisco quer pôr a foto do pai e um vídeo da homenagem que lhe foi feita em
-  julho de 2024. Lembrá-lo quando ele voltar ao assunto.
+- **José Quintela.** A foto já está (2026-11-07): o bloco passou de `.tribute`
+  a `.figure-aside`, como o da Cátia. Falta o vídeo da homenagem que lhe foi
+  feita em julho de 2024. Lembrá-lo quando ele voltar ao assunto.
 - **Foto da página inicial.** A que está ao lado de "Uma formação que vai além
   da técnica" é um plano largo do pavilhão; o Francisco acha-a vazia e quer um
   momento de alegria. Vai mandar uma foto do Halloween de 2025.
