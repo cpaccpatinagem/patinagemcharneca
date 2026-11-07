@@ -11,8 +11,10 @@ node_modules/
 # Fotos em alta resolução: ficam só no computador, não são publicadas.
 # As do pavilhão são de crianças e trazem GPS no EXIF - mais uma razão
 # para o original nunca ir para um repositório público.
-assets/img/equipa/_originais/
-assets/img/pavilhao/_originais/
+# Originais em alta resolução, de qualquer pasta de imagens. A regra é por
+# padrão e não por pasta: uma pasta nova de fotos não pode depender de alguém
+# se lembrar de a acrescentar aqui.
+assets/img/*/_originais/
 
 # Vídeo em bruto do telemóvel: são crianças em treino, com GPS e data no
 # ficheiro, e centenas de MB. Nunca vai para o repositório público. O vídeo do

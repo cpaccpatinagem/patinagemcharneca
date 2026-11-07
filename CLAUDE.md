@@ -219,8 +219,8 @@ Por fazer:
 - **Foto histórica** - placeholder no topo do `clube.html`.
 - **Vídeo do hero** - o `<video>` está comentado no `index.html` e no lugar dele
   corre o `.hero__placeholder`. Especificações no `README.md`.
-- **Taça de Portugal 2013** e o percurso da Inês Pelica no Clube Futebol
-  Sassoeiros - ambos afirmados no site e por confirmar.
+- **Percurso da Inês Pelica** no Clube Futebol Sassoeiros - afirmado no site e
+  por confirmar.
 - **Analytics da Vercel** - o script está nas 7 páginas e a política de
   privacidade já o descreve, mas `/_vercel/insights/script.js` dá 404 porque a
   funcionalidade não está ligada no painel. Enquanto assim for, não se conta
@@ -232,6 +232,11 @@ Por fazer:
 - **Funil na folha das pré-inscrições** - correr `configurarFunil()` uma vez a
   partir do editor do Apps Script. Cria as colunas "Experimental feito?" e
   "Inscrito?" e a folha "Funil" com as contagens por mês.
+
+Feito a 2026-11-07: **Taça de Portugal** é de **2014**, não de 2013 como o site
+dizia. O Francisco corrigiu e mandou a fotografia da entrega, que está agora no
+`clube.html`, a seguir ao texto da década de 2012-2024, em
+`assets/img/historico/`.
 
 Feito a 2026-09-20: **Search Console validada** por registo TXT no dominios.pt
 (o painel exige o valor entre aspas e o nome por extenso, não aceita `@`),
