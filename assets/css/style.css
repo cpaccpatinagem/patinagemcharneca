@@ -917,6 +917,29 @@ p { text-wrap: pretty; }
   border-color: transparent;
 }
 
+/* Fotografias dentro de uma entrada de atualização. A imagem sangra até ao
+   bordo do cartão, e por isso anula o padding com uma margem negativa igual.
+   Com três fotos, a primeira ocupa a largura toda e as outras duas dividem a
+   linha de baixo. */
+.card__media {
+  margin: calc(-1 * clamp(1.5rem, 3vw, 2.25rem));
+  margin-bottom: var(--sp-4);
+  display: grid;
+  gap: 2px;
+  background: var(--c-hairline-soft);
+}
+.card__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.card__media--tres { grid-template-columns: 1fr 1fr; }
+.card__media--tres > :first-child { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+.card__media--tres > :first-child + img,
+.card__media--tres > :first-child ~ img { aspect-ratio: 1 / 1; }
+
 /* Linha de links no fim de uma entrada de atualização: a classificação na
    Federação e, quando existir, a publicação no Instagram. Em ecrãs estreitos
    passam um para cada linha em vez de encolherem. */

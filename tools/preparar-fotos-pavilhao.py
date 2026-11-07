@@ -10,8 +10,13 @@ são fotos de crianças num sítio conhecido. Nada disso deve ir para a internet
 Uso:
     python3 tools/preparar-fotos-pavilhao.py                 (trata tudo)
     python3 tools/preparar-fotos-pavilhao.py ficheiro.jpg nome-final
+    python3 tools/preparar-fotos-pavilhao.py --pasta aniversario
 
-Os originais ficam em assets/img/pavilhao/_originais/ e não vão para o
+A opção --pasta trata outra pasta de assets/img/ com as mesmas regras. Serve
+para fotos de eventos, que não são do pavilhão mas precisam do mesmo
+tratamento: redimensionar e deitar fora os metadados.
+
+Os originais ficam em assets/img/<pasta>/_originais/ e não vão para o
 repositório - estão no .gitignore, como os retratos da equipa.
 """
 
@@ -25,6 +30,13 @@ from PIL import Image, ImageOps
 
 DESTINO = "assets/img/pavilhao"
 ORIGENS = os.path.join(DESTINO, "_originais")
+
+
+def escolher_pasta(nome):
+    """Aponta o destino e a origem para assets/img/<nome>/."""
+    global DESTINO, ORIGENS
+    DESTINO = os.path.join("assets/img", nome)
+    ORIGENS = os.path.join(DESTINO, "_originais")
 
 # O maior sítio onde uma destas fotos aparece é a metade da grelha de 1360 px.
 # 1600 chega para ecrãs de alta densidade sem inchar o peso da página.
@@ -79,6 +91,12 @@ def nome_ficheiro(caminho):
 
 
 if __name__ == "__main__":
+    argv = sys.argv[1:]
+    if len(argv) >= 2 and argv[0] == "--pasta":
+        escolher_pasta(argv[1])
+        argv = argv[2:]
+    sys.argv = [sys.argv[0]] + argv
+
     if len(sys.argv) == 3:
         preparar(sys.argv[1], sys.argv[2])
     elif len(sys.argv) == 1:
