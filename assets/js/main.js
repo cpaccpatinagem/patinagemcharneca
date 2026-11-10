@@ -84,6 +84,51 @@
   }
 
   /* ------------------------------------------------------------------
+     1c. Cortina de navegação
+     ------------------------------------------------------------------ */
+  function initCortina() {
+    var cortina = $("[data-cortina]");
+    if (!cortina || reduceMotion) return;
+
+    document.addEventListener("click", function (e) {
+      // Clique com cmd, ctrl, shift ou do meio abre noutro separador: é o
+      // browser que manda, não nós.
+      if (e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (!e.target || !e.target.closest) return;
+
+      var link = e.target.closest("a");
+      if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
+
+      var url;
+      try { url = new URL(link.href, location.href); } catch (err) { return; }
+
+      // Fora daqui ficam mailto:, tel:, outros sites e as âncoras da própria
+      // página, que não mudam de documento nenhum.
+      if (url.protocol !== "http:" && url.protocol !== "https:") return;
+      if (url.origin !== location.origin) return;
+      if (url.pathname === location.pathname && url.search === location.search) return;
+
+      e.preventDefault();
+      // A bandeira diz à página seguinte que deve abrir já tapada. Quem a lê é
+      // o script no <head>, antes da primeira pintura, para não haver um
+      // relance da página nova antes da cortina.
+      try { sessionStorage.setItem("cpacc-cortina", "1"); } catch (err) {}
+
+      cortina.classList.add("is-a-entrar");
+      setTimeout(function () { location.href = url.href; }, 440);
+    });
+
+    // Voltar atrás traz a página do cache do browser tal como ficou - ou seja,
+    // com a cortina ainda por cima. Sem isto, ficava tapada.
+    window.addEventListener("pageshow", function (e) {
+      if (!e.persisted) return;
+      cortina.classList.remove("is-a-entrar");
+      document.documentElement.classList.remove("cortina-a-sair");
+    });
+  }
+
+  /* ------------------------------------------------------------------
      2. Menu móvel
      ------------------------------------------------------------------ */
   function initMenu() {
@@ -690,6 +735,7 @@
   function init() {
     initHeader();
     initCtaRapido();
+    initCortina();
     initMenu();
     initReveal();
     initCounters();

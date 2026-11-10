@@ -1747,15 +1747,65 @@ p { text-wrap: pretty; }
 .skip:focus { top: 1rem; }
 
 /* --------------------------------------------------------------------------
-   17b. TRANSIÇÕES ENTRE PÁGINAS (View Transitions)
-   Cross-fade curto entre documentos. O logótipo do cabeçalho mantém-se no
-   sítio. Browsers sem suporte ignoram tudo isto.
+   17b. CORTINA DE NAVEGAÇÃO
+   Ao sair de uma página, uma cortina com o logótipo sobe de baixo e tapa o
+   ecrã; a página seguinte já abre tapada e a cortina sai por cima. O tempo em
+   que fica parada é o tempo que o browser demora a carregar - é por isso que
+   o efeito nunca parece atrasar nada.
+
+   Substituiu as View Transitions entre documentos: as duas ao mesmo tempo
+   sobrepunham-se, e esta funciona igual em todos os browsers.
    -------------------------------------------------------------------------- */
-@view-transition { navigation: auto; }
-::view-transition-old(root),
-::view-transition-new(root) { animation-duration: 250ms; animation-timing-function: var(--ease-soft); }
-.header .brand { view-transition-name: brand; }
-::view-transition-group(brand) { animation-duration: 250ms; }
+.cortina {
+  position: fixed;
+  inset: 0;
+  /* Acima de tudo menos do grão, que é decorativo e não apanha cliques. */
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  background: var(--c-ink-900);
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(100%);
+}
+.cortina__logo {
+  width: clamp(175px, 24vw, 290px);
+  height: auto;
+}
+
+/* Saída: a cortina sobe de baixo e fica. */
+.cortina.is-a-entrar {
+  visibility: visible;
+  /* Trava cliques enquanto a página seguinte não chega. */
+  pointer-events: auto;
+  animation: cortinaEntra 420ms var(--ease-out) forwards;
+}
+.cortina.is-a-entrar .cortina__logo {
+  opacity: 0;
+  animation: cortinaLogoEntra 320ms var(--ease-out) 110ms forwards;
+}
+
+/* Entrada: a página seguinte já abre tapada e a cortina sai sozinha.
+   É de propósito que esta metade seja só CSS. Se o JavaScript falhar ou
+   demorar, a cortina sai na mesma e a página nunca fica presa por trás dela. */
+.cortina-a-sair .cortina {
+  visibility: visible;
+  transform: none;
+  animation: cortinaSai 620ms var(--ease-out) 160ms forwards;
+}
+
+@keyframes cortinaEntra {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes cortinaLogoEntra {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes cortinaSai {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-100%); visibility: hidden; }
+}
 
 /* --------------------------------------------------------------------------
    18. ACESSIBILIDADE — MOVIMENTO REDUZIDO
@@ -1777,7 +1827,6 @@ p { text-wrap: pretty; }
   .btn--gold::after { display: none; }
   .path::before { transform: none !important; }
   .menu { transition: none; }
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) { animation: none !important; }
+  /* A cortina é movimento puro: para quem o desativou, não existe de todo. */
+  .cortina { display: none !important; }
 }
