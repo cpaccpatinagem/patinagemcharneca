@@ -88,7 +88,20 @@
      ------------------------------------------------------------------ */
   function initCortina() {
     var cortina = $("[data-cortina]");
-    if (!cortina || reduceMotion) return;
+    if (!cortina) return;
+
+    // Rede de segurança da metade da entrada. A animação de saída é CSS, e o
+    // browser só a faz correr quando pinta frames: num separador em segundo
+    // plano, com poupança de bateria ou num equipamento a arrastar-se, pode
+    // nem começar e a cortina fica a tapar a página. O setTimeout dispara
+    // mesmo assim, e tirar a classe devolve a cortina ao estado escondido.
+    if (document.documentElement.classList.contains("cortina-a-sair")) {
+      setTimeout(function () {
+        document.documentElement.classList.remove("cortina-a-sair");
+      }, 900);
+    }
+
+    if (reduceMotion) return;
 
     document.addEventListener("click", function (e) {
       // Clique com cmd, ctrl, shift ou do meio abre noutro separador: é o
