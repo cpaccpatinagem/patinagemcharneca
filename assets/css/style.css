@@ -1768,30 +1768,75 @@ p { text-wrap: pretty; }
   pointer-events: none;
   transform: translateY(100%);
 }
-.cortina__logo {
+.cortina__marca {
+  position: relative;
   width: clamp(175px, 24vw, 290px);
-  height: auto;
+}
+.cortina__logo { display: block; width: 100%; height: auto; }
+
+/* O brilho é uma banda clara que atravessa o logótipo. A máscara é o próprio
+   ficheiro do logótipo, por isso a luz só aparece em cima do desenho e não
+   num retângulo à volta dele. Sem suporte de máscara, não entra de todo. */
+.cortina__brilho { display: none; }
+@supports ((-webkit-mask-image: url("")) or (mask-image: url(""))) {
+  .cortina__brilho {
+    display: block;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    -webkit-mask: url("/assets/img/logo-gold.svg") center / contain no-repeat;
+            mask: url("/assets/img/logo-gold.svg") center / contain no-repeat;
+  }
+}
+.cortina__brilho::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 42%;
+  /* Sombra, núcleo branco, sombra. O dourado do logótipo já é claro, e uma
+     banda só branca por cima dele quase não se nota - são as arestas escuras
+     que fazem a luz ler como relevo a passar. */
+  background: linear-gradient(105deg,
+      transparent 4%,
+      rgba(6, 13, 26, 0.45) 26%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(6, 13, 26, 0.45) 74%,
+      transparent 96%);
+  /* A banda tem 55% da largura da marca. Começa encostada de fora à
+     esquerda e acaba encostada de fora à direita: fora deste intervalo o
+     tempo passava com ela já fora do ecrã, e o brilho quase não se via. */
+  transform: translateX(-120%);
 }
 
-/* Saída: a cortina sobe de baixo e fica. */
+/* Saída: a cortina sobe de baixo e fica. O brilho repete enquanto se espera -
+   se a ligação estiver lenta, o ecrã continua vivo em vez de parecer preso. */
 .cortina.is-a-entrar {
   visibility: visible;
   /* Trava cliques enquanto a página seguinte não chega. */
   pointer-events: auto;
-  animation: cortinaEntra 420ms var(--ease-out) forwards;
+  animation: cortinaEntra 560ms var(--ease-out) forwards;
 }
-.cortina.is-a-entrar .cortina__logo {
+.cortina.is-a-entrar .cortina__marca {
   opacity: 0;
-  animation: cortinaLogoEntra 320ms var(--ease-out) 110ms forwards;
+  animation: cortinaLogoEntra 360ms var(--ease-out) 180ms forwards;
+}
+.cortina.is-a-entrar .cortina__brilho::before {
+  animation: cortinaBrilho 1500ms var(--ease-soft) 520ms infinite;
 }
 
 /* Entrada: a página seguinte já abre tapada e a cortina sai sozinha.
    É de propósito que esta metade seja só CSS. Se o JavaScript falhar ou
-   demorar, a cortina sai na mesma e a página nunca fica presa por trás dela. */
+   demorar, a cortina sai na mesma e a página nunca fica presa por trás dela.
+   Aqui o brilho passa uma vez só, e é esse o momento da marca. */
 .cortina-a-sair .cortina {
   visibility: visible;
   transform: none;
-  animation: cortinaSai 620ms var(--ease-out) 160ms forwards;
+  animation: cortinaSai 720ms var(--ease-out) 520ms forwards;
+}
+.cortina-a-sair .cortina__brilho::before {
+  animation: cortinaBrilho 1000ms var(--ease-soft) 80ms 1 forwards;
 }
 
 @keyframes cortinaEntra {
@@ -1801,6 +1846,10 @@ p { text-wrap: pretty; }
 @keyframes cortinaLogoEntra {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
+}
+@keyframes cortinaBrilho {
+  from { transform: translateX(-120%); }
+  to   { transform: translateX(200%); }
 }
 @keyframes cortinaSai {
   from { transform: translateY(0); }
