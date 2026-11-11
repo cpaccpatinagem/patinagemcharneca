@@ -1778,9 +1778,14 @@ p { text-wrap: pretty; }
 .cortina__marca {
   position: relative;
   width: clamp(230px, 34vw, 440px);
-  aspect-ratio: 269 / 312;
   transform-style: preserve-3d;
+  /* Sem aspect-ratio declarado de propósito. A altura da caixa passa a ser a
+     da própria imagem, e as camadas (inset:0) ficam exactamente em cima dela.
+     Com "269 / 312" a caixa ficava cerca de 1 px mais baixa do que o ficheiro
+     (269.2913 / 311.811) e a parede lateral saía desencontrada da face - a
+     rodar, isso lia-se como um tremor nas arestas. */
   will-change: transform;
+  backface-visibility: hidden;
 }
 .cortina__logo {
   display: block;
@@ -1803,21 +1808,23 @@ p { text-wrap: pretty; }
             mask: url("/assets/img/logo-gold.svg") center / contain no-repeat;
   }
 }
-.cortina__camada { background: #9A7816; }
-.cortina__camada:nth-child(n+5) { background: #7A5E12; }
-.cortina__camada:nth-child(1) { transform: translateZ(-1.4px); }
-.cortina__camada:nth-child(2) { transform: translateZ(-2.8px); }
-.cortina__camada:nth-child(3) { transform: translateZ(-4.2px); }
-.cortina__camada:nth-child(4) { transform: translateZ(-5.6px); }
-.cortina__camada:nth-child(5) { transform: translateZ(-7px); }
-.cortina__camada:nth-child(6) { transform: translateZ(-8.4px); }
-.cortina__camada:nth-child(7) { transform: translateZ(-9.8px); }
-.cortina__camada:nth-child(8) { transform: translateZ(-11.2px); }
+/* Seis camadas em vez de oito, com a mesma espessura total: cada uma é uma
+   máscara SVG que o browser volta a desenhar a cada frame da rotação, e era
+   aí que o movimento engasgava. */
+.cortina__camada { background: #9A7816; backface-visibility: hidden; }
+.cortina__camada:nth-child(n+4) { background: #7A5E12; }
+.cortina__camada:nth-child(1) { transform: translateZ(-1.9px); }
+.cortina__camada:nth-child(2) { transform: translateZ(-3.8px); }
+.cortina__camada:nth-child(3) { transform: translateZ(-5.7px); }
+.cortina__camada:nth-child(4) { transform: translateZ(-7.6px); }
+.cortina__camada:nth-child(5) { transform: translateZ(-9.5px); }
+.cortina__camada:nth-child(6) { transform: translateZ(-11.4px); }
 
 /* O brilho fica à frente da face, recortado pela mesma forma. */
 .cortina__brilho {
   overflow: hidden;
   transform: translateZ(1px);
+  backface-visibility: hidden;
 }
 .cortina__brilho::before {
   content: "";
@@ -1874,10 +1881,12 @@ p { text-wrap: pretty; }
   animation: cortinaSai 720ms var(--ease-out) 820ms forwards;
 }
 .cortina-a-sair .cortina__marca {
-  animation: marcaGira 1100ms var(--ease-out) 60ms both;
+  /* 60 + 760 = 820 ms, que é quando a cortina começa a sair. A rotação acaba
+     no instante em que a cortina arranca, em vez de as duas se sobreporem. */
+  animation: marcaGira 760ms var(--ease-out) 60ms both;
 }
 .cortina-a-sair .cortina__brilho::before {
-  animation: cortinaBrilho 1100ms var(--ease-soft) 200ms 1 forwards;
+  animation: cortinaBrilho 820ms var(--ease-soft) 160ms 1 forwards;
 }
 
 @keyframes cortinaEntra {
