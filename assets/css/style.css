@@ -1841,10 +1841,13 @@ p { text-wrap: pretty; }
   transform: translateX(-120%);
 }
 
-/* Saída: a cortina sobe de baixo e fica. O logótipo roda para a frente e
-   depois baloiça devagar. O brilho só entra ao fim de um segundo, quando já
-   se percebeu que a ligação está lenta - antes disso mal começava e era
-   cortado pela mudança de página, e via-se o salto. */
+/* Saída: a cortina sobe de baixo e fica. Aqui o logótipo só aparece, sem
+   rodar: a rotação é uma só por navegação e acontece na chegada. Antes rodava
+   nas duas metades e via-se a mesma entrada duas vezes seguidas.
+
+   O baloiço e o brilho só entram ao fim de um segundo, quando já se percebeu
+   que a ligação está lenta. Numa ligação normal a página já mudou antes
+   disso, e nem chegam a aparecer. */
 .cortina.is-a-entrar {
   visibility: visible;
   /* Trava cliques enquanto a página seguinte não chega. */
@@ -1853,8 +1856,8 @@ p { text-wrap: pretty; }
 }
 .cortina.is-a-entrar .cortina__marca {
   opacity: 0;
-  animation: marcaEntra 520ms var(--ease-out) 160ms forwards,
-             marcaBaloico 4200ms var(--ease-soft) 680ms infinite;
+  animation: marcaEntra 420ms var(--ease-out) 150ms forwards,
+             marcaBaloico 4200ms var(--ease-soft) 1000ms infinite;
 }
 .cortina.is-a-entrar .cortina__brilho::before {
   animation: cortinaBrilho 1500ms var(--ease-soft) 1000ms infinite;
@@ -1882,8 +1885,8 @@ p { text-wrap: pretty; }
   to   { transform: translateY(0); }
 }
 @keyframes marcaEntra {
-  from { opacity: 0; transform: rotateY(30deg) translateY(16px); }
-  to   { opacity: 1; transform: rotateY(0deg) translateY(0); }
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes marcaBaloico {
   0%, 100% { opacity: 1; transform: rotateY(0deg) rotateX(0deg); }
