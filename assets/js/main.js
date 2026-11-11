@@ -98,7 +98,7 @@
     if (document.documentElement.classList.contains("cortina-a-sair")) {
       setTimeout(function () {
         document.documentElement.classList.remove("cortina-a-sair");
-      }, 1600);
+      }, 2000);
     }
 
     if (reduceMotion) return;
@@ -129,7 +129,7 @@
       try { sessionStorage.setItem("cpacc-cortina", "1"); } catch (err) {}
 
       cortina.classList.add("is-a-entrar");
-      setTimeout(function () { location.href = url.href; }, 620);
+      setTimeout(function () { location.href = url.href; }, 680);
     });
 
     // Voltar atrás traz a página do cache do browser tal como ficou - ou seja,

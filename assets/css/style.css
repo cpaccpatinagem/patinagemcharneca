@@ -1764,29 +1764,60 @@ p { text-wrap: pretty; }
   display: grid;
   place-items: center;
   background: var(--c-ink-900);
+  /* A profundidade da cena. Sem isto a rotação do logótipo seria plana. */
+  perspective: 1200px;
   visibility: hidden;
   pointer-events: none;
   transform: translateY(100%);
 }
+
+/* O logótipo é uma peça com espessura: oito cópias recortadas pela mesma
+   forma, afastadas no eixo Z, fazem a parede lateral; a imagem por cima é a
+   face. Quando a peça roda, a parede roda com ela - é 3D a sério, não uma
+   sombra a fingir. */
 .cortina__marca {
   position: relative;
-  width: clamp(175px, 24vw, 290px);
+  width: clamp(230px, 34vw, 440px);
+  aspect-ratio: 269 / 312;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
-.cortina__logo { display: block; width: 100%; height: auto; }
-
-/* O brilho é uma banda clara que atravessa o logótipo. A máscara é o próprio
-   ficheiro do logótipo, por isso a luz só aparece em cima do desenho e não
-   num retângulo à volta dele. Sem suporte de máscara, não entra de todo. */
+.cortina__logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: translateZ(0.5px);
+}
+.cortina__camada,
 .cortina__brilho { display: none; }
+
+/* Sem suporte de máscara não há espessura nem brilho: fica o logótipo
+   simples, que continua a ser a marca certa. */
 @supports ((-webkit-mask-image: url("")) or (mask-image: url(""))) {
+  .cortina__camada,
   .cortina__brilho {
     display: block;
     position: absolute;
     inset: 0;
-    overflow: hidden;
     -webkit-mask: url("/assets/img/logo-gold.svg") center / contain no-repeat;
             mask: url("/assets/img/logo-gold.svg") center / contain no-repeat;
   }
+}
+.cortina__camada { background: #9A7816; }
+.cortina__camada:nth-child(n+5) { background: #7A5E12; }
+.cortina__camada:nth-child(1) { transform: translateZ(-1.4px); }
+.cortina__camada:nth-child(2) { transform: translateZ(-2.8px); }
+.cortina__camada:nth-child(3) { transform: translateZ(-4.2px); }
+.cortina__camada:nth-child(4) { transform: translateZ(-5.6px); }
+.cortina__camada:nth-child(5) { transform: translateZ(-7px); }
+.cortina__camada:nth-child(6) { transform: translateZ(-8.4px); }
+.cortina__camada:nth-child(7) { transform: translateZ(-9.8px); }
+.cortina__camada:nth-child(8) { transform: translateZ(-11.2px); }
+
+/* O brilho fica à frente da face, recortado pela mesma forma. */
+.cortina__brilho {
+  overflow: hidden;
+  transform: translateZ(1px);
 }
 .cortina__brilho::before {
   content: "";
@@ -1804,14 +1835,16 @@ p { text-wrap: pretty; }
       rgba(255, 255, 255, 1) 50%,
       rgba(6, 13, 26, 0.45) 74%,
       transparent 96%);
-  /* A banda tem 55% da largura da marca. Começa encostada de fora à
-     esquerda e acaba encostada de fora à direita: fora deste intervalo o
-     tempo passava com ela já fora do ecrã, e o brilho quase não se via. */
+  /* A banda tem 42% da largura da marca. Começa encostada de fora à esquerda
+     e acaba encostada de fora à direita: fora deste intervalo o tempo passava
+     com ela já fora do ecrã, e o brilho quase não se via. */
   transform: translateX(-120%);
 }
 
-/* Saída: a cortina sobe de baixo e fica. O brilho repete enquanto se espera -
-   se a ligação estiver lenta, o ecrã continua vivo em vez de parecer preso. */
+/* Saída: a cortina sobe de baixo e fica. O logótipo roda para a frente e
+   depois baloiça devagar. O brilho só entra ao fim de um segundo, quando já
+   se percebeu que a ligação está lenta - antes disso mal começava e era
+   cortado pela mudança de página, e via-se o salto. */
 .cortina.is-a-entrar {
   visibility: visible;
   /* Trava cliques enquanto a página seguinte não chega. */
@@ -1820,36 +1853,52 @@ p { text-wrap: pretty; }
 }
 .cortina.is-a-entrar .cortina__marca {
   opacity: 0;
-  animation: cortinaLogoEntra 360ms var(--ease-out) 180ms forwards;
+  animation: marcaEntra 520ms var(--ease-out) 160ms forwards,
+             marcaBaloico 4200ms var(--ease-soft) 680ms infinite;
 }
 .cortina.is-a-entrar .cortina__brilho::before {
-  animation: cortinaBrilho 1500ms var(--ease-soft) 520ms infinite;
+  animation: cortinaBrilho 1500ms var(--ease-soft) 1000ms infinite;
 }
 
 /* Entrada: a página seguinte já abre tapada e a cortina sai sozinha.
    É de propósito que esta metade seja só CSS. Se o JavaScript falhar ou
    demorar, a cortina sai na mesma e a página nunca fica presa por trás dela.
-   Aqui o brilho passa uma vez só, e é esse o momento da marca. */
+   Aqui o logótipo roda de lado para a frente e o brilho passa uma vez: é
+   esse o momento da marca. */
 .cortina-a-sair .cortina {
   visibility: visible;
   transform: none;
-  animation: cortinaSai 720ms var(--ease-out) 520ms forwards;
+  animation: cortinaSai 720ms var(--ease-out) 820ms forwards;
+}
+.cortina-a-sair .cortina__marca {
+  animation: marcaGira 1100ms var(--ease-out) 60ms both;
 }
 .cortina-a-sair .cortina__brilho::before {
-  animation: cortinaBrilho 1000ms var(--ease-soft) 80ms 1 forwards;
+  animation: cortinaBrilho 1100ms var(--ease-soft) 200ms 1 forwards;
 }
 
 @keyframes cortinaEntra {
   from { transform: translateY(100%); }
   to   { transform: translateY(0); }
 }
-@keyframes cortinaLogoEntra {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: none; }
+@keyframes marcaEntra {
+  from { opacity: 0; transform: rotateY(30deg) translateY(16px); }
+  to   { opacity: 1; transform: rotateY(0deg) translateY(0); }
+}
+@keyframes marcaBaloico {
+  0%, 100% { opacity: 1; transform: rotateY(0deg) rotateX(0deg); }
+  25%      { opacity: 1; transform: rotateY(-15deg) rotateX(4deg); }
+  75%      { opacity: 1; transform: rotateY(15deg) rotateX(-4deg); }
+}
+@keyframes marcaGira {
+  from { transform: rotateY(-42deg) rotateX(8deg) scale(0.94); }
+  to   { transform: rotateY(0deg) rotateX(0deg) scale(1); }
 }
 @keyframes cortinaBrilho {
+  /* 120% e 245% da largura da banda são o que a põe inteira fora da marca
+     dos dois lados. A 200% ficava um resto de luz encostado à direita. */
   from { transform: translateX(-120%); }
-  to   { transform: translateX(200%); }
+  to   { transform: translateX(245%); }
 }
 @keyframes cortinaSai {
   from { transform: translateY(0); }
